@@ -10,4 +10,13 @@ class ApiConnector extends GetConnect{
 
     return json;
   }
+
+  Future<dynamic> save(String url, Object object) async {
+    return await api.post(url, object);
+  }
+
+  Future<bool> deleteById(String url, String id) async{
+    return await api.delete(url, id);
+  }
+
 }

@@ -3,6 +3,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 import 'package:onlinestoredashboard/pages/home.dart';
+import 'package:onlinestoredashboard/pages/organization_page.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import 'controller/Controller.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       initialBinding: HomeBindings(),
       getPages: [
-        GetPage(name: '/', page: () => Home()),
+        GetPage(name: '/', page: () => OrganizationPage()),
 
       ],
     );

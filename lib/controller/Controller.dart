@@ -26,6 +26,20 @@ class Controller extends GetxController {
     }
     update();
   }
+
+  Future<dynamic?> changeObject(String url, dynamic object) async {
+    dynamic result;
+    final json = await api.save(url, object);
+    if (object is Organization) {
+      result = Organization.fromJson(json);
+    }
+    return result;
+  }
+
+  Future<bool> deleteById(url, id) async {
+    return await api.deleteById(url, id);
+  }
+
 }
 
 class HomeBindings extends Bindings {
