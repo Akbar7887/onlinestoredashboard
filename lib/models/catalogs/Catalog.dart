@@ -2,6 +2,15 @@
 import 'Product.dart';
 
 class Catalog {
+
+  int? id;
+  String? catalogname;
+  String? imagepath;
+  String? active;
+  List<Catalog>? catalogs;
+  List<Product>? products;
+
+
   Catalog({
       this.id, 
       this.catalogname, 
@@ -28,12 +37,6 @@ class Catalog {
       });
     }
   }
-  int? id;
-  String? catalogname;
-  String? imagepath;
-  String? active;
-  List<Catalog>? catalogs;
-  List<Product>? products;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

@@ -1,6 +1,14 @@
 import 'package:onlinestoredashboard/models/catalogs/ProductImage.dart';
 
 class Product {
+
+  int? id;
+  String? name;
+  String? description;
+  dynamic? imagepath;
+  String? active;
+  List<ProductImage>? productImages;
+
   Product({
       this.id, 
       this.name, 
@@ -22,12 +30,7 @@ class Product {
       });
     }
   }
-  int? id;
-  String? name;
-  String? description;
-  dynamic? imagepath;
-  String? active;
-  List<ProductImage>? productImages;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
