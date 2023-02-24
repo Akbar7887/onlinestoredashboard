@@ -24,7 +24,6 @@ class CatalogPage extends StatelessWidget {
         child: Scaffold(
             appBar: OnlineAppBar(),
             body: Obx(() {
-              dropDownValue = _catalogController.catalogs.first;
               return ListView(
                 children: [
                   Container(
@@ -71,15 +70,18 @@ class CatalogPage extends StatelessWidget {
   }
 
   List<DropdownMenuItem<Catalog>> getDropDownCatalogs() {
-    catalogfordrop = _catalogController.catalogs
-        .map<DropdownMenuItem<Catalog>>((element) =>
-            DropdownMenuItem(child: Text(element.catalogname!), value: element))
-        .toList();
-
-    return catalogfordrop;
+    return _catalogController.catalogs
+        .map<DropdownMenuItem<Catalog>>((element) {
+      return DropdownMenuItem(
+          child: Text(element.catalogname!), value: element);
+       // getDropDownCatalogs();
+    }).toList();
   }
 
   Future<void> showDialogCatalog(BuildContext context) async {
+    if (_catalogController.catalogs != null) {
+      dropDownValue = _catalogController.catalogs.first;
+    }
     TextEditingController _catalogName = TextEditingController();
     if (_catalog != null) {
       _catalogName.text = _catalog!.catalogname!;
@@ -90,45 +92,52 @@ class CatalogPage extends StatelessWidget {
       barrierDismissible: true,
       // false = user must tap button, true = tap outside dialog
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text(S.of(context).catalog_show_diagram),
-          content: SizedBox(
-              width: MediaQuery.of(context).size.width / 2,
-              height: MediaQuery.of(context).size.height / 3,
-              child: Column(
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: DropdownButton<Catalog>(
-                        isExpanded: true,
-                        value: dropDownValue,
-                        items: getDropDownCatalogs(),
-                        onChanged: (value) {},
+        return StatefulBuilder(
+            builder: (context, setState) => AlertDialog(
+                  title: Text(S.of(context).catalog_show_diagram),
+                  content: SizedBox(
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: MediaQuery.of(context).size.height / 3,
+                      child: Column(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.only(bottom: 20),
+                              child: dropDownValue == null
+                                  ? CircularProgressIndicator()
+                                  : DropdownButton<Catalog>(
+                                      isExpanded: true,
+                                      value: dropDownValue,
+                                      items: getDropDownCatalogs(),
+                                      onChanged: (value) {
+                                        setState(() => dropDownValue = value);
+                                      },
+                                    )),
+                          Container(
+                            child: TextFormField(
+                              controller: _catalogName,
+                              decoration: MainConstant.decoration(
+                                  S.of(context).catalog),
+                            ),
+                          ),
+                        ],
                       )),
-                  Container(
-                    child: TextFormField(
-                      controller: _catalogName,
-                      decoration:
-                          MainConstant.decoration(S.of(context).catalog),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text(S.of(context).save),
+                      onPressed: () {
+                        Navigator.of(dialogContext)
+                            .pop(); // Dismiss alert dialog
+                      },
                     ),
-                  ),
-                ],
-              )),
-          actions: <Widget>[
-            TextButton(
-              child: Text(S.of(context).save),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
-              },
-            ),
-            TextButton(
-              child: Text(S.of(context).cancel),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
-              },
-            ),
-          ],
-        );
+                    TextButton(
+                      child: Text(S.of(context).cancel),
+                      onPressed: () {
+                        Navigator.of(dialogContext)
+                            .pop(); // Dismiss alert dialog
+                      },
+                    ),
+                  ],
+                ));
       },
     );
   }
