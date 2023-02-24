@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
+import 'package:onlinestoredashboard/pages/catalogs/catalog_page.dart';
 import 'package:onlinestoredashboard/pages/home.dart';
 import 'package:onlinestoredashboard/pages/organization_page.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import 'controller/Controller.dart';
+import 'generated/l10n.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +27,13 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: UiO.companyName,
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
       theme: ThemeData(
         textTheme: TextTheme(),
         fontFamily: UiO.font,
@@ -34,7 +44,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       initialBinding: HomeBindings(),
       getPages: [
-        GetPage(name: '/', page: () => OrganizationPage()),
+        GetPage(name: '/', page: () => CatalogPage()),
+        GetPage(name: '/org', page: () => OrganizationPage()),
 
       ],
     );

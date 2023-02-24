@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:onlinestoredashboard/models/Organization.dart';
+import 'package:onlinestoredashboard/models/constants/main_constant.dart';
 
 import '../widgets/onlineAppBar.dart';
 
@@ -22,19 +23,6 @@ Controller _controller = Get.put(Controller());
 
 class OrganizationPage extends StatelessWidget {
   const OrganizationPage({Key? key}) : super(key: key);
-
-  InputDecoration decoration(String name) {
-    return InputDecoration(
-        fillColor: Colors.white,
-        //Theme.of(context).backgroundColor,
-        labelText: name,
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(width: 0.5, color: Colors.black)),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(width: 0.5, color: Colors.black)));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +85,8 @@ class OrganizationPage extends StatelessWidget {
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w200,
                                                 color: Colors.black),
-                                            decoration:
-                                                decoration("Наименование"))),
+                                            decoration: MainConstant.decoration(
+                                                "Наименование"))),
                                     Container(
                                         padding: EdgeInsets.only(bottom: 20),
                                         width:
@@ -116,7 +104,8 @@ class OrganizationPage extends StatelessWidget {
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w200,
                                                 color: Colors.black),
-                                            decoration: decoration("Телефон"))),
+                                            decoration: MainConstant.decoration(
+                                                "Телефон"))),
                                     Container(
                                         padding: EdgeInsets.only(bottom: 20),
                                         width:
@@ -134,7 +123,8 @@ class OrganizationPage extends StatelessWidget {
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w200,
                                                 color: Colors.black),
-                                            decoration: decoration("Регион"))),
+                                            decoration: MainConstant.decoration(
+                                                "Регион"))),
                                     Container(
                                         padding: EdgeInsets.only(bottom: 20),
                                         width:
@@ -152,7 +142,8 @@ class OrganizationPage extends StatelessWidget {
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w200,
                                                 color: Colors.black),
-                                            decoration: decoration("Адрес"))),
+                                            decoration: MainConstant.decoration(
+                                                "Адрес"))),
                                   ],
                                 ),
                               ),
@@ -176,7 +167,8 @@ class OrganizationPage extends StatelessWidget {
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w200,
                                                 color: Colors.black),
-                                            decoration: decoration("e-mail"))),
+                                            decoration: MainConstant.decoration(
+                                                "e-mail"))),
                                     Container(
                                         padding: EdgeInsets.only(bottom: 20),
                                         width:
@@ -194,8 +186,8 @@ class OrganizationPage extends StatelessWidget {
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w200,
                                                 color: Colors.black),
-                                            decoration:
-                                                decoration("Facebook"))),
+                                            decoration: MainConstant.decoration(
+                                                "Facebook"))),
                                     Container(
                                         padding: EdgeInsets.only(bottom: 20),
                                         width:
@@ -213,8 +205,8 @@ class OrganizationPage extends StatelessWidget {
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w200,
                                                 color: Colors.black),
-                                            decoration:
-                                                decoration("Instagram"))),
+                                            decoration: MainConstant.decoration(
+                                                "Instagram"))),
                                     Container(
                                         padding: EdgeInsets.only(bottom: 20),
                                         width:
@@ -232,8 +224,8 @@ class OrganizationPage extends StatelessWidget {
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w200,
                                                 color: Colors.black),
-                                            decoration:
-                                                decoration("Telegram"))),
+                                            decoration: MainConstant.decoration(
+                                                "Telegram"))),
                                   ],
                                 ),
                               ),
@@ -274,8 +266,9 @@ class OrganizationPage extends StatelessWidget {
                                             "organization/save", _organization)
                                         .then((value) => ScaffoldMessenger.of(
                                                 context)
-                                            .showSnackBar(
-                                                SnackBar(content: Text("Организация было изменен!"))));
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    "Организация было изменен!"))));
                                   },
                                   child: Text("Сохранить")),
                               SizedBox(

@@ -3,6 +3,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:onlinestoredashboard/controller/ApiConnector.dart';
+import 'package:onlinestoredashboard/controller/CatalogController.dart';
 import 'package:onlinestoredashboard/models/Organization.dart';
 
 class Controller extends GetxController {
@@ -39,12 +40,12 @@ class Controller extends GetxController {
   Future<bool> deleteById(url, id) async {
     return await api.deleteById(url, id);
   }
-
 }
 
 class HomeBindings extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => Controller());
+    Get.lazyPut(() => CatalogController());
   }
 }
