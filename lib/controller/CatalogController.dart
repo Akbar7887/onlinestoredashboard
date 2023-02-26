@@ -8,7 +8,7 @@ class CatalogController extends GetxController {
   final api = ApiConnector();
 
   var catalogs = <Catalog>[].obs;
-
+  Catalog? catalog;
 
   @override
   void onInit() {
@@ -21,4 +21,9 @@ class CatalogController extends GetxController {
     catalogs.value = json.map((e) => Catalog.fromJson(e)).toList();
   }
 
+  Future<Catalog> savesub(String url, Catalog catalog, int id) async {
+    final json = await api.savesub(url, catalog, id.toString());
+    catalog = Catalog.fromJson(json);
+    return catalog;
+  }
 }

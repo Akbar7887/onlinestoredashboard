@@ -14,6 +14,7 @@ final CatalogController _catalogController = Get.put(CatalogController());
 Catalog? _catalog;
 List<DropdownMenuItem<Catalog>> _catalogfordrop = [];
 Catalog? dropDownValue;
+final _keyForm = GlobalKey<FormState>();
 
 class CatalogPage extends StatelessWidget {
   const CatalogPage({Key? key}) : super(key: key);
@@ -31,12 +32,12 @@ class CatalogPage extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-
+                        // dropDownValue = null;
+                        // _catalog = null;
                         showDialogCatalog(context);
                       },
                       child: FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: Text(S.of(context).add)),
+                          fit: BoxFit.fitWidth, child: Text(S.of(context).add)),
                     ),
                   ),
                   Container(
@@ -92,15 +93,19 @@ class CatalogPage extends StatelessWidget {
 
   Future<void> showDialogCatalog(BuildContext context) async {
     if (_catalog == null) {
-      dropDownValue = _catalogController.catalogs.first;
-    }else{
-      // var par  = _catalogController.catalogs.where((p0) => p0 == _catalog);
-
-      dropDownValue = _catalog;
+      dropDownValue = _catalogController.catalogs.firstWhere((element) =>
+          _catalogController.catalogs.first.parent!.id == element.id);
+    } else {
+      if (_catalog!.parentId != null) {
+        dropDownValue = _catalogController.catalogs
+            .firstWhere((element) => _catalog!.parentId == element.id);
+      } else {
+        dropDownValue = null;
+      }
     }
-    TextEditingController _catalogName = TextEditingController();
+    TextEditingController _controllercatalogName = TextEditingController();
     if (_catalog != null) {
-      _catalogName.text = _catalog!.catalogname!;
+      _controllercatalogName.text = _catalog!.catalogname!;
     }
     _catalogfordrop = [];
 
@@ -113,38 +118,57 @@ class CatalogPage extends StatelessWidget {
         return StatefulBuilder(
             builder: (context, setState) => AlertDialog(
                   title: Text(S.of(context).catalog_show_diagram),
-                  content: SizedBox(
-                      width: MediaQuery.of(context).size.width / 2,
-                      height: MediaQuery.of(context).size.height / 3,
-                      child: Column(
-                        children: [
-                          Container(
-                              padding: EdgeInsets.only(bottom: 20),
-                              child: dropDownValue == null
-                                  ? CircularProgressIndicator()
-                                  : DropdownButton<Catalog>(
-                                      isExpanded: true,
-                                      value: dropDownValue,
-                                      items: _catalogfordrop,
-                                      onChanged: (value) {
-                                        setState(() => dropDownValue = value);
-                                      },
-                                    )),
-                          Container(
-                            child: TextFormField(
-                              controller: _catalogName,
-                              decoration: MainConstant.decoration(
-                                  S.of(context).catalog),
-                            ),
-                          ),
-                        ],
-                      )),
+                  content: Form(
+                      key: _keyForm,
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width / 2,
+                          height: MediaQuery.of(context).size.height / 3,
+                          child: Column(
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.only(bottom: 20),
+                                  child: DropdownButton<Catalog>(
+                                    isExpanded: true,
+                                    value: dropDownValue,
+                                    items: _catalogfordrop,
+                                    onChanged: (value) {
+                                      setState(() => dropDownValue = value);
+                                    },
+                                  )),
+                              Container(
+                                child: TextFormField(
+                                  controller: _controllercatalogName,
+                                  decoration: MainConstant.decoration(
+                                      S.of(context).catalog),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return S.of(context).validate;
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ))),
                   actions: <Widget>[
                     TextButton(
                       child: Text(S.of(context).save),
                       onPressed: () {
-                        Navigator.of(dialogContext)
-                            .pop(); // Dismiss alert dialog
+                        if (!_keyForm.currentState!.validate()) {
+                          return;
+                        }
+
+                        if (_catalog == null) {
+                          _catalog = new Catalog();
+                        }
+                        _catalog!.catalogname = _controllercatalogName.text;
+
+                        _catalogController
+                            .savesub("doc/catalog/savesub", _catalog!,
+                                dropDownValue!.id!)
+                            .then((value) {
+                          _catalogController.fetchGetAll();
+                          Navigator.of(dialogContext).pop();
+                        });
                       },
                     ),
                     TextButton(

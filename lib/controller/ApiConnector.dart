@@ -20,6 +20,10 @@ class ApiConnector extends GetConnect{
     return await api.post(url, object);
   }
 
+  Future<dynamic> savesub(String url, Object object, String id) async {
+    return await api.savesub(url, object, id);
+  }
+
   Future<bool> deleteById(String url, String id) async{
     return await api.delete(url, id);
   }
