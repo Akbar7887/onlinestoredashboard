@@ -12,7 +12,7 @@ import '../../widgets/onlineAppBar.dart';
 
 final CatalogController _catalogController = Get.put(CatalogController());
 Catalog? _catalog;
-List<DropdownMenuItem<Catalog>> catalogfordrop = [];
+List<DropdownMenuItem<Catalog>> _catalogfordrop = [];
 Catalog? dropDownValue;
 
 class CatalogPage extends StatelessWidget {
@@ -26,6 +26,19 @@ class CatalogPage extends StatelessWidget {
             body: Obx(() {
               return ListView(
                 children: [
+                  SizedBox(
+                    width: 100,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+
+                        showDialogCatalog(context);
+                      },
+                      child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(S.of(context).add)),
+                    ),
+                  ),
                   Container(
                       height: 30,
                       width: MediaQuery.of(context).size.width,
@@ -69,24 +82,29 @@ class CatalogPage extends StatelessWidget {
         .toList();
   }
 
-  List<DropdownMenuItem<Catalog>> getDropDownCatalogs() {
-    return _catalogController.catalogs
-        .map<DropdownMenuItem<Catalog>>((element) {
-      return DropdownMenuItem(
-          child: Text(element.catalogname!), value: element);
-       // getDropDownCatalogs();
-    }).toList();
+  getDropDownCatalogs(List<Catalog> catalogs) {
+    catalogs.forEach((element) {
+      _catalogfordrop.add(
+          DropdownMenuItem(child: Text(element.catalogname!), value: element));
+      getDropDownCatalogs(element.catalogs!);
+    });
   }
 
   Future<void> showDialogCatalog(BuildContext context) async {
-    if (_catalogController.catalogs != null) {
+    if (_catalog == null) {
       dropDownValue = _catalogController.catalogs.first;
+    }else{
+      // var par  = _catalogController.catalogs.where((p0) => p0 == _catalog);
+
+      dropDownValue = _catalog;
     }
     TextEditingController _catalogName = TextEditingController();
     if (_catalog != null) {
       _catalogName.text = _catalog!.catalogname!;
     }
+    _catalogfordrop = [];
 
+    getDropDownCatalogs(_catalogController.catalogs);
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -107,7 +125,7 @@ class CatalogPage extends StatelessWidget {
                                   : DropdownButton<Catalog>(
                                       isExpanded: true,
                                       value: dropDownValue,
-                                      items: getDropDownCatalogs(),
+                                      items: _catalogfordrop,
                                       onChanged: (value) {
                                         setState(() => dropDownValue = value);
                                       },
