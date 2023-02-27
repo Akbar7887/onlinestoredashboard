@@ -26,4 +26,10 @@ class CatalogController extends GetxController {
     catalog = Catalog.fromJson(json);
     return catalog;
   }
+  Future<Catalog> deleteActive(String url, int id) async{
+    final json = await api.deleteActive(url, id.toString());
+    catalog = Catalog.fromJson(json);
+    return catalog!;
+  }
+
 }

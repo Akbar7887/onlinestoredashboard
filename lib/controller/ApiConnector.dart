@@ -28,4 +28,8 @@ class ApiConnector extends GetConnect{
     return await api.delete(url, id);
   }
 
+  Future<dynamic> deleteActive(String url, String id) async {
+    return await api.deleteActive(url, id);
+  }
+
 }

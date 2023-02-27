@@ -15,6 +15,7 @@ Catalog? _catalog;
 List<DropdownMenuItem<Catalog>> _catalogfordrop = [];
 Catalog? dropDownValue;
 final _keyForm = GlobalKey<FormState>();
+List<Catalog> _catalogs = [];
 
 class CatalogPage extends StatelessWidget {
   const CatalogPage({Key? key}) : super(key: key);
@@ -78,20 +79,44 @@ class CatalogPage extends StatelessWidget {
                     height: 50,
                     width: 200,
                     child: Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: Colors.black38)),
-                      child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text(e.catalogname!)),
-                    ))),
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            side: BorderSide(color: Colors.black38)),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              child: Text(e.catalogname!),
+                            ),
+                            Spacer(),
+                            Padding(
+                              padding: EdgeInsets.only(right: 10),
+                              child: IconButton(
+                                onPressed: () {
+                                  _catalogController
+                                      .deleteActive("doc/catalog/deleteactive", e.id!)
+                                      .then((value) =>
+                                          _catalogController.fetchGetAll());
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.blue,
+                                  size: 15,
+                                ),
+                              ),
+                            )
+                          ],
+                        )))),
             children: createCatalogHiriarh(context, e.catalogs!)))
         .toList();
   }
 
   getDropDownCatalogs(List<Catalog> catalogs) {
+    // _catalogs = [];
     catalogs.forEach((element) {
+      _catalogs.add(element);
       _catalogfordrop.add(
           DropdownMenuItem(child: Text(element.catalogname!), value: element));
       getDropDownCatalogs(element.catalogs!);
@@ -102,10 +127,14 @@ class CatalogPage extends StatelessWidget {
     // if (_catalog == null) {
     //   dropDownValue = _catalogController.catalogs.firstWhere((element) =>
     //       _catalogController.catalogs.first.parent!.id == element.id);
+    _catalogfordrop = [];
+    _catalogs = [];
+    getDropDownCatalogs(_catalogController.catalogs);
+
     if (_catalog != null) {
       if (_catalog!.parentId != null) {
-        dropDownValue = _catalogController.catalogs
-            .firstWhere((element) => _catalog!.parentId == element.id);
+        dropDownValue =
+            _catalogs.firstWhere((element) => _catalog!.parentId == element.id);
       } else {
         dropDownValue = null;
       }
@@ -116,9 +145,7 @@ class CatalogPage extends StatelessWidget {
     } else {
       _controllercatalogName.text = "";
     }
-    _catalogfordrop = [];
 
-    getDropDownCatalogs(_catalogController.catalogs);
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -168,6 +195,7 @@ class CatalogPage extends StatelessWidget {
 
                         if (_catalog == null) {
                           _catalog = new Catalog();
+                          _catalog!.active = 'ACTIVE';
                         }
                         _catalog!.catalogname = _controllercatalogName.text;
 
