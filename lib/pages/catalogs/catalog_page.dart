@@ -4,6 +4,7 @@ import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:onlinestoredashboard/controller/CatalogController.dart';
+import 'package:onlinestoredashboard/pages/catalogs/header.dart';
 
 import '../../generated/l10n.dart';
 import '../../models/catalogs/Catalog.dart';
@@ -31,19 +32,7 @@ class CatalogPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                          height: 30,
-                          width: MediaQuery.of(context).size.width,
-                          child: FittedBox(
-                            child: Text(
-                              "Каталог",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          )),
-                      Divider(),
+                     Header(S.of(context).catalog_page_name),
                       ElevatedButton(
                         onPressed: () {
                           dropDownValue = null;

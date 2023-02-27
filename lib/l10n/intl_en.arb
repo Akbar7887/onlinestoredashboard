@@ -8,5 +8,8 @@
   "catalog": "Каталог",
   "parent": "Родитель",
   "add": "Добавить",
-  "validate": "Просим заплнить поля"
+  "validate": "Просим заплнить поля",
+  "catalog_page_name": "Каталог",
+  "product_page_name": "Каталог",
+  "wanttoremove": "Хотите удалить ?"
 }

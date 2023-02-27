@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:onlinestoredashboard/models/UiO.dart';
+import 'package:onlinestoredashboard/models/catalogs/Product.dart';
 
 class Api {
   Map<String, String> header = {

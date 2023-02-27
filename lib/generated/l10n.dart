@@ -149,6 +149,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Каталог`
+  String get catalog_page_name {
+    return Intl.message(
+      'Каталог',
+      name: 'catalog_page_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Каталог`
+  String get product_page_name {
+    return Intl.message(
+      'Каталог',
+      name: 'product_page_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Хотите удалить ?`
+  String get wanttoremove {
+    return Intl.message(
+      'Хотите удалить ?',
+      name: 'wanttoremove',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

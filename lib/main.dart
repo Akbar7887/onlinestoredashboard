@@ -4,6 +4,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 import 'package:onlinestoredashboard/pages/catalogs/catalog_page.dart';
+import 'package:onlinestoredashboard/pages/catalogs/product_page.dart';
 import 'package:onlinestoredashboard/pages/home.dart';
 import 'package:onlinestoredashboard/pages/organization_page.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       initialBinding: HomeBindings(),
       getPages: [
-        GetPage(name: '/', page: () => CatalogPage()),
+        GetPage(name: '/', page: () => ProductPage()),
+        GetPage(name: '/cat', page: () => CatalogPage()),
         GetPage(name: '/org', page: () => OrganizationPage()),
 
       ],

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:onlinestoredashboard/models/catalogs/Catalog.dart';
+import 'package:onlinestoredashboard/models/catalogs/Product.dart';
 
 import 'ApiConnector.dart';
 
@@ -32,4 +33,13 @@ class CatalogController extends GetxController {
     return catalog!;
   }
 
+  Future<bool> deleteById(url, id) async {
+    return await api.deleteById(url, id);
+  }
+
+  Future<Catalog> saveProduct(String url, Product product, int id) async {
+    final json = await api.savesub(url, product, id.toString());
+    catalog = Catalog.fromJson(json);
+    return catalog!;
+  }
 }
