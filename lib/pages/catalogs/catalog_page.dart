@@ -32,8 +32,8 @@ class CatalogPage extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        // dropDownValue = null;
-                        // _catalog = null;
+                        dropDownValue = null;
+                        _catalog = null;
                         showDialogCatalog(context);
                       },
                       child: FittedBox(
@@ -92,10 +92,10 @@ class CatalogPage extends StatelessWidget {
   }
 
   Future<void> showDialogCatalog(BuildContext context) async {
-    if (_catalog == null) {
-      dropDownValue = _catalogController.catalogs.firstWhere((element) =>
-          _catalogController.catalogs.first.parent!.id == element.id);
-    } else {
+    // if (_catalog == null) {
+    //   dropDownValue = _catalogController.catalogs.firstWhere((element) =>
+    //       _catalogController.catalogs.first.parent!.id == element.id);
+    if (_catalog != null) {
       if (_catalog!.parentId != null) {
         dropDownValue = _catalogController.catalogs
             .firstWhere((element) => _catalog!.parentId == element.id);
@@ -106,6 +106,8 @@ class CatalogPage extends StatelessWidget {
     TextEditingController _controllercatalogName = TextEditingController();
     if (_catalog != null) {
       _controllercatalogName.text = _catalog!.catalogname!;
+    } else {
+      _controllercatalogName.text = "";
     }
     _catalogfordrop = [];
 
