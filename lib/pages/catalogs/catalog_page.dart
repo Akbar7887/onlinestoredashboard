@@ -96,7 +96,8 @@ class CatalogPage extends StatelessWidget {
                               child: IconButton(
                                 onPressed: () {
                                   _catalogController
-                                      .deleteActive("doc/catalog/deleteactive", e.id!)
+                                      .deleteActive(
+                                          "doc/catalog/deleteactive", e.id!)
                                       .then((value) =>
                                           _catalogController.fetchGetAll());
                                 },
@@ -111,6 +112,19 @@ class CatalogPage extends StatelessWidget {
                         )))),
             children: createCatalogHiriarh(context, e.catalogs!)))
         .toList();
+  }
+
+  dropDownTree(List<Catalog> catalogs) {
+    catalogs.forEach((element) {
+      _catalogs.add(element);
+      _catalogfordrop.add(DropdownMenuItem(
+          child: TreeView(nodes: [
+            TreeNode(
+                content: Text(element.catalogname!),
+                children: getDropDownCatalogs(element.catalogs!)),
+          ]),
+          value: element));
+    });
   }
 
   getDropDownCatalogs(List<Catalog> catalogs) {
