@@ -9,6 +9,7 @@ class CatalogController extends GetxController {
   final api = ApiConnector();
 
   var catalogs = <Catalog>[].obs;
+  List<Product> products = [];
   Catalog? catalog;
 
   @override

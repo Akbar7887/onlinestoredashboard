@@ -8,6 +8,7 @@ class Product {
   dynamic? imagepath;
   String? active;
   List<ProductImage>? productImages;
+  int? catalogId;
 
   Product({
       this.id, 
@@ -15,7 +16,8 @@ class Product {
       this.description, 
       this.imagepath, 
       this.active, 
-      this.productImages,});
+      this.productImages,
+  this.catalogId});
 
   Product.fromJson(dynamic json) {
     id = json['id'];
@@ -29,6 +31,9 @@ class Product {
         productImages!.add(ProductImage.fromJson(v));
       });
     }
+    catalogId = json['catalogId'];
+
+
   }
 
 
