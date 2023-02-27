@@ -25,36 +25,43 @@ class CatalogPage extends StatelessWidget {
         child: Scaffold(
             appBar: OnlineAppBar(),
             body: Obx(() {
-              return ListView(
-                children: [
-                  SizedBox(
-                    width: 100,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        dropDownValue = null;
-                        _catalog = null;
-                        showDialogCatalog(context);
-                      },
-                      child: FittedBox(
-                          fit: BoxFit.fitWidth, child: Text(S.of(context).add)),
-                    ),
-                  ),
-                  Container(
-                      height: 30,
-                      width: MediaQuery.of(context).size.width,
-                      child: FittedBox(
-                        child: Text(
-                          "Каталог",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      )),
-                  Container(
-                      child: TreeView(
-                          nodes: createCatalogHiriarh(
-                              context, _catalogController.catalogs)))
-                ],
-              );
+              return Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                          height: 30,
+                          width: MediaQuery.of(context).size.width,
+                          child: FittedBox(
+                            child: Text(
+                              "Каталог",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          )),
+                      Divider(),
+                      ElevatedButton(
+                        onPressed: () {
+                          dropDownValue = null;
+                          _catalog = null;
+                          showDialogCatalog(context);
+                        },
+                        child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(S.of(context).add)),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                          child: TreeView(
+                              nodes: createCatalogHiriarh(
+                                  context, _catalogController.catalogs)))
+                    ],
+                  ));
             })));
   }
 
