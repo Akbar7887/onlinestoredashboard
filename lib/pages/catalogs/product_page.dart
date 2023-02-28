@@ -6,6 +6,7 @@ import 'package:onlinestoredashboard/controller/CatalogController.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 import 'package:onlinestoredashboard/models/catalogs/Catalog.dart';
 import 'package:onlinestoredashboard/models/catalogs/Product.dart';
+import 'package:onlinestoredashboard/models/constants/main_constant.dart';
 import 'package:onlinestoredashboard/pages/catalogs/header.dart';
 import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -18,42 +19,45 @@ final CatalogController _controller = Get.put(CatalogController());
 Product? _product;
 late ProductDataGridSource _productDataGridSource;
 final _keyForm = GlobalKey<FormState>();
+Catalog? dropDownValue;
 
 class ProductPage extends GetView<CatalogController> {
   ProductPage() : super();
 
-  // getProduct(Catalog catalog) {
-  //   _products = [];
-  //   catalog.products!.forEach((product) {
-  //     _products.add(product);
-  //   });
-  //   _controller.products = _products.obs;
-  // }
-
-  // getCatalog(List<Catalog> catalogs) {
-  //   _controller.catalogs = <Catalog>[].obs;
-  //   catalogs.forEach((catalog) {
-  //     _controller.addCatalog(catalog);
-  //     getCatalog(catalog.catalogs!);
-  //   });
-  // }
-
-  Widget tree(List<Catalog> catalogs) {
-    return TreeView(nodes: treeList(catalogs));
+  Widget tree(BuildContext context, List<Catalog> catalogs) {
+    return Container(
+        child: Card(
+            child: Column(
+      children: [
+        Container(
+            height: 20,
+            child: FittedBox(
+              fit: BoxFit.fill,
+              child: Text(
+                S.of(context).catalog,
+              ),
+            )),
+        Divider(),
+        Expanded(child: TreeView(nodes: treeList(context, catalogs)))
+      ],
+    )));
   }
 
-  List<TreeNode> treeList(List<Catalog> list) {
+  List<TreeNode> treeList(BuildContext context, List<Catalog> list) {
     return list
         .map((e) => TreeNode(
             content: InkWell(
                 onTap: () {
                   _controller.getProducts(e);
+                  dropDownValue = e;
+
                   _productDataGridSource =
                       ProductDataGridSource(_controller.productlist.value);
                 },
                 child: Container(
                     height: 50,
-                    width: 200,
+                    width:  MediaQuery.of(context).size.width/10,
+                    //constraints: BoxConstraints.expand(),
                     child: Card(
                         elevation: 5,
                         shape: RoundedRectangleBorder(
@@ -62,14 +66,20 @@ class ProductPage extends GetView<CatalogController> {
                         child: Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              child: Text(e.catalogname!),
-                            ),
+                            Padding(
+                                padding: EdgeInsets.all(5),
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: Text(
+                                    e.catalogname!,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                )),
                             Spacer(),
                           ],
                         )))),
-            children: treeList(e.catalogs!)))
+            children: treeList(context, e.catalogs!)))
         .toList();
   }
 
@@ -78,126 +88,156 @@ class ProductPage extends GetView<CatalogController> {
         elevation: 5,
         child: Padding(
             padding: EdgeInsets.all(10),
-            child: SfDataGridTheme(
-              data: SfDataGridThemeData(
-                headerColor: Colors.grey[700],
-                rowHoverColor: Colors.grey,
-                gridLineStrokeWidth: 1,
-                rowHoverTextStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                ),
-              ),
-              child: SfDataGrid(
-                  source: _productDataGridSource,
-                  selectionMode: SelectionMode.single,
-                  headerGridLinesVisibility: GridLinesVisibility.vertical,
-                  columnWidthMode: ColumnWidthMode.fill,
-                  // allowFiltering: true,
-                  allowSorting: true,
-                  allowEditing: true,
-                  gridLinesVisibility: GridLinesVisibility.both,
-                  onCellTap: (cell) async {
-                    if (cell.rowColumnIndex.rowIndex > -1) {
-                      if (cell.rowColumnIndex.columnIndex == 2) {
-                        _product = _controller.productlist
-                            .value[cell.rowColumnIndex.rowIndex - 1];
-                        showDialogMeneger(context);
-                      }
-                      if (cell.rowColumnIndex.columnIndex == 3) {
-                        await showDialog<void>(
-                          context: context,
-                          barrierDismissible: true,
-                          // false = user must tap button, true = tap outside dialog
-                          builder: (BuildContext dialogContext) {
-                            return AlertDialog(
-                              content: Text(S.of(context).wanttoremove),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('Да'),
-                                  onPressed: () {
-                                    _controller
-                                        .deleteById(
-                                            "catalog/delete",
-                                            _controller
-                                                .productlist
-                                                .value[cell.rowColumnIndex
-                                                        .rowIndex -
-                                                    1]
-                                                .id
-                                                .toString())
-                                        .then((value) {
-                                      _controller.fetchGetAll();
-                                    });
-                                    Navigator.of(dialogContext)
-                                        .pop(); // Dismiss alert dialog
-                                  },
-                                ),
-                                TextButton(
-                                  child: Text('Нет'),
-                                  onPressed: () {
-                                    Navigator.of(dialogContext)
-                                        .pop(); // Dismiss alert dialog
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    }
-                  },
-                  columns: [
-                    GridColumn(
-                        columnName: 'id',
-                        width: 50,
-                        label: Center(
-                          child: Text(
-                            "№",
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )),
-                    GridColumn(
-                      columnName: 'name',
-                      // width: MediaQuery.of(context).size.width/2,
-                      label: Center(
-                        child: Text(
-                          S.of(context).name,
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
+            child: Column(
+              children: [
+                Container(
+                    height: 20,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: Text(
+                        S.of(context).product,
                       ),
+                    )),
+                Divider(),
+                Container(
+                    alignment: Alignment.topLeft,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          _product = null;
+                          dropDownValue = null;
+                          showDialogMeneger(context);
+                        },
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.grey[800])),
+                        child: Text("Добавить"))),
+                SizedBox(
+                  height: 20,
+                ),
+                SfDataGridTheme(
+                  data: SfDataGridThemeData(
+                    headerColor: Colors.grey[700],
+                    rowHoverColor: Colors.grey,
+                    gridLineStrokeWidth: 1,
+                    rowHoverTextStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
                     ),
-                    GridColumn(
-                        columnName: "edit",
-                        maximumWidth: 150,
-                        label: Container(
-                            padding: EdgeInsets.all(16.0),
-                            alignment: Alignment.center,
+                  ),
+                  child: SfDataGrid(
+                      source: _productDataGridSource,
+                      selectionMode: SelectionMode.single,
+                      headerGridLinesVisibility: GridLinesVisibility.vertical,
+                      columnWidthMode: ColumnWidthMode.fill,
+                      // allowFiltering: true,
+                      allowSorting: true,
+                      allowEditing: true,
+                      gridLinesVisibility: GridLinesVisibility.both,
+                      onCellTap: (cell) async {
+                        if (cell.rowColumnIndex.rowIndex > -1) {
+                          if (cell.rowColumnIndex.columnIndex == 2) {
+                            _product = _controller.productlist
+                                .value[cell.rowColumnIndex.rowIndex - 1];
+                            showDialogMeneger(context);
+                          }
+                          if (cell.rowColumnIndex.columnIndex == 3) {
+                            await showDialog<void>(
+                              context: context,
+                              barrierDismissible: true,
+                              // false = user must tap button, true = tap outside dialog
+                              builder: (BuildContext dialogContext) {
+                                return AlertDialog(
+                                  content: Text(S.of(context).wanttoremove),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('Да'),
+                                      onPressed: () {
+                                        _controller
+                                            .deleteById(
+                                                "doc/product/delete",
+                                                _controller
+                                                    .productlist
+                                                    .value[cell.rowColumnIndex
+                                                            .rowIndex -
+                                                        1]
+                                                    .id
+                                                    .toString())
+                                            .then((value) {
+                                          _controller.fetchGetAll();
+                                          _controller
+                                              .getProducts(dropDownValue!);
+                                        });
+                                        Navigator.of(dialogContext)
+                                            .pop(); // Dismiss alert dialog
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text('Нет'),
+                                      onPressed: () {
+                                        Navigator.of(dialogContext)
+                                            .pop(); // Dismiss alert dialog
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        }
+                      },
+                      columns: [
+                        GridColumn(
+                            columnName: 'id',
+                            width: 50,
+                            label: Center(
+                              child: Text(
+                                "№",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                        GridColumn(
+                          columnName: 'name',
+                          // width: MediaQuery.of(context).size.width/2,
+                          label: Center(
                             child: Text(
-                              S.of(context).edit,
+                              S.of(context).name,
                               style: TextStyle(
+                                  fontSize: 15,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
-                            ))),
-                    GridColumn(
-                        columnName: "delete",
-                        maximumWidth: 150,
-                        label: Container(
-                            padding: EdgeInsets.all(16.0),
-                            alignment: Alignment.center,
-                            child: Text(
-                              S.of(context).delete,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ))),
-                  ]),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                            columnName: "edit",
+                            maximumWidth: 150,
+                            label: Container(
+                                padding: EdgeInsets.all(16.0),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  S.of(context).edit,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            columnName: "delete",
+                            maximumWidth: 150,
+                            label: Container(
+                                padding: EdgeInsets.all(16.0),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  S.of(context).delete,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ))),
+                      ]),
+                )
+              ],
             )));
   }
 
@@ -227,27 +267,13 @@ class ProductPage extends GetView<CatalogController> {
               height: 10,
             ),
             Container(
-                alignment: Alignment.topLeft,
-                child: ElevatedButton(
-                    onPressed: () {
-                      _product = null;
-                      showDialogMeneger(context);
-                    },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.grey[800])),
-                    child: Text("Добавить"))),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.blue.shade800)),
                 child: Row(
                   children: [
-                    Expanded(child: tree(_controller.catalogs)),
+                    Expanded(child: tree(context, _controller.catalogs)),
                     Expanded(flex: 3, child: table(context)),
                   ],
                 ))
@@ -262,13 +288,16 @@ class ProductPage extends GetView<CatalogController> {
 
   Future<void> showDialogMeneger(BuildContext context) async {
     TextEditingController _nameController = TextEditingController();
+    TextEditingController _descriptionController = TextEditingController();
     String _id = '';
     if (_product != null) {
       _nameController.text = _product!.name!;
+      _descriptionController.text = _product!.description!;
       _id = _product!.id.toString();
     } else {
       _id = '';
-      _nameController.text = '';
+      _nameController.clear();
+      _descriptionController.clear();
     }
 
     return await showDialog<void>(
@@ -276,74 +305,98 @@ class ProductPage extends GetView<CatalogController> {
       barrierDismissible: true,
       // false = user must tap button, true = tap outside dialog
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text(S.of(context).catalog_show_diagram),
-          content: Container(
-              width: MediaQuery.of(context).size.width / 3,
-              height: MediaQuery.of(context).size.height / 3,
-              child: Form(
-                  key: _keyForm,
-                  child: Column(
-                    children: [
-                      Container(
-                          alignment: Alignment.topLeft,
-                          child: Text('№ ${_id}')),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                          controller: _nameController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Просим заплнить наименование";
-                            }
-                          },
-                          style: GoogleFonts.openSans(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w200,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              //Theme.of(context).backgroundColor,
-                              labelText: S.of(context).name,
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      width: 0.5, color: Colors.black)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      width: 0.5, color: Colors.black)))),
-                    ],
-                  ))),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                if (!_keyForm.currentState!.validate()) {
-                  return;
-                }
+        return StatefulBuilder(
+            builder: (context, setState) => AlertDialog(
+                  title: Text(S.of(context).catalog_show_diagram),
+                  content: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: Form(
+                          key: _keyForm,
+                          child: Column(
+                            children: [
+                              DropdownButton(
+                                isExpanded: true,
+                                items: _controller.catalogslist.value.map((e) {
+                                  return DropdownMenuItem(
+                                    child: Text(e.catalogname!),
+                                    value: e,
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() => dropDownValue = value);
+                                },
+                                value: dropDownValue,
+                              ),
+                              Container(
+                                  alignment: Alignment.topLeft,
+                                  child: Text('№ ${_id}')),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                  controller: _nameController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return S.of(context).validate;
+                                    }
+                                  },
+                                  style: GoogleFonts.openSans(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.black),
+                                  decoration: MainConstant.decoration(
+                                      S.of(context).name)),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                  controller: _descriptionController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return S.of(context).validate;
+                                    }
+                                  },
+                                  style: GoogleFonts.openSans(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.black),
+                                  decoration: MainConstant.decoration(
+                                      S.of(context).description)),
+                            ],
+                          ))),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        if (!_keyForm.currentState!.validate()) {
+                          return;
+                        }
 
-                if (_product == null) {
-                  _product = Product();
-                }
-                _product!.name = _nameController.text;
-                _controller
-                    .saveProduct("doc/catalog/saveproduct", _product!, 3)
-                    .then((value) {
-                  _controller.fetchGetAll();
-                  Navigator.of(dialogContext).pop(); // Dismiss alert dialog
-                });
-              },
-              child: Text(S.of(context).save),
-            ),
-            TextButton(
-              child: Text(S.of(context).cancel),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
-              },
-            ),
-          ],
-        );
+                        if (_product == null) {
+                          _product = Product();
+                        }
+                        _product!.name = _nameController.text;
+                        _product!.description = _descriptionController.text;
+                        _controller
+                            .saveProduct("doc/catalog/saveproduct", _product!,
+                                dropDownValue!.id!)
+                            .then((value) {
+                          _controller.fetchGetAll();
+                          Navigator.of(dialogContext)
+                              .pop(); // Dismiss alert dialog
+                        });
+                      },
+                      child: Text(S.of(context).save),
+                    ),
+                    TextButton(
+                      child: Text(S.of(context).cancel),
+                      onPressed: () {
+                        Navigator.of(dialogContext)
+                            .pop(); // Dismiss alert dialog
+                      },
+                    ),
+                  ],
+                ));
       },
     );
   }
@@ -354,7 +407,8 @@ class ProductDataGridSource extends DataGridSource {
     dataGridRows = products
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<int>(
-                  columnName: 'id', value: _controller.products.indexOf(e) + 1),
+                  columnName: 'id',
+                  value: _controller.productlist.value.indexOf(e) + 1),
               DataGridCell<String>(columnName: 'name', value: e.name),
               DataGridCell<Icon>(columnName: 'edit', value: Icon(Icons.edit)),
               DataGridCell<Icon>(

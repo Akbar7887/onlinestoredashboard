@@ -70,6 +70,16 @@ class S {
     );
   }
 
+  /// `Описание`
+  String get description {
+    return Intl.message(
+      'Описание',
+      name: 'description',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Изменить`
   String get edit {
     return Intl.message(
@@ -160,10 +170,10 @@ class S {
     );
   }
 
-  /// `Каталог`
+  /// `Продукты`
   String get product_page_name {
     return Intl.message(
-      'Каталог',
+      'Продукты',
       name: 'product_page_name',
       desc: '',
       args: [],
@@ -175,6 +185,16 @@ class S {
     return Intl.message(
       'Хотите удалить ?',
       name: 'wanttoremove',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Продукты`
+  String get product {
+    return Intl.message(
+      'Продукты',
+      name: 'product',
       desc: '',
       args: [],
     );

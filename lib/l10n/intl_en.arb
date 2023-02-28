@@ -1,6 +1,7 @@
 {
   "catalog_show_diagram": "Форма для измениие или добавление!",
   "name": "Наименование",
+  "description": "Описание",
   "edit": "Изменить",
   "delete": "Удалить",
   "save": "Сохранить",
@@ -10,6 +11,7 @@
   "add": "Добавить",
   "validate": "Просим заплнить поля",
   "catalog_page_name": "Каталог",
-  "product_page_name": "Каталог",
-  "wanttoremove": "Хотите удалить ?"
+  "product_page_name": "Продукты",
+  "wanttoremove": "Хотите удалить ?",
+  "product": "Продукты"
 }

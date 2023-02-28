@@ -14,6 +14,7 @@ class CatalogController extends GetxController {
   var productlist = <Product>[].obs;
   Catalog? catalog;
 
+
   @override
   void onInit() {
     fetchGetAll();
@@ -25,6 +26,7 @@ class CatalogController extends GetxController {
     final json = await api.getAll("doc/catalog/get");
     this.catalogs.value = json.map((e) => Catalog.fromJson(e)).toList();
 
+    this.catalogslist.value = <Catalog>[].obs;
     creatCatalogList(this.catalogs.value);
     update();
 

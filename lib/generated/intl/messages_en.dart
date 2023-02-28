@@ -29,10 +29,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "catalog_show_diagram": MessageLookupByLibrary.simpleMessage(
             "Форма для измениие или добавление!"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
+        "description": MessageLookupByLibrary.simpleMessage("Описание"),
         "edit": MessageLookupByLibrary.simpleMessage("Изменить"),
         "name": MessageLookupByLibrary.simpleMessage("Наименование"),
         "parent": MessageLookupByLibrary.simpleMessage("Родитель"),
-        "product_page_name": MessageLookupByLibrary.simpleMessage("Каталог"),
+        "product": MessageLookupByLibrary.simpleMessage("Продукты"),
+        "product_page_name": MessageLookupByLibrary.simpleMessage("Продукты"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "validate":
             MessageLookupByLibrary.simpleMessage("Просим заплнить поля"),
