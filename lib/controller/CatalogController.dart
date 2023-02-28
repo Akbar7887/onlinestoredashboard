@@ -9,19 +9,53 @@ class CatalogController extends GetxController {
   final api = ApiConnector();
 
   var catalogs = <Catalog>[].obs;
-  List<Product> products = [];
+  var products = <Product>[].obs;
+  var catalogslist = <Catalog>[].obs;
+  var productlist = <Product>[].obs;
   Catalog? catalog;
 
   @override
   void onInit() {
     fetchGetAll();
+    // getProducts(this.catalogs.value.first);
     super.onInit();
   }
 
   fetchGetAll() async {
     final json = await api.getAll("doc/catalog/get");
-    catalogs.value = json.map((e) => Catalog.fromJson(e)).toList();
+    this.catalogs.value = json.map((e) => Catalog.fromJson(e)).toList();
+
+    creatCatalogList(this.catalogs.value);
+    update();
+
   }
+
+  creatCatalogList(List<Catalog> catalogs) {
+    catalogs.forEach((element) {
+      this.catalogslist.value.add(element);
+      creatCatalogList(element.catalogs!);
+      update();
+
+    });
+  }
+
+  getProducts(Catalog catalog){
+    this.productlist.value =  catalog.products!;
+     update();
+  }
+
+  changeProducts(List<Product> product){
+    this.products.value = product;
+    update();
+    // notifyChildrens();
+  }
+
+  addCatalog(Catalog catalog){
+    this.catalogs.add(catalog);
+    update();
+    // notifyChildrens();
+  }
+
 
   Future<Catalog> savesub(String url, Catalog catalog, int id) async {
     final json = await api.savesub(url, catalog, id.toString());
