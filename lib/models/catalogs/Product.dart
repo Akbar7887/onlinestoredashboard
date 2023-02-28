@@ -1,7 +1,10 @@
+import 'dart:collection';
+
 import 'package:onlinestoredashboard/models/catalogs/ProductImage.dart';
 
-class Product {
+import 'Characteristic.dart';
 
+class Product {
   int? id;
   String? name;
   String? description;
@@ -9,15 +12,17 @@ class Product {
   String? active;
   List<ProductImage>? productImages;
   int? catalogId;
+  Set<Characteristic>? characteristicSet;
 
-  Product({
-      this.id, 
-      this.name, 
-      this.description, 
-      this.imagepath, 
-      this.active, 
+  Product(
+      {this.id,
+      this.name,
+      this.description,
+      this.imagepath,
+      this.active,
       this.productImages,
-  this.catalogId});
+      this.catalogId,
+      this.characteristicSet});
 
   Product.fromJson(dynamic json) {
     id = json['id'];
@@ -32,10 +37,13 @@ class Product {
       });
     }
     catalogId = json['catalogId'];
-
-
+    if(json['characteristicSet'] != null){
+      characteristicSet = HashSet();
+      json['characteristicSet'].forEach((c){
+        characteristicSet!.add(Characteristic.fromJson(c));
+      });
+    }
   }
-
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -47,7 +55,9 @@ class Product {
     if (productImages != null) {
       map['productImages'] = productImages!.map((v) => v.toJson()).toList();
     }
+    if (characteristicSet != null) {
+      map['characteristicSet'] = characteristicSet!.map((v) => v.toJson()).toList();
+    }
     return map;
   }
-
 }
