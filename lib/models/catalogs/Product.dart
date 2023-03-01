@@ -12,7 +12,7 @@ class Product {
   String? active;
   List<ProductImage>? productImages;
   int? catalogId;
-  Set<Characteristic>? characteristicSet;
+  List<Characteristic>? characteristics;
 
   Product(
       {this.id,
@@ -22,7 +22,7 @@ class Product {
       this.active,
       this.productImages,
       this.catalogId,
-      this.characteristicSet});
+      this.characteristics});
 
   Product.fromJson(dynamic json) {
     id = json['id'];
@@ -37,10 +37,10 @@ class Product {
       });
     }
     catalogId = json['catalogId'];
-    if(json['characteristicSet'] != null){
-      characteristicSet = HashSet();
-      json['characteristicSet'].forEach((c){
-        characteristicSet!.add(Characteristic.fromJson(c));
+    if(json['characteristics'] != null){
+      characteristics = [];
+      json['characteristics'].forEach((c){
+        characteristics!.add(Characteristic.fromJson(c));
       });
     }
   }
@@ -55,8 +55,8 @@ class Product {
     if (productImages != null) {
       map['productImages'] = productImages!.map((v) => v.toJson()).toList();
     }
-    if (characteristicSet != null) {
-      map['characteristicSet'] = characteristicSet!.map((v) => v.toJson()).toList();
+    if (characteristics != null) {
+      map['characteristics'] = characteristics!.map((v) => v.toJson()).toList();
     }
     return map;
   }

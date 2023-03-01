@@ -7,6 +7,7 @@ import 'package:onlinestoredashboard/models/UiO.dart';
 import 'package:onlinestoredashboard/models/catalogs/Catalog.dart';
 import 'package:onlinestoredashboard/models/catalogs/Product.dart';
 import 'package:onlinestoredashboard/models/constants/main_constant.dart';
+import 'package:onlinestoredashboard/pages/catalogs/addcharacteristic.dart';
 import 'package:onlinestoredashboard/pages/catalogs/header.dart';
 import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -56,7 +57,7 @@ class ProductPage extends GetView<CatalogController> {
                 },
                 child: Container(
                     height: 50,
-                    width:  MediaQuery.of(context).size.width/10,
+                    width: MediaQuery.of(context).size.width / 10,
                     //constraints: BoxConstraints.expand(),
                     child: Card(
                         elevation: 5,
@@ -81,6 +82,43 @@ class ProductPage extends GetView<CatalogController> {
                         )))),
             children: treeList(context, e.catalogs!)))
         .toList();
+  }
+
+  deleterow(BuildContext context, cell) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      // false = user must tap button, true = tap outside dialog
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          content: Text(S.of(context).wanttoremove),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Да'),
+              onPressed: () {
+                _controller
+                    .deleteById(
+                        "doc/product/delete",
+                        _controller.productlist
+                            .value[cell.rowColumnIndex.rowIndex - 1].id
+                            .toString())
+                    .then((value) {
+                  _controller.fetchGetAll();
+                  _controller.getProducts(dropDownValue!);
+                });
+                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+              },
+            ),
+            TextButton(
+              child: Text('Нет'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget table(BuildContext context) {
@@ -133,7 +171,7 @@ class ProductPage extends GetView<CatalogController> {
                       allowSorting: true,
                       allowEditing: true,
                       gridLinesVisibility: GridLinesVisibility.both,
-                      onCellTap: (cell) async {
+                      onCellTap: (cell) {
                         if (cell.rowColumnIndex.rowIndex > -1) {
                           if (cell.rowColumnIndex.columnIndex == 2) {
                             _product = _controller.productlist
@@ -141,47 +179,17 @@ class ProductPage extends GetView<CatalogController> {
                             showDialogMeneger(context);
                           }
                           if (cell.rowColumnIndex.columnIndex == 3) {
-                            await showDialog<void>(
-                              context: context,
-                              barrierDismissible: true,
-                              // false = user must tap button, true = tap outside dialog
-                              builder: (BuildContext dialogContext) {
-                                return AlertDialog(
-                                  content: Text(S.of(context).wanttoremove),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text('Да'),
-                                      onPressed: () {
-                                        _controller
-                                            .deleteById(
-                                                "doc/product/delete",
-                                                _controller
-                                                    .productlist
-                                                    .value[cell.rowColumnIndex
-                                                            .rowIndex -
-                                                        1]
-                                                    .id
-                                                    .toString())
-                                            .then((value) {
-                                          _controller.fetchGetAll();
-                                          _controller
-                                              .getProducts(dropDownValue!);
-                                        });
-                                        Navigator.of(dialogContext)
-                                            .pop(); // Dismiss alert dialog
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text('Нет'),
-                                      onPressed: () {
-                                        Navigator.of(dialogContext)
-                                            .pop(); // Dismiss alert dialog
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
+                            _controller.product!.value = _controller.productlist
+                                .value[cell.rowColumnIndex.rowIndex - 1];
+                            showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return Addcharacteristic();
+                                });
+                          }
+                          if (cell.rowColumnIndex.columnIndex == 4) {
+                            deleterow(context, cell);
                           }
                         }
                       },
@@ -215,7 +223,7 @@ class ProductPage extends GetView<CatalogController> {
                             columnName: "edit",
                             maximumWidth: 150,
                             label: Container(
-                                padding: EdgeInsets.all(16.0),
+                                padding: EdgeInsets.all(5.0),
                                 alignment: Alignment.center,
                                 child: Text(
                                   S.of(context).edit,
@@ -224,10 +232,22 @@ class ProductPage extends GetView<CatalogController> {
                                       fontWeight: FontWeight.bold),
                                 ))),
                         GridColumn(
+                            columnName: "characteristic",
+                            maximumWidth: 150,
+                            label: Container(
+                                padding: EdgeInsets.all(5.0),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  S.of(context).characteristic,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
                             columnName: "delete",
                             maximumWidth: 150,
                             label: Container(
-                                padding: EdgeInsets.all(16.0),
+                                padding: EdgeInsets.all(5.0),
                                 alignment: Alignment.center,
                                 child: Text(
                                   S.of(context).delete,
@@ -412,6 +432,8 @@ class ProductDataGridSource extends DataGridSource {
               DataGridCell<String>(columnName: 'name', value: e.name),
               DataGridCell<Icon>(columnName: 'edit', value: Icon(Icons.edit)),
               DataGridCell<Icon>(
+                  columnName: 'characteristic', value: Icon(Icons.add)),
+              DataGridCell<Icon>(
                   columnName: 'delete', value: Icon(Icons.delete)),
             ]))
         .toList();
@@ -424,26 +446,20 @@ class ProductDataGridSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    return DataGridRowAdapter(cells: [
-      Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Text(row.getCells()[0].value.toString()),
-      ),
-      Container(
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Text(row.getCells()[1].value.toString()),
-      ),
-      Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: row.getCells()[2].value),
-      Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: row.getCells()[3].value,
-      ),
-    ]);
+    return DataGridRowAdapter(
+        cells: row
+            .getCells()
+            .map((e) => (e.columnName == 'edit' ||
+                    e.columnName == 'delete' ||
+                    e.columnName == 'characteristic')
+                ? Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: e.value)
+                : Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(e.value.toString())))
+            .toList());
   }
 }

@@ -13,5 +13,8 @@
   "catalog_page_name": "Каталог",
   "product_page_name": "Продукты",
   "wanttoremove": "Хотите удалить ?",
-  "product": "Продукты"
+  "product": "Продукты",
+  "characteristic": "Харак-ка",
+  "characteristics": "характеристики",
+  "valuename": "Значение"
 }

@@ -28,6 +28,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "catalog_page_name": MessageLookupByLibrary.simpleMessage("Каталог"),
         "catalog_show_diagram": MessageLookupByLibrary.simpleMessage(
             "Форма для измениие или добавление!"),
+        "characteristic": MessageLookupByLibrary.simpleMessage("Харак-ка"),
+        "characteristics":
+            MessageLookupByLibrary.simpleMessage("характеристики"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "description": MessageLookupByLibrary.simpleMessage("Описание"),
         "edit": MessageLookupByLibrary.simpleMessage("Изменить"),
@@ -38,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "validate":
             MessageLookupByLibrary.simpleMessage("Просим заплнить поля"),
+        "valuename": MessageLookupByLibrary.simpleMessage("Значение"),
         "wanttoremove": MessageLookupByLibrary.simpleMessage("Хотите удалить ?")
       };
 }

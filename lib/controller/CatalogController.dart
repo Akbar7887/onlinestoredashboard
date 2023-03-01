@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:onlinestoredashboard/models/catalogs/Catalog.dart';
+import 'package:onlinestoredashboard/models/catalogs/Characteristic.dart';
 import 'package:onlinestoredashboard/models/catalogs/Product.dart';
 
 import 'ApiConnector.dart';
@@ -13,7 +14,8 @@ class CatalogController extends GetxController {
   var catalogslist = <Catalog>[].obs;
   var productlist = <Product>[].obs;
   Catalog? catalog;
-
+  var characteristics = <Characteristic>[].obs;
+   Rx<Product> product = Product().obs;
 
   @override
   void onInit() {
@@ -29,7 +31,6 @@ class CatalogController extends GetxController {
     this.catalogslist.value = <Catalog>[].obs;
     creatCatalogList(this.catalogs.value);
     update();
-
   }
 
   creatCatalogList(List<Catalog> catalogs) {
@@ -37,25 +38,29 @@ class CatalogController extends GetxController {
       this.catalogslist.value.add(element);
       creatCatalogList(element.catalogs!);
       update();
-
     });
   }
 
-  getProducts(Catalog catalog){
-    this.productlist.value =  catalog.products!;
-     update();
+  getProducts(Catalog catalog) {
+    this.productlist.value = catalog.products!;
+    update();
   }
 
-  changeProducts(List<Product> product){
+  changeProducts(List<Product> product) {
     this.products.value = product;
     update();
     // notifyChildrens();
   }
 
-  addCatalog(Catalog catalog){
+  addCatalog(Catalog catalog) {
     this.catalogs.add(catalog);
     update();
     // notifyChildrens();
+  }
+
+  changeProduct(Product product){
+    this.product.value = product;
+    update();
   }
 
 
@@ -64,7 +69,8 @@ class CatalogController extends GetxController {
     catalog = Catalog.fromJson(json);
     return catalog;
   }
-  Future<Catalog> deleteActive(String url, int id) async{
+
+  Future<Catalog> deleteActive(String url, int id) async {
     final json = await api.deleteActive(url, id.toString());
     catalog = Catalog.fromJson(json);
     return catalog!;
