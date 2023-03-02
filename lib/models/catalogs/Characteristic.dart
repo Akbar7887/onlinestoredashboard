@@ -4,7 +4,6 @@ class Characteristic {
   String? name;
   String? valuename;
   int? productId;
-  bool editable = false;
 
   Characteristic({
       this.id, 

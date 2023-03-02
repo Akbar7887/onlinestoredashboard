@@ -10,7 +10,8 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../generated/l10n.dart';
 
 final CatalogController _controller = Get.put(CatalogController());
-List<TextEditingController> controllername = [];
+List<TextEditingController> _namecontroller = [];
+List<TextEditingController> _valuenamecontroller = [];
 
 class Addcharacteristic extends StatelessWidget {
   const Addcharacteristic({Key? key}) : super(key: key);
@@ -69,7 +70,8 @@ class Addcharacteristic extends StatelessWidget {
                         SizedBox(
                           height: 10,
                         ),
-                        SfDataGridTheme(
+                        Expanded(
+                            child: SfDataGridTheme(
                           data: SfDataGridThemeData(
                             headerColor: Colors.grey[700],
                             rowHoverColor: Colors.grey,
@@ -85,17 +87,18 @@ class Addcharacteristic extends StatelessWidget {
                               navigationMode: GridNavigationMode.cell,
                               columnWidthMode: ColumnWidthMode.fill,
                               editingGestureType: EditingGestureType.tap,
+                              headerRowHeight: 20,
                               onCellTap: (cell) {
-                                _controller
-                                    .characteristics[
-                                        cell.rowColumnIndex.rowIndex - 1]
-                                    .editable = true;
-
-                                if (cell.rowColumnIndex.rowIndex > -1) {
-                                  if (cell.rowColumnIndex.columnIndex == 2) {}
-                                  if (cell.rowColumnIndex.columnIndex == 3) {}
-                                  if (cell.rowColumnIndex.columnIndex == 4) {}
-                                }
+                                // _controller
+                                //     .characteristics[
+                                //         cell.rowColumnIndex.rowIndex - 1]
+                                //     .editable = true;
+                                //
+                                // if (cell.rowColumnIndex.rowIndex > -1) {
+                                //   if (cell.rowColumnIndex.columnIndex == 2) {}
+                                //   if (cell.rowColumnIndex.columnIndex == 3) {}
+                                //   if (cell.rowColumnIndex.columnIndex == 4) {}
+                                // }
                               },
                               columns: [
                                 GridColumn(
@@ -161,7 +164,7 @@ class Addcharacteristic extends StatelessWidget {
                                               fontWeight: FontWeight.bold),
                                         ))),
                               ]),
-                        )
+                        ))
                       ],
                     )),
               ))),
@@ -169,20 +172,26 @@ class Addcharacteristic extends StatelessWidget {
                 TextButton(
                   child: Text(S.of(context).save),
                   onPressed: () {
-                    _characteristicDataGridSource.dataGridRows
-                        .forEach((element) {
-                      _controller
-                          .characteristics
-                          .value[_characteristicDataGridSource.dataGridRows
+                    _controller.characteristics.value.forEach((element) {
+                      element.name = _namecontroller[_controller
+                              .characteristics.value
                               .indexOf(element)]
-                          .name = element.getCells()[1].value;
-                      _controller
-                          .characteristics
-                          .value[_characteristicDataGridSource.dataGridRows
+                          .text;
+                      element.valuename = _valuenamecontroller[_controller
+                              .characteristics.value
                               .indexOf(element)]
-                          .valuename = element.getCells()[2].value;
+                          .text;
                     });
-                    // Navigator.of(context).pop(); // Dismiss alert dialog
+
+                    _controller
+                        .savelist(
+                            "doc/characteristic/addcharacterlist",
+                            _controller.product.value.id.toString(),
+                            _controller.characteristics.value)
+                        .then((value) {
+                      _controller.characteristics.value = value!;
+                      Navigator.of(context).pop(); // Dismiss alert dialog
+                    });
                   },
                 ),
                 TextButton(
@@ -212,24 +221,24 @@ class CharacteristicDataGridSource extends DataGridSource {
               // DataGridCell<bool>(columnName: 'editable', value: false),
             ]))
         .toList();
+
+    dataGridRows.forEach((element) {
+      _namecontroller.add(
+          TextEditingController(text: element.getCells()[1].value.toString()));
+      _valuenamecontroller.add(
+          TextEditingController(text: element.getCells()[2].value.toString()));
+    });
   }
 
-  //
+  void addController(DataGridRow row) {}
+
   late List<DataGridRow> dataGridRows;
 
   @override
   List<DataGridRow> get rows => dataGridRows;
   dynamic newCellValue;
 
-
-
-  //
-  // // @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    controllername
-        .add(TextEditingController(text: row.getCells()[1].value.toString()));
-
-    
     return DataGridRowAdapter(cells: [
       Container(
         alignment: Alignment.center,
@@ -239,12 +248,14 @@ class CharacteristicDataGridSource extends DataGridSource {
       Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 8),
-        child: TextField(controller: controllername[dataGridRows.indexOf(row)]),
+        child:
+            TextField(controller: _namecontroller[dataGridRows.indexOf(row)]),
       ),
       Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 8),
-        child: Text(row.getCells()[2].value.toString()),
+        child: TextField(
+            controller: _valuenamecontroller[dataGridRows.indexOf(row)]),
       ),
       Container(
           alignment: Alignment.center,

@@ -11,7 +11,7 @@ class ApiConnector extends GetConnect{
     return json;
   }
   Future<List<dynamic>> getAll(String url) async {
-    final json = await api.getfirst(url);
+    final json = await api.getall(url);
 
     return json;
   }
@@ -22,6 +22,10 @@ class ApiConnector extends GetConnect{
 
   Future<dynamic> savesub(String url, Object object, String id) async {
     return await api.savesub(url, object, id);
+  }
+
+  Future<dynamic> saveList(String url, String id, List<dynamic> list) async {
+    return await api.saveList(url, id, list);
   }
 
   Future<bool> deleteById(String url, String id) async{

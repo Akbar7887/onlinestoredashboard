@@ -35,7 +35,8 @@ class CatalogController extends GetxController {
 
   fetchGetAllCharacteristic(String url, String id) async {
     final json = await api.getByParentId(url, id);
-    this.characteristics.value = json.map((e) => Characteristic.fromJson(e)).toList();
+    this.characteristics.value =
+        json.map((e) => Characteristic.fromJson(e)).toList();
     update();
   }
 
@@ -69,11 +70,23 @@ class CatalogController extends GetxController {
     update();
   }
 
-
   Future<Catalog> savesub(String url, Catalog catalog, int id) async {
     final json = await api.savesub(url, catalog, id.toString());
     catalog = Catalog.fromJson(json);
     return catalog;
+  }
+
+  Future<List<Characteristic>?> savelist(
+    String url,
+    String id,
+    List<Characteristic> list,
+  ) async {
+    final json = await api.saveList(url, id.toString(), list);
+
+    Product product = Product.fromJson(json);
+
+    // _list.sort((a, b) => a.id!.compareTo(b.id!));
+    return product.characteristics;
   }
 
   Future<Catalog> deleteActive(String url, int id) async {
