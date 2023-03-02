@@ -32,6 +32,14 @@ class CatalogController extends GetxController {
     creatCatalogList(this.catalogs.value);
     update();
   }
+  fetchGetAllCharacteristic(String url, String id) async {
+    final json = await api.getByParentId(url, id);
+    this.characteristics.value = json.map((e) => Characteristic.fromJson(e)).toList();
+
+    this.catalogslist.value = <Catalog>[].obs;
+    creatCatalogList(this.catalogs.value);
+    update();
+  }
 
   creatCatalogList(List<Catalog> catalogs) {
     catalogs.forEach((element) {
