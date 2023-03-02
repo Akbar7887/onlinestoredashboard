@@ -1,26 +1,31 @@
 class Characteristic {
-    int? id;
-    String? name;
-    int? productId;
-    String? valuename;
 
-    Characteristic({this.id, this.name, this.productId, this.valuename});
+  int? id;
+  String? name;
+  String? valuename;
+  int? productId;
 
-    factory Characteristic.fromJson(Map<String, dynamic> json) {
-        return Characteristic(
-            id: json['id'], 
-            name: json['name'], 
-            productId: json['productId'], 
-            valuename: json['valuename'], 
-        );
-    }
+  Characteristic({
+      this.id, 
+      this.name, 
+      this.valuename, 
+      this.productId,});
 
-    Map<String, dynamic> toJson() {
-        final Map<String, dynamic> data = new Map<String, dynamic>();
-        data['id'] = this.id;
-        data['name'] = this.name;
-        data['productId'] = this.productId;
-        data['valuename'] = this.valuename;
-        return data;
-    }
+  Characteristic.fromJson(dynamic json) {
+    id = json['id'];
+    name = json['name'];
+    valuename = json['valuename'];
+    productId = json['productId'];
+  }
+
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['name'] = name;
+    map['valuename'] = valuename;
+    map['productId'] = productId;
+    return map;
+  }
+
 }

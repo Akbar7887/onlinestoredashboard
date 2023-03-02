@@ -179,8 +179,13 @@ class ProductPage extends GetView<CatalogController> {
                             showDialogMeneger(context);
                           }
                           if (cell.rowColumnIndex.columnIndex == 3) {
-                            _controller.product!.value = _controller.productlist
+                            _controller.product.value = _controller.productlist
                                 .value[cell.rowColumnIndex.rowIndex - 1];
+                            _controller.fetchGetAllCharacteristic(
+                                "doc/characteristic/get",
+                                controller.productlist
+                                    .value[cell.rowColumnIndex.rowIndex - 1].id
+                                    .toString());
                             showDialog(
                                 context: context,
                                 barrierDismissible: false,

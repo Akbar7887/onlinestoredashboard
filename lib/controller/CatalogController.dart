@@ -15,7 +15,7 @@ class CatalogController extends GetxController {
   var productlist = <Product>[].obs;
   Catalog? catalog;
   var characteristics = <Characteristic>[].obs;
-   Rx<Product> product = Product().obs;
+  Rx<Product> product = Product().obs;
 
   @override
   void onInit() {
@@ -32,12 +32,10 @@ class CatalogController extends GetxController {
     creatCatalogList(this.catalogs.value);
     update();
   }
+
   fetchGetAllCharacteristic(String url, String id) async {
     final json = await api.getByParentId(url, id);
     this.characteristics.value = json.map((e) => Characteristic.fromJson(e)).toList();
-
-    this.catalogslist.value = <Catalog>[].obs;
-    creatCatalogList(this.catalogs.value);
     update();
   }
 
@@ -66,7 +64,7 @@ class CatalogController extends GetxController {
     // notifyChildrens();
   }
 
-  changeProduct(Product product){
+  changeProduct(Product product) {
     this.product.value = product;
     update();
   }
