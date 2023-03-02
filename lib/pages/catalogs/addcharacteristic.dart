@@ -95,7 +95,6 @@ class Addcharacteristic extends StatelessWidget {
                                   return UiO.datagrig_height;
                                 },
                                 headerRowHeight: UiO.datagrig_height,
-
                                 onCellTap: (cell) {},
                                 columns: [
                                   GridColumn(
@@ -251,19 +250,31 @@ class CharacteristicDataGridSource extends DataGridSource {
                 return "Ошибка";
               }
             },
-            decoration: InputDecoration(border: InputBorder.none),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              isCollapsed: true,
+              // isDense: true,
+            ),
+            textAlignVertical: TextAlignVertical.center,
             controller: _namecontroller[dataGridRows.indexOf(row)]),
       ),
       Container(
         alignment: Alignment.centerLeft,
-        padding: EdgeInsets.symmetric(horizontal: 16),
+         padding: EdgeInsets.symmetric(horizontal: 16),
         child: TextFormField(
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Ошибка";
               }
             },
-            decoration: InputDecoration(border: InputBorder.none),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              isCollapsed: true,
+              // isDense: true,
+            ),
+            textAlignVertical: TextAlignVertical.center,
+            // textAlign: TextAlign.start,
+
             controller: _valuenamecontroller[dataGridRows.indexOf(row)]),
       ),
       Container(
