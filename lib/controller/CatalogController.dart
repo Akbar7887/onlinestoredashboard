@@ -33,11 +33,10 @@ class CatalogController extends GetxController {
     update();
   }
 
-  fetchGetAllCharacteristic(String url, String id) async {
+  Future<void> getCharasteristic(String url, String id) async {
     final json = await api.getByParentId(url, id);
     this.characteristics.value =
         json.map((e) => Characteristic.fromJson(e)).toList();
-    update();
   }
 
   creatCatalogList(List<Catalog> catalogs) {

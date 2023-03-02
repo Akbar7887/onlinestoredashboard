@@ -84,43 +84,6 @@ class ProductPage extends GetView<CatalogController> {
         .toList();
   }
 
-  deleterow(BuildContext context, cell) async {
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      // false = user must tap button, true = tap outside dialog
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          content: Text(S.of(context).wanttoremove),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Да'),
-              onPressed: () {
-                _controller
-                    .deleteById(
-                        "doc/product/delete",
-                        _controller.productlist
-                            .value[cell.rowColumnIndex.rowIndex - 1].id
-                            .toString())
-                    .then((value) {
-                  _controller.fetchGetAll();
-                  _controller.getProducts(dropDownValue!);
-                });
-                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
-              },
-            ),
-            TextButton(
-              child: Text('Нет'),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Widget table(BuildContext context) {
     return Card(
         elevation: 5,
@@ -171,37 +134,20 @@ class ProductPage extends GetView<CatalogController> {
                       allowSorting: true,
                       allowEditing: true,
                       gridLinesVisibility: GridLinesVisibility.both,
-                      onQueryRowHeight: (details){
-                        return  UiO.datagrig_height;
+                      onQueryRowHeight: (details) {
+                        return UiO.datagrig_height;
                       },
                       headerRowHeight: UiO.datagrig_height,
-
                       onCellTap: (cell) {
-                        if (cell.rowColumnIndex.rowIndex > -1) {
-                          if (cell.rowColumnIndex.columnIndex == 2) {
-                            _product = _controller.productlist
-                                .value[cell.rowColumnIndex.rowIndex - 1];
-                            showDialogMeneger(context);
-                          }
-                          if (cell.rowColumnIndex.columnIndex == 3) {
-                            _controller.product.value = _controller.productlist
-                                .value[cell.rowColumnIndex.rowIndex - 1];
-                            _controller.fetchGetAllCharacteristic(
-                                "doc/characteristic/get",
-                                controller.productlist
-                                    .value[cell.rowColumnIndex.rowIndex - 1].id
-                                    .toString());
-                            showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  return Addcharacteristic();
-                                });
-                          }
-                          if (cell.rowColumnIndex.columnIndex == 4) {
-                            deleterow(context, cell);
-                          }
-                        }
+                        // if (cell.rowColumnIndex.rowIndex > -1) {
+                        //   if (cell.rowColumnIndex.columnIndex == 2) {
+                        //
+                        //   }
+                        //   if (cell.rowColumnIndex.columnIndex == 3) {}
+                        //   if (cell.rowColumnIndex.columnIndex == 4) {
+                        //     // deleterow(context, cell);
+                        //   }
+                        // }
                       },
                       columns: [
                         GridColumn(
@@ -230,41 +176,12 @@ class ProductPage extends GetView<CatalogController> {
                           ),
                         ),
                         GridColumn(
-                            columnName: "edit",
-                            maximumWidth: 150,
-                            label: Container(
-                                padding: EdgeInsets.all(5.0),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  S.of(context).edit,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ))),
-                        GridColumn(
-                            columnName: "characteristic",
-                            maximumWidth: 150,
-                            label: Container(
-                                padding: EdgeInsets.all(5.0),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  S.of(context).characteristic,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ))),
-                        GridColumn(
                             columnName: "delete",
                             maximumWidth: 150,
                             label: Container(
                                 padding: EdgeInsets.all(5.0),
                                 alignment: Alignment.center,
-                                child: Text(
-                                  S.of(context).delete,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ))),
+                                child: Icon(Icons.menu))),
                       ]),
                 )
               ],
@@ -315,121 +232,120 @@ class ProductPage extends GetView<CatalogController> {
       ));
     });
   }
+}
 
-  Future<void> showDialogMeneger(BuildContext context) async {
-    TextEditingController _nameController = TextEditingController();
-    TextEditingController _descriptionController = TextEditingController();
-    String _id = '';
-    if (_product != null) {
-      _nameController.text = _product!.name!;
-      _descriptionController.text = _product!.description!;
-      _id = _product!.id.toString();
-    } else {
-      _id = '';
-      _nameController.clear();
-      _descriptionController.clear();
-    }
+Future<void> showDialogMeneger(BuildContext context) async {
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  String _id = '';
+  if (_product != null) {
+    _nameController.text = _product!.name!;
+    _descriptionController.text = _product!.description!;
+    _id = _product!.id.toString();
+  } else {
+    _id = '';
+    _nameController.clear();
+    _descriptionController.clear();
+  }
 
-    return await showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      // false = user must tap button, true = tap outside dialog
-      builder: (BuildContext dialogContext) {
-        return StatefulBuilder(
-            builder: (context, setState) => AlertDialog(
-                  title: Text(S.of(context).catalog_show_diagram),
-                  content: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      child: Form(
-                          key: _keyForm,
-                          child: Column(
-                            children: [
-                              DropdownButton(
-                                isExpanded: true,
-                                items: _controller.catalogslist.value.map((e) {
-                                  return DropdownMenuItem(
-                                    child: Text(e.catalogname!),
-                                    value: e,
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() => dropDownValue = value);
+  return await showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    // false = user must tap button, true = tap outside dialog
+    builder: (BuildContext dialogContext) {
+      return StatefulBuilder(
+          builder: (context, setState) => AlertDialog(
+                title: Text(S.of(context).catalog_show_diagram),
+                content: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: Form(
+                        key: _keyForm,
+                        child: Column(
+                          children: [
+                            DropdownButton(
+                              isExpanded: true,
+                              items: _controller.catalogslist.value.map((e) {
+                                return DropdownMenuItem(
+                                  child: Text(e.catalogname!),
+                                  value: e,
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() => dropDownValue = value);
+                              },
+                              value: dropDownValue,
+                            ),
+                            Container(
+                                alignment: Alignment.topLeft,
+                                child: Text('№ ${_id}')),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                                controller: _nameController,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return S.of(context).validate;
+                                  }
                                 },
-                                value: dropDownValue,
-                              ),
-                              Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text('№ ${_id}')),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              TextFormField(
-                                  controller: _nameController,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return S.of(context).validate;
-                                    }
-                                  },
-                                  style: GoogleFonts.openSans(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w200,
-                                      color: Colors.black),
-                                  decoration: MainConstant.decoration(
-                                      S.of(context).name)),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              TextFormField(
-                                  controller: _descriptionController,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return S.of(context).validate;
-                                    }
-                                  },
-                                  style: GoogleFonts.openSans(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w200,
-                                      color: Colors.black),
-                                  decoration: MainConstant.decoration(
-                                      S.of(context).description)),
-                            ],
-                          ))),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        if (!_keyForm.currentState!.validate()) {
-                          return;
-                        }
+                                style: GoogleFonts.openSans(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w200,
+                                    color: Colors.black),
+                                decoration: MainConstant.decoration(
+                                    S.of(context).name)),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                                controller: _descriptionController,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return S.of(context).validate;
+                                  }
+                                },
+                                style: GoogleFonts.openSans(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w200,
+                                    color: Colors.black),
+                                decoration: MainConstant.decoration(
+                                    S.of(context).description)),
+                          ],
+                        ))),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      if (!_keyForm.currentState!.validate()) {
+                        return;
+                      }
 
-                        if (_product == null) {
-                          _product = Product();
-                        }
-                        _product!.name = _nameController.text;
-                        _product!.description = _descriptionController.text;
-                        _controller
-                            .saveProduct("doc/catalog/saveproduct", _product!,
-                                dropDownValue!.id!)
-                            .then((value) {
-                          _controller.fetchGetAll();
-                          Navigator.of(dialogContext)
-                              .pop(); // Dismiss alert dialog
-                        });
-                      },
-                      child: Text(S.of(context).save),
-                    ),
-                    TextButton(
-                      child: Text(S.of(context).cancel),
-                      onPressed: () {
+                      if (_product == null) {
+                        _product = Product();
+                      }
+                      _product!.name = _nameController.text;
+                      _product!.description = _descriptionController.text;
+                      _controller
+                          .saveProduct("doc/catalog/saveproduct", _product!,
+                              dropDownValue!.id!)
+                          .then((value) {
+                        _controller.fetchGetAll();
                         Navigator.of(dialogContext)
                             .pop(); // Dismiss alert dialog
-                      },
-                    ),
-                  ],
-                ));
-      },
-    );
-  }
+                      });
+                    },
+                    child: Text(S.of(dialogContext).save),
+                  ),
+                  TextButton(
+                    child: Text(S.of(dialogContext).cancel),
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+                    },
+                  ),
+                ],
+              ));
+    },
+  );
 }
 
 class ProductDataGridSource extends DataGridSource {
@@ -440,11 +356,8 @@ class ProductDataGridSource extends DataGridSource {
                   columnName: 'id',
                   value: _controller.productlist.value.indexOf(e) + 1),
               DataGridCell<String>(columnName: 'name', value: e.name),
-              DataGridCell<Icon>(columnName: 'edit', value: Icon(Icons.edit)),
               DataGridCell<Icon>(
-                  columnName: 'characteristic', value: Icon(Icons.add)),
-              DataGridCell<Icon>(
-                  columnName: 'delete', value: Icon(Icons.delete)),
+                  columnName: 'delete', value: Icon(Icons.more_vert_outlined)),
             ]))
         .toList();
   }
@@ -454,18 +367,92 @@ class ProductDataGridSource extends DataGridSource {
   @override
   List<DataGridRow> get rows => dataGridRows;
 
+  deleterow(BuildContext context, int index) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      // false = user must tap button, true = tap outside dialog
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          content: Text(S.of(context).wanttoremove),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Да'),
+              onPressed: () {
+                _controller
+                    .deleteById("doc/product/delete",
+                        _controller.productlist.value[index].id.toString())
+                    .then((value) {
+                  _controller.fetchGetAll();
+                  _controller.getProducts(dropDownValue!);
+                });
+                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+              },
+            ),
+            TextButton(
+              child: Text('Нет'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         cells: row
             .getCells()
-            .map((e) => (e.columnName == 'edit' ||
-                    e.columnName == 'delete' ||
-                    e.columnName == 'characteristic')
+            .map((e) => e.columnName == 'delete'
                 ? Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: e.value)
+                    // padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: PopupMenuButton(
+                      itemBuilder: (BuildContext context) => [
+                        PopupMenuItem(
+                          onTap: () async {
+                            _product = _controller
+                                .productlist.value[dataGridRows.indexOf(row)];
+                            await showDialogMeneger(context);
+                          },
+                          child: Icon(
+                            Icons.add,
+                          ),
+                        ),
+                        PopupMenuItem(
+                          onTap: () {
+                            _controller.product.value = _controller
+                                .productlist.value[dataGridRows.indexOf(row)];
+                            _controller
+                                .getCharasteristic(
+                                    "doc/characteristic/get",
+                                    _controller.productlist
+                                        .value[dataGridRows.indexOf(row)].id
+                                        .toString())
+                                .then((value) {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return Addcharacteristic();
+                                  });
+                            });
+                          },
+                          child: Icon(Icons.add_comment),
+                        ),
+                        PopupMenuItem(
+                          onTap: () {
+                            deleterow(context, dataGridRows.indexOf(row));
+                          },
+                          child: Icon(
+                            Icons.delete,
+                          ),
+                        ),
+                      ],
+                    ))
                 : Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.symmetric(horizontal: 16),

@@ -134,29 +134,12 @@ class Addcharacteristic extends StatelessWidget {
                                     ),
                                   ),
                                   GridColumn(
-                                      columnName: "edit",
-                                      maximumWidth: 120,
-                                      label: Container(
-                                          padding: EdgeInsets.all(5.0),
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            S.of(context).edit,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ))),
-                                  GridColumn(
                                       columnName: "delete",
-                                      maximumWidth: 100,
-                                      label: Container(
-                                          padding: EdgeInsets.all(5.0),
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            S.of(context).delete,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ))),
+                                      // maximumWidth: 100,
+
+                                      label: Icon(
+                                            Icons.more_vert_outlined
+                                          )),
                                 ]),
                           ))
                         ],
@@ -211,9 +194,8 @@ class CharacteristicDataGridSource extends DataGridSource {
                   value: _controller.characteristics.value.indexOf(e) + 1),
               DataGridCell<String>(columnName: 'name', value: e.name),
               DataGridCell<String>(columnName: 'valuename', value: e.valuename),
-              DataGridCell<Icon>(columnName: 'edit', value: Icon(Icons.edit)),
               DataGridCell<Icon>(
-                  columnName: 'delete', value: Icon(Icons.delete)),
+                  columnName: 'delete', value: Icon(Icons.delete, size: 15,)),
               // DataGridCell<bool>(columnName: 'editable', value: false),
             ]))
         .toList();
@@ -270,32 +252,17 @@ class CharacteristicDataGridSource extends DataGridSource {
             decoration: InputDecoration(
               border: InputBorder.none,
               isCollapsed: true,
-              // isDense: true,
             ),
             textAlignVertical: TextAlignVertical.center,
-            // textAlign: TextAlign.start,
 
             controller: _valuenamecontroller[dataGridRows.indexOf(row)]),
       ),
       Container(
-          alignment: Alignment.center,
-          // padding: EdgeInsets.symmetric(horizontal: 8),
-          child: row.getCells()[3].value),
-      Container(
         alignment: Alignment.center,
         // padding: EdgeInsets.symmetric(horizontal: 8),
-        child: row.getCells()[4].value,
+        child: row.getCells()[3].value,
       ),
     ]);
   }
 
-// @override
-// void onCellSubmit(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
-//     GridColumn column) {}
-//
-// @override
-// Widget buildEditWidget(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
-//     GridColumn column, CellSubmit submitCell) {
-//   return Container();
-// }
 }
