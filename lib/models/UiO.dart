@@ -18,4 +18,7 @@ class UiO{
   static final String telegram = 't.me/dsk_binokor_uzb';
   static final String inhstagram = '';
   static final String facebook = '';
+  static final double datagrig_height =  30;
+
 }
+

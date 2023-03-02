@@ -171,6 +171,11 @@ class ProductPage extends GetView<CatalogController> {
                       allowSorting: true,
                       allowEditing: true,
                       gridLinesVisibility: GridLinesVisibility.both,
+                      onQueryRowHeight: (details){
+                        return  UiO.datagrig_height;
+                      },
+                      headerRowHeight: UiO.datagrig_height,
+
                       onCellTap: (cell) {
                         if (cell.rowColumnIndex.rowIndex > -1) {
                           if (cell.rowColumnIndex.columnIndex == 2) {
