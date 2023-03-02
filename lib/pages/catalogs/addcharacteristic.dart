@@ -10,13 +10,13 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../generated/l10n.dart';
 
 final CatalogController _controller = Get.put(CatalogController());
+List<TextEditingController> controllername = [];
 
 class Addcharacteristic extends StatelessWidget {
   const Addcharacteristic({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return Obx(() {
       CharacteristicDataGridSource _characteristicDataGridSource =
           CharacteristicDataGridSource(_controller.characteristics.value);
@@ -30,7 +30,8 @@ class Addcharacteristic extends StatelessWidget {
                   '${S.of(context).catalog_show_diagram} ${S.of(context).characteristics}'),
               content: SafeArea(
                   child: Form(
-                child: Container(
+                      child: StatefulBuilder(
+                builder: (BuildContext context, setState) => Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     child: Column(
@@ -42,7 +43,16 @@ class Addcharacteristic extends StatelessWidget {
                                 Container(
                                     alignment: Alignment.topLeft,
                                     child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          _controller.characteristics.value
+                                              .add(Characteristic());
+                                          setState(() {
+                                            _characteristicDataGridSource =
+                                                CharacteristicDataGridSource(
+                                                    _controller
+                                                        .characteristics.value);
+                                          });
+                                        },
                                         style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all(
@@ -72,14 +82,15 @@ class Addcharacteristic extends StatelessWidget {
                           child: SfDataGrid(
                               source: _characteristicDataGridSource,
                               selectionMode: SelectionMode.single,
-                              headerGridLinesVisibility:
-                                  GridLinesVisibility.vertical,
+                              navigationMode: GridNavigationMode.cell,
                               columnWidthMode: ColumnWidthMode.fill,
-                              // allowFiltering: true,
-                              allowSorting: true,
-                              allowEditing: true,
-                              gridLinesVisibility: GridLinesVisibility.both,
+                              editingGestureType: EditingGestureType.tap,
                               onCellTap: (cell) {
+                                _controller
+                                    .characteristics[
+                                        cell.rowColumnIndex.rowIndex - 1]
+                                    .editable = true;
+
                                 if (cell.rowColumnIndex.rowIndex > -1) {
                                   if (cell.rowColumnIndex.columnIndex == 2) {}
                                   if (cell.rowColumnIndex.columnIndex == 3) {}
@@ -126,8 +137,20 @@ class Addcharacteristic extends StatelessWidget {
                                   ),
                                 ),
                                 GridColumn(
+                                    columnName: "edit",
+                                    maximumWidth: 120,
+                                    label: Container(
+                                        padding: EdgeInsets.all(5.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          S.of(context).edit,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ))),
+                                GridColumn(
                                     columnName: "delete",
-                                    maximumWidth: 150,
+                                    maximumWidth: 100,
                                     label: Container(
                                         padding: EdgeInsets.all(5.0),
                                         alignment: Alignment.center,
@@ -141,8 +164,27 @@ class Addcharacteristic extends StatelessWidget {
                         )
                       ],
                     )),
-              )),
+              ))),
               actions: [
+                TextButton(
+                  child: Text(S.of(context).save),
+                  onPressed: () {
+                    _characteristicDataGridSource.dataGridRows
+                        .forEach((element) {
+                      _controller
+                          .characteristics
+                          .value[_characteristicDataGridSource.dataGridRows
+                              .indexOf(element)]
+                          .name = element.getCells()[1].value;
+                      _controller
+                          .characteristics
+                          .value[_characteristicDataGridSource.dataGridRows
+                              .indexOf(element)]
+                          .valuename = element.getCells()[2].value;
+                    });
+                    // Navigator.of(context).pop(); // Dismiss alert dialog
+                  },
+                ),
                 TextButton(
                   child: Text(S.of(context).cancel),
                   onPressed: () {
@@ -164,31 +206,65 @@ class CharacteristicDataGridSource extends DataGridSource {
                   value: _controller.characteristics.value.indexOf(e) + 1),
               DataGridCell<String>(columnName: 'name', value: e.name),
               DataGridCell<String>(columnName: 'valuename', value: e.valuename),
+              DataGridCell<Icon>(columnName: 'edit', value: Icon(Icons.edit)),
               DataGridCell<Icon>(
                   columnName: 'delete', value: Icon(Icons.delete)),
+              // DataGridCell<bool>(columnName: 'editable', value: false),
             ]))
         .toList();
   }
 
+  //
   late List<DataGridRow> dataGridRows;
 
   @override
   List<DataGridRow> get rows => dataGridRows;
+  dynamic newCellValue;
 
-  @override
+
+
+  //
+  // // @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    return DataGridRowAdapter(
-        cells: row
-            .getCells()
-            .map((e) => (e.columnName == 'delete')
-                ? Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: e.value)
-                : Container(
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(e.value.toString())))
-            .toList());
+    controllername
+        .add(TextEditingController(text: row.getCells()[1].value.toString()));
+
+    
+    return DataGridRowAdapter(cells: [
+      Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: Text(row.getCells()[0].value.toString()),
+      ),
+      Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: TextField(controller: controllername[dataGridRows.indexOf(row)]),
+      ),
+      Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: Text(row.getCells()[2].value.toString()),
+      ),
+      Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: row.getCells()[3].value),
+      Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: row.getCells()[4].value,
+      ),
+    ]);
   }
+
+// @override
+// void onCellSubmit(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
+//     GridColumn column) {}
+//
+// @override
+// Widget buildEditWidget(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
+//     GridColumn column, CellSubmit submitCell) {
+//   return Container();
+// }
 }
