@@ -7,16 +7,16 @@ import 'package:onlinestoredashboard/models/catalogs/Characteristic.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../generated/l10n.dart';
-import '../../models/UiO.dart';
+import '../../../generated/l10n.dart';
+import '../../../models/UiO.dart';
 
 final CatalogController _controller = Get.put(CatalogController());
 List<TextEditingController> _namecontroller = [];
 List<TextEditingController> _valuenamecontroller = [];
 final _keyForm = GlobalKey<FormState>();
 
-class Addcharacteristic extends StatelessWidget {
-  const Addcharacteristic({Key? key}) : super(key: key);
+class AddcharacteristicDialog extends StatelessWidget {
+  const AddcharacteristicDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

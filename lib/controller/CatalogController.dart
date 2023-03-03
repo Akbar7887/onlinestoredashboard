@@ -64,9 +64,9 @@ class CatalogController extends GetxController {
     // notifyChildrens();
   }
 
-  changeProduct(Product product) {
-    this.product.value = product;
-    update();
+  Future<void> changeProduct(Product product) async  {
+     this.product.value = await product;
+    // update();
   }
 
   Future<Catalog> savesub(String url, Catalog catalog, int id) async {
