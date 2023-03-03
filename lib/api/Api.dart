@@ -122,6 +122,24 @@ class Api {
     }
   }
 
+  Future<dynamic> removethroughtParent(String url, String id) async {
+    Map<String, dynamic> param = {'id': id};
+
+    Uri uri = Uri.parse("${UiO.url}${url}").replace(queryParameters: param);
+
+    // Uri uri = Uri.https(UiO.url, url,{"id": id});
+    final response = await http.post(uri, headers: header);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
+
+      return json; //json.map((e) => Catalog.fromJson(e)).toList();
+    } else {
+      throw Exception("Error");
+    }
+  }
+
+
   Future<bool> delete(String url, String id) async {
     Uri uri =
         Uri.parse("${UiO.url}${url}").replace(queryParameters: {"id": id});

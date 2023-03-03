@@ -36,6 +36,10 @@ class ApiConnector extends GetConnect{
     return await api.deleteActive(url, id);
   }
 
+  Future<dynamic> removethroughtParent(String url, String id) async {
+    return await api.removethroughtParent(url, id);
+  }
+
   Future<List<dynamic>> getByParentId(String url, String id ) async {
     final json = await api.getByParentId(url, id);
     return json;

@@ -124,4 +124,10 @@ class CatalogController extends GetxController {
     catalog.value = Catalog.fromJson(json);
     return catalog.value!;
   }
+
+  Future<dynamic> removethroughtParent(String url, String id) async {
+    final json =  await api.removethroughtParent(url, id);
+    product.value = Product.fromJson(json);
+    return product.value;
+  }
 }
