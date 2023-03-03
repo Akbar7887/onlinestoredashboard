@@ -29,122 +29,114 @@ class AddcharacteristicDialog extends StatelessWidget {
             '${S.of(context).catalog_show_diagram} ${S.of(context).characteristics}'),
         content: SafeArea(
             child: Form(
-                key: _keyForm,
-                child: StatefulBuilder(
-                  builder: (BuildContext context, setState) => Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      child: Column(
+          key: _keyForm,
+          child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  Container(
+                      height: 30,
+                      child: Row(
                         children: [
                           Container(
-                              height: 30,
-                              child: Row(
-                                children: [
-                                  Container(
-                                      alignment: Alignment.topLeft,
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            _controller.characteristics.value
-                                                .add(Characteristic());
-                                            setState(() {
-                                              _characteristicDataGridSource =
-                                                  CharacteristicDataGridSource(
-                                                      _controller
-                                                          .characteristics
-                                                          .value);
-                                            });
-                                          },
-                                          style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.grey[800])),
-                                          child: Text("Добавить"))),
-                                  SizedBox(width: 50),
-                                  Expanded(
-                                      child: FittedBox(
-                                          fit: BoxFit.contain,
-                                          child: Text(
-                                              _controller.product.value.name!)))
-                                ],
-                              )),
-                          SizedBox(
-                            height: 10,
-                          ),
+                              alignment: Alignment.topLeft,
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    _controller.addCharacteristic(
+                                        Characteristic(
+                                            name: "", valuename: ""));
+                                    _characteristicDataGridSource =
+                                        CharacteristicDataGridSource(
+                                            _controller.characteristics.value);
+                                  },
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.grey[800])),
+                                  child: Text("Добавить"))),
+                          SizedBox(width: 50),
                           Expanded(
-                              child: SfDataGridTheme(
-                            data: SfDataGridThemeData(
-                              headerColor: Colors.grey[700],
-                              rowHoverColor: Colors.grey,
-                              gridLineStrokeWidth: 1,
-                              rowHoverTextStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
-                            ),
-                            child: SfDataGrid(
-                                source: _characteristicDataGridSource,
-                                selectionMode: SelectionMode.single,
-                                headerGridLinesVisibility:
-                                    GridLinesVisibility.vertical,
-                                columnWidthMode: ColumnWidthMode.fill,
-                                // allowFiltering: true,
-                                allowSorting: true,
-                                allowEditing: true,
-                                gridLinesVisibility: GridLinesVisibility.both,
-                                onQueryRowHeight: (details) {
-                                  return UiO.datagrig_height;
-                                },
-                                headerRowHeight: UiO.datagrig_height,
-                                onCellTap: (cell) {},
-                                columns: [
-                                  GridColumn(
-                                      columnName: 'id',
-                                      width: 50,
-                                      label: Center(
-                                        child: Text(
-                                          "№",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      )),
-                                  GridColumn(
-                                    columnName: 'name',
-                                    // width: MediaQuery.of(context).size.width/2,
-                                    label: Center(
-                                      child: Text(
-                                        S.of(context).name,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'valuename',
-                                    // width: MediaQuery.of(context).size.width/2,
-                                    label: Center(
-                                      child: Text(
-                                        S.of(context).valuename,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                      columnName: "delete",
-                                      // maximumWidth: 100,
-
-                                      label: Icon(
-                                            Icons.more_vert_outlined
-                                          )),
-                                ]),
-                          ))
+                              child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Text(_controller.product.value.name!)))
                         ],
                       )),
-                ))),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Expanded(
+                      child: SfDataGridTheme(
+                    data: SfDataGridThemeData(
+                      headerColor: Colors.grey[700],
+                      rowHoverColor: Colors.grey,
+                      gridLineStrokeWidth: 1,
+                      rowHoverTextStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                    child: SfDataGrid(
+                        source: _characteristicDataGridSource,
+                        selectionMode: SelectionMode.single,
+                        headerGridLinesVisibility: GridLinesVisibility.vertical,
+                        columnWidthMode: ColumnWidthMode.fill,
+                        // allowFiltering: true,
+                        allowSorting: true,
+                        allowEditing: true,
+                        gridLinesVisibility: GridLinesVisibility.both,
+                        onQueryRowHeight: (details) {
+                          return UiO.datagrig_height;
+                        },
+                        headerRowHeight: UiO.datagrig_height,
+                        onCellTap: (cell) {},
+                        columns: [
+                          GridColumn(
+                              columnName: 'id',
+                              width: 50,
+                              label: Center(
+                                child: Text(
+                                  "№",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )),
+                          GridColumn(
+                            columnName: 'name',
+                            // width: MediaQuery.of(context).size.width/2,
+                            label: Center(
+                              child: Text(
+                                S.of(context).name,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          GridColumn(
+                            columnName: 'valuename',
+                            // width: MediaQuery.of(context).size.width/2,
+                            label: Center(
+                              child: Text(
+                                S.of(context).valuename,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          GridColumn(
+                              columnName: "delete",
+                              // maximumWidth: 100,
+
+                              label: Icon(Icons.more_vert_outlined)),
+                        ]),
+                  ))
+                ],
+              )),
+        )),
         actions: [
           TextButton(
             child: Text(S.of(context).save),
@@ -187,6 +179,7 @@ class AddcharacteristicDialog extends StatelessWidget {
 
 class CharacteristicDataGridSource extends DataGridSource {
   CharacteristicDataGridSource(List<Characteristic> characteristics) {
+    characteristics.sort((a, b) => a.id!.compareTo(b.id!));
     dataGridRows = characteristics
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<int>(
@@ -195,7 +188,11 @@ class CharacteristicDataGridSource extends DataGridSource {
               DataGridCell<String>(columnName: 'name', value: e.name),
               DataGridCell<String>(columnName: 'valuename', value: e.valuename),
               DataGridCell<Icon>(
-                  columnName: 'delete', value: Icon(Icons.delete, size: 15,)),
+                  columnName: 'delete',
+                  value: Icon(
+                    Icons.delete,
+                    size: 15,
+                  )),
               // DataGridCell<bool>(columnName: 'editable', value: false),
             ]))
         .toList();
@@ -242,7 +239,7 @@ class CharacteristicDataGridSource extends DataGridSource {
       ),
       Container(
         alignment: Alignment.centerLeft,
-         padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: TextFormField(
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -254,7 +251,6 @@ class CharacteristicDataGridSource extends DataGridSource {
               isCollapsed: true,
             ),
             textAlignVertical: TextAlignVertical.center,
-
             controller: _valuenamecontroller[dataGridRows.indexOf(row)]),
       ),
       Container(
@@ -264,5 +260,4 @@ class CharacteristicDataGridSource extends DataGridSource {
       ),
     ]);
   }
-
 }

@@ -13,7 +13,7 @@ class CatalogController extends GetxController {
   var products = <Product>[].obs;
   var catalogslist = <Catalog>[].obs;
   var productlist = <Product>[].obs;
-  Catalog? catalog;
+  Rx<Catalog> catalog = Catalog().obs;
   var characteristics = <Characteristic>[].obs;
   Rx<Product> product = Product().obs;
 
@@ -34,38 +34,49 @@ class CatalogController extends GetxController {
   }
 
   Future<void> getCharasteristic(String url, String id) async {
+    this.characteristics.value = [];
     final json = await api.getByParentId(url, id);
     this.characteristics.value =
         json.map((e) => Characteristic.fromJson(e)).toList();
+    update();
+
   }
 
   creatCatalogList(List<Catalog> catalogs) {
     catalogs.forEach((element) {
       this.catalogslist.value.add(element);
       creatCatalogList(element.catalogs!);
-      update();
+      // update();
     });
   }
 
   getProducts(Catalog catalog) {
     this.productlist.value = catalog.products!;
-    update();
+    // update();
   }
 
   changeProducts(List<Product> product) {
     this.products.value = product;
-    update();
+    // update();
     // notifyChildrens();
   }
 
   addCatalog(Catalog catalog) {
     this.catalogs.add(catalog);
-    update();
+    // update();
     // notifyChildrens();
   }
 
-  Future<void> changeProduct(Product product) async  {
-     this.product.value = await product;
+
+  changeProduct(Product product)   {
+    this.product.value = product;
+    // update();
+  }
+
+   addCharacteristic(Characteristic characteristic)  {
+    if(!this.characteristics.contains(characteristic)){
+      this.characteristics.value.add(characteristic);
+    }
     // update();
   }
 
@@ -90,8 +101,8 @@ class CatalogController extends GetxController {
 
   Future<Catalog> deleteActive(String url, int id) async {
     final json = await api.deleteActive(url, id.toString());
-    catalog = Catalog.fromJson(json);
-    return catalog!;
+    catalog.value = Catalog.fromJson(json);
+    return catalog.value!;
   }
 
   Future<bool> deleteById(url, id) async {
@@ -100,7 +111,7 @@ class CatalogController extends GetxController {
 
   Future<Catalog> saveProduct(String url, Product product, int id) async {
     final json = await api.savesub(url, product, id.toString());
-    catalog = Catalog.fromJson(json);
-    return catalog!;
+    catalog.value = Catalog.fromJson(json);
+    return catalog.value!;
   }
 }

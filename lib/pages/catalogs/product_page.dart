@@ -108,12 +108,15 @@ class ProductPage extends GetView<CatalogController> {
                         onPressed: () {
                           _product = null;
                           dropDownValue = null;
+
                           showDialog(
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
                                 return EditProductDialog();
-                              });
+                              }).then((value) {
+                            _controller.fetchGetAll();
+                          });
                         },
                         style: ButtonStyle(
                             backgroundColor:
@@ -278,7 +281,7 @@ class ProductDataGridSource extends DataGridSource {
                                   .changeProduct(_controller.productlist
                                       .value[dataGridRows.indexOf(row)])
                                   .then((value) {
-                                _controller.catalog = dropDownValue;
+                                _controller.catalog.value = dropDownValue!;
                                 showDialog<void>(
                                     context: context,
                                     barrierDismissible: true,
@@ -302,21 +305,24 @@ class ProductDataGridSource extends DataGridSource {
                             )),
                         PopupMenuItem(
                           onTap: () {
-                            _controller.product.value = _controller
-                                .productlist.value[dataGridRows.indexOf(row)];
                             _controller
-                                .getCharasteristic(
-                                    "doc/characteristic/get",
-                                    _controller.productlist
-                                        .value[dataGridRows.indexOf(row)].id
-                                        .toString())
+                                .changeProduct(_controller.productlist
+                                    .value[dataGridRows.indexOf(row)])
                                 .then((value) {
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (BuildContext context) {
-                                    return AddcharacteristicDialog();
-                                  });
+                              _controller
+                                  .getCharasteristic(
+                                      "doc/characteristic/get",
+                                      _controller.productlist
+                                          .value[dataGridRows.indexOf(row)].id
+                                          .toString())
+                                  .then((value) {
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext context) {
+                                      return AddcharacteristicDialog();
+                                    });
+                              });
                             });
                           },
                           child: Row(
@@ -342,11 +348,9 @@ class ProductDataGridSource extends DataGridSource {
                               showDialog(
                                   context: context,
                                   barrierDismissible: true,
-                                  // false = user must tap button, true = tap outside dialog
                                   builder: (BuildContext dialogContext) {
                                     return DeleteDialog(
                                       url: "doc/product/delete",
-                                      object: _controller.product.value,
                                       index: dataGridRows.indexOf(row),
                                     );
                                   });

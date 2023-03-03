@@ -24,7 +24,7 @@ class EditProductDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (_controller.product.value != null) {
+      if (_controller.product.value.id != null) {
         _nameController.text = _controller.product.value.name!;
         _descriptionController.text = _controller.product.value.description!;
         _id = _controller.product.value.id.toString();
@@ -45,7 +45,7 @@ class EditProductDialog extends StatelessWidget {
                     child: StatefulBuilder(
                         builder: (BuildContext context, setState) => Column(
                               children: [
-                                DropdownButton(
+                                DropdownButton<Catalog>(
                                   isExpanded: true,
                                   items:
                                       _controller.catalogslist.value.map((e) {
@@ -55,9 +55,9 @@ class EditProductDialog extends StatelessWidget {
                                     );
                                   }).toList(),
                                   onChanged: (value) {
-                                    setState(() => _controller.catalog = value);
+                                    setState(() => _controller.catalog.value = value!);
                                   },
-                                  value: _controller.catalog,
+                                  value: _controller.catalog.value,
                                 ),
                                 Container(
                                     alignment: Alignment.topLeft,
@@ -111,7 +111,7 @@ class EditProductDialog extends StatelessWidget {
               _product.description = _descriptionController.text;
               _controller
                   .saveProduct(
-                      "doc/catalog/saveproduct", _product, _controller.catalog!.id!)
+                      "doc/catalog/saveproduct", _product, _controller.catalog.value.id!)
                   .then((value) {
                 _controller.fetchGetAll();
                 Navigator.of(context).pop(); // Dismiss alert dialog
