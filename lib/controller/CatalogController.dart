@@ -9,13 +9,23 @@ import 'ApiConnector.dart';
 class CatalogController extends GetxController {
   final api = ApiConnector();
 
-  var catalogs = <Catalog>[].obs;
-  var products = <Product>[].obs;
-  var catalogslist = <Catalog>[].obs;
-  var productlist = <Product>[].obs;
-  Rx<Catalog> catalog = Catalog().obs;
-  var characteristics = <Characteristic>[].obs;
-  Rx<Product> product = Product().obs;
+  var _catalogs = <Catalog>[].obs;
+  var _products = <Product>[].obs;
+  var _catalogslist = <Catalog>[].obs;
+  var _productlist = <Product>[].obs;
+  Rx<Catalog> _catalog = Catalog().obs;
+  var _characteristics = <Characteristic>[].obs;
+  Rx<Product> _product = Product().obs;
+
+
+  RxList<Catalog> get catalogs => _catalogs;
+  RxList<Product> get products => _products;
+  RxList<Catalog> get catalogslist => _catalogslist;
+  RxList<Product> get productlist => _productlist;
+  Rx<Catalog> get catalog => Catalog().obs;
+  RxList<Characteristic> get characteristics => _characteristics;
+  Rx<Product> get product => _product;
+
 
   @override
   void onInit() {
@@ -55,8 +65,8 @@ class CatalogController extends GetxController {
     // update();
   }
 
-  changeProducts(List<Product> product) {
-    this.products.value = product;
+  changeProducts(List<Product> products) {
+    this.products.value = products;
     // update();
     // notifyChildrens();
   }
@@ -74,8 +84,8 @@ class CatalogController extends GetxController {
   }
 
    addCharacteristic(Characteristic characteristic)  {
-    if(!this.characteristics.contains(characteristic)){
-      this.characteristics.value.add(characteristic);
+    if(!this._characteristics.value.contains(characteristic)){
+      this._characteristics.value.add(characteristic);
     }
     // update();
   }

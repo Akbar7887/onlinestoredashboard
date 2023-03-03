@@ -307,8 +307,8 @@ class ProductDataGridSource extends DataGridSource {
                           onTap: () {
                             _controller
                                 .changeProduct(_controller.productlist
-                                    .value[dataGridRows.indexOf(row)])
-                                .then((value) {
+                                    .value[dataGridRows.indexOf(row)]);
+
                               _controller
                                   .getCharasteristic(
                                       "doc/characteristic/get",
@@ -322,7 +322,6 @@ class ProductDataGridSource extends DataGridSource {
                                     builder: (BuildContext context) {
                                       return AddcharacteristicDialog();
                                     });
-                              });
                             });
                           },
                           child: Row(
@@ -343,8 +342,7 @@ class ProductDataGridSource extends DataGridSource {
                           onTap: () {
                             _controller
                                 .changeProduct(_controller.productlist
-                                    .value[dataGridRows.indexOf(row)])
-                                .then((value) {
+                                    .value[dataGridRows.indexOf(row)]);
                               showDialog(
                                   context: context,
                                   barrierDismissible: true,
@@ -354,7 +352,6 @@ class ProductDataGridSource extends DataGridSource {
                                       index: dataGridRows.indexOf(row),
                                     );
                                   });
-                            });
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
