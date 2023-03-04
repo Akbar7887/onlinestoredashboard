@@ -103,18 +103,17 @@ class ProductPage extends GetView<CatalogController> {
                     alignment: Alignment.topLeft,
                     child: ElevatedButton(
                         onPressed: () {
-                          // _product = null;
-                          // dropDownValue = null;
 
-                          // _controller.product!.value  = null;
+                          if (_controller.catalog.value.id == null){
+                            return;
+                          }
                           showDialog(
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
                                 return EditProductDialog(
                                     catalog_id: _controller.catalog.value.id!);
-                              });
-                          _controller.fetchGetAll();
+                              }).then((value) => _controller.fetchGetAll());
                         },
                         style: ButtonStyle(
                             backgroundColor:
@@ -195,6 +194,7 @@ class ProductPage extends GetView<CatalogController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+
       // _controller.getProducts(_controller.catalogs.value.first);
       _productDataGridSource = ProductDataGridSource(_controller.productlist);
 
@@ -274,18 +274,15 @@ class ProductDataGridSource extends DataGridSource {
                       // tooltip: "Изменение строки",
                       itemBuilder: (BuildContext context) => [
                         PopupMenuItem(
-                            onTap: ()  {
-                              _controller.product.value =  _controller.productlist
-                                  .value[dataGridRows.indexOf(row)];
-                               showDialog(
+                            onTap: () {
+                              _controller.changeProduct(_controller
+                                  .productlist.value[dataGridRows.indexOf(row)]);
+                              showDialog(
                                   context: context,
-                                  barrierDismissible: true,
+                                  barrierDismissible: false,
                                   builder: (BuildContext context) {
                                     return EditProductDialog(
-                                        catalog_id: _controller
-                                            .productlist
-                                            .value[dataGridRows.indexOf(row)]
-                                            .id!);
+                                        catalog_id: _controller.catalog.value.id!);
                                   });
                             },
                             child: Row(

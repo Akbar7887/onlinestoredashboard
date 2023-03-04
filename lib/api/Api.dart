@@ -87,7 +87,7 @@ class Api {
     }
   }
 
-  Future<dynamic> saveList(String url, String id, List<dynamic> list) async {
+  Future<List<dynamic>> saveList(String url, String id, List<dynamic> list) async {
     Map<String, dynamic> param = {'id': id};
 
     Uri uri = Uri.parse("${UiO.url}${url}").replace(queryParameters: param);

@@ -68,7 +68,7 @@ class AddcharacteristicDialog extends StatelessWidget {
                                       child: FittedBox(
                                           fit: BoxFit.contain,
                                           child: Text(
-                                              _controller.product!.value.name!)))
+                                              _controller.product.value.name!)))
                                 ],
                               )),
                           SizedBox(
@@ -86,7 +86,7 @@ class AddcharacteristicDialog extends StatelessWidget {
                               ),
                             ),
                             child: SfDataGrid(
-                                source: _characteristicDataGridSource!,
+                                source: _characteristicDataGridSource,
                                 selectionMode: SelectionMode.single,
                                 headerGridLinesVisibility:
                                     GridLinesVisibility.vertical,
@@ -165,10 +165,10 @@ class AddcharacteristicDialog extends StatelessWidget {
               _controller
                   .savelist(
                       "doc/characteristic/addcharacterlist",
-                      _controller.product!.value.id.toString(),
+                      _controller.product.value.id.toString(),
                       _controller.characteristics.value)
                   .then((value) {
-                _controller.characteristics.value = value!;
+                _controller.characteristics.value = value;
                 Navigator.of(context).pop(); // Dismiss alert dialog
               });
             },

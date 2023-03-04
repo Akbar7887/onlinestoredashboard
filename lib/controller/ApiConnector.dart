@@ -24,7 +24,7 @@ class ApiConnector extends GetConnect{
     return await api.savesub(url, object, id);
   }
 
-  Future<dynamic> saveList(String url, String id, List<dynamic> list) async {
+  Future<List<dynamic>> saveList(String url, String id, List<dynamic> list) async {
     return await api.saveList(url, id, list);
   }
 

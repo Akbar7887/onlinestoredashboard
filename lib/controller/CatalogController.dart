@@ -81,7 +81,7 @@ class CatalogController extends GetxController {
 
 
   changeProduct(Product product)   {
-    this.product!.value = product;
+    this.product.value = product;
     // update();
   }
 
@@ -98,17 +98,17 @@ class CatalogController extends GetxController {
     return catalog;
   }
 
-  Future<List<Characteristic>?> savelist(
+  Future<List<Characteristic>> savelist(
     String url,
     String id,
     List<Characteristic> list,
   ) async {
     final json = await api.saveList(url, id.toString(), list);
 
-    Product product = Product.fromJson(json);
+    List<Characteristic> characteristics = json.map((e) => Characteristic.fromJson(e)).toList();
 
     // _list.sort((a, b) => a.id!.compareTo(b.id!));
-    return product.characteristics;
+    return characteristics;
   }
 
   Future<Catalog> deleteActive(String url, int id) async {
