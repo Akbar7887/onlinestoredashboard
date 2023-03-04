@@ -287,7 +287,7 @@ class CharacteristicDataGridSource extends DataGridSource {
               _controller.characteristics.removeAt(dataGridRows.indexOf(row));
             }
             _controller
-                .removethroughtParent(
+                .deleteById(
                     "doc/characteristic/removecharacter",
                     _controller.characteristics[dataGridRows.indexOf(row)].id
                         .toString())

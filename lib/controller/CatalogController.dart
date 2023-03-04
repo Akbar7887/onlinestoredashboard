@@ -129,7 +129,7 @@ class CatalogController extends GetxController {
 
   Future<dynamic> removethroughtParent(String url, String id) async {
     final json =  await api.removethroughtParent(url, id);
-    product!.value = Product.fromJson(json);
-    return product!.value;
+    product.value = Product.fromJson(json);
+    return product.value;
   }
 }
