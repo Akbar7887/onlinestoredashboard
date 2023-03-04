@@ -68,7 +68,7 @@ class AddcharacteristicDialog extends StatelessWidget {
                                       child: FittedBox(
                                           fit: BoxFit.contain,
                                           child: Text(
-                                              _controller.product.value.name!)))
+                                              _controller.product!.value.name!)))
                                 ],
                               )),
                           SizedBox(
@@ -165,7 +165,7 @@ class AddcharacteristicDialog extends StatelessWidget {
               _controller
                   .savelist(
                       "doc/characteristic/addcharacterlist",
-                      _controller.product.value.id.toString(),
+                      _controller.product!.value.id.toString(),
                       _controller.characteristics.value)
                   .then((value) {
                 _controller.characteristics.value = value!;
@@ -286,7 +286,6 @@ class CharacteristicDataGridSource extends DataGridSource {
                 null) {
               _controller.characteristics.removeAt(dataGridRows.indexOf(row));
             }
-
             _controller
                 .removethroughtParent(
                     "doc/characteristic/removecharacter",

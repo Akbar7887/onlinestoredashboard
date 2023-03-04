@@ -16,10 +16,11 @@ TextEditingController _descriptionController = TextEditingController();
 String _id = '';
 final _keyForm = GlobalKey<FormState>();
 final CatalogController _controller = Get.put(CatalogController());
-// Catalog? dropDownValue;
 
 class EditProductDialog extends StatelessWidget {
-  const EditProductDialog({Key? key}) : super(key: key);
+   EditProductDialog({Key? key, required int catalog_id}) : super(key: key);
+
+  int? catalog_id;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,10 @@ class EditProductDialog extends StatelessWidget {
         _id = '';
         _nameController.clear();
         _descriptionController.clear();
+      }
+      if(catalog_id != null){
+        _controller.catalog.value = _controller.catalogslist.value
+            .firstWhere((element) => element.id == catalog_id);
       }
 
       return AlertDialog(
@@ -48,14 +53,15 @@ class EditProductDialog extends StatelessWidget {
                                 DropdownButton<Catalog>(
                                   isExpanded: true,
                                   items:
-                                      _controller.catalogslist.value.map((e) {
+                                      _controller.catalogslist.value.map<DropdownMenuItem<Catalog>>((e) {
                                     return DropdownMenuItem(
                                       child: Text(e.catalogname!),
                                       value: e,
                                     );
                                   }).toList(),
                                   onChanged: (value) {
-                                    setState(() => _controller.catalog.value = value!);
+                                    setState(() =>
+                                        _controller.catalog.value = value!);
                                   },
                                   value: _controller.catalog.value,
                                 ),
@@ -110,8 +116,8 @@ class EditProductDialog extends StatelessWidget {
               _product.name = _nameController.text;
               _product.description = _descriptionController.text;
               _controller
-                  .saveProduct(
-                      "doc/catalog/saveproduct", _product, _controller.catalog.value.id!)
+                  .saveProduct("doc/catalog/saveproduct", _product,
+                      _controller.catalog.value.id!)
                   .then((value) {
                 _controller.fetchGetAll();
                 Navigator.of(context).pop(); // Dismiss alert dialog

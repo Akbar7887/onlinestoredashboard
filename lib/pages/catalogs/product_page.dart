@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:onlinestoredashboard/controller/CatalogController.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 import 'package:onlinestoredashboard/models/catalogs/Catalog.dart';
 import 'package:onlinestoredashboard/models/catalogs/Product.dart';
-import 'package:onlinestoredashboard/models/constants/main_constant.dart';
 import 'package:onlinestoredashboard/pages/catalogs/dialogs/addcharacteristic_dialog.dart';
 import 'package:onlinestoredashboard/pages/catalogs/dialogs/delete_dialog.dart';
 import 'package:onlinestoredashboard/pages/catalogs/dialogs/editProduct_dialog.dart';
-import 'package:onlinestoredashboard/pages/catalogs/header.dart';
 import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -22,7 +19,7 @@ final CatalogController _controller = Get.put(CatalogController());
 Product? _product;
 late ProductDataGridSource _productDataGridSource;
 // final _keyForm = GlobalKey<FormState>();
-Catalog? dropDownValue;
+// Catalog? dropDownValue;
 
 class ProductPage extends GetView<CatalogController> {
   ProductPage() : super();
@@ -52,8 +49,8 @@ class ProductPage extends GetView<CatalogController> {
             content: InkWell(
                 onTap: () {
                   _controller.getProducts(e);
-                  dropDownValue = e;
-
+                  _controller.catalog.value = _controller.catalogslist
+                      .firstWhere((element) => element.id == e.id);
                   _productDataGridSource =
                       ProductDataGridSource(_controller.productlist.value);
                 },
@@ -106,17 +103,18 @@ class ProductPage extends GetView<CatalogController> {
                     alignment: Alignment.topLeft,
                     child: ElevatedButton(
                         onPressed: () {
-                          _product = null;
-                          dropDownValue = null;
+                          // _product = null;
+                          // dropDownValue = null;
 
+                          // _controller.product!.value  = null;
                           showDialog(
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
-                                return EditProductDialog();
-                              }).then((value) {
-                            _controller.fetchGetAll();
-                          });
+                                return EditProductDialog(
+                                    catalog_id: _controller.catalog.value.id!);
+                              });
+                          _controller.fetchGetAll();
                         },
                         style: ButtonStyle(
                             backgroundColor:
@@ -226,7 +224,7 @@ class ProductPage extends GetView<CatalogController> {
                     border: Border.all(color: Colors.blue.shade800)),
                 child: Row(
                   children: [
-                    Expanded(child: tree(context, _controller.catalogs)),
+                    Expanded(child: tree(context, _controller.catalogs.value)),
                     Expanded(flex: 3, child: table(context)),
                   ],
                 ))
@@ -276,19 +274,19 @@ class ProductDataGridSource extends DataGridSource {
                       // tooltip: "Изменение строки",
                       itemBuilder: (BuildContext context) => [
                         PopupMenuItem(
-                            onTap: () {
-                              _controller
-                                  .changeProduct(_controller.productlist
-                                      .value[dataGridRows.indexOf(row)])
-                                  .then((value) {
-                                _controller.catalog.value = dropDownValue!;
-                                showDialog<void>(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (BuildContext context) {
-                                      return EditProductDialog();
-                                    });
-                              });
+                            onTap: ()  {
+                              _controller.product.value =  _controller.productlist
+                                  .value[dataGridRows.indexOf(row)];
+                               showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return EditProductDialog(
+                                        catalog_id: _controller
+                                            .productlist
+                                            .value[dataGridRows.indexOf(row)]
+                                            .id!);
+                                  });
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -305,23 +303,22 @@ class ProductDataGridSource extends DataGridSource {
                             )),
                         PopupMenuItem(
                           onTap: () {
-                            _controller
-                                .changeProduct(_controller.productlist
-                                    .value[dataGridRows.indexOf(row)]);
+                            _controller.changeProduct(_controller
+                                .productlist.value[dataGridRows.indexOf(row)]);
 
-                              _controller
-                                  .getCharasteristic(
-                                      "doc/characteristic/get",
-                                      _controller.productlist
-                                          .value[dataGridRows.indexOf(row)].id
-                                          .toString())
-                                  .then((value) {
-                                showDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (BuildContext context) {
-                                      return AddcharacteristicDialog();
-                                    });
+                            _controller
+                                .getCharasteristic(
+                                    "doc/characteristic/get",
+                                    _controller.productlist
+                                        .value[dataGridRows.indexOf(row)].id
+                                        .toString())
+                                .then((value) {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return AddcharacteristicDialog();
+                                  });
                             });
                           },
                           child: Row(
@@ -340,18 +337,17 @@ class ProductDataGridSource extends DataGridSource {
                         ),
                         PopupMenuItem(
                           onTap: () {
-                            _controller
-                                .changeProduct(_controller.productlist
-                                    .value[dataGridRows.indexOf(row)]);
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (BuildContext dialogContext) {
-                                    return DeleteDialog(
-                                      url: "doc/product/delete",
-                                      index: dataGridRows.indexOf(row),
-                                    );
-                                  });
+                            _controller.changeProduct(_controller
+                                .productlist.value[dataGridRows.indexOf(row)]);
+                            showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext dialogContext) {
+                                  return DeleteDialog(
+                                    url: "doc/product/delete",
+                                    index: dataGridRows.indexOf(row),
+                                  );
+                                });
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

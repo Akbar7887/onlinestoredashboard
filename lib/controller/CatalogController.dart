@@ -9,23 +9,23 @@ import 'ApiConnector.dart';
 class CatalogController extends GetxController {
   final api = ApiConnector();
 
-  var _catalogs = <Catalog>[].obs;
-  var _products = <Product>[].obs;
-  var _catalogslist = <Catalog>[].obs;
-  var _productlist = <Product>[].obs;
-  Rx<Catalog> _catalog = Catalog().obs;
-  var _characteristics = <Characteristic>[].obs;
-  Rx<Product> _product = Product().obs;
+  var catalogs = <Catalog>[].obs;
+  var products = <Product>[].obs;
+  var catalogslist = <Catalog>[].obs;
+  var productlist = <Product>[].obs;
+  Rx<Catalog> catalog = Catalog().obs;
+  var characteristics = <Characteristic>[].obs;
+  Rx<Product> product = Product().obs;
 
 
-  RxList<Catalog> get catalogs => _catalogs;
-  RxList<Product> get products => _products;
-  RxList<Catalog> get catalogslist => _catalogslist;
-  RxList<Product> get productlist => _productlist;
-  Rx<Catalog> get catalog => Catalog().obs;
-  RxList<Characteristic> get characteristics => _characteristics;
-  Rx<Product> get product => _product;
-
+  // RxList<Catalog> get catalogs => _catalogs;
+  // RxList<Product> get products => _products;
+  // RxList<Catalog> get catalogslist => _catalogslist;
+  // RxList<Product> get productlist => _productlist;
+  // Rx<Catalog> get catalog => Catalog().obs;
+  // RxList<Characteristic> get characteristics => _characteristics;
+  // Rx<Product>? get product => _product;
+  //
 
   @override
   void onInit() {
@@ -43,6 +43,14 @@ class CatalogController extends GetxController {
     update();
   }
 
+  creatCatalogList(List<Catalog> catalogs) {
+    catalogs.forEach((element) {
+      this.catalogslist.value.add(element);
+      creatCatalogList(element.catalogs!);
+      // update();
+    });
+  }
+
   Future<void> getCharasteristic(String url, String id) async {
     this.characteristics.value = [];
     final json = await api.getByParentId(url, id);
@@ -52,13 +60,7 @@ class CatalogController extends GetxController {
 
   }
 
-  creatCatalogList(List<Catalog> catalogs) {
-    catalogs.forEach((element) {
-      this.catalogslist.value.add(element);
-      creatCatalogList(element.catalogs!);
-      // update();
-    });
-  }
+
 
   getProducts(Catalog catalog) {
     this.productlist.value = catalog.products!;
@@ -79,13 +81,13 @@ class CatalogController extends GetxController {
 
 
   changeProduct(Product product)   {
-    this.product.value = product;
+    this.product!.value = product;
     // update();
   }
 
    addCharacteristic(Characteristic characteristic)  {
-    if(!this._characteristics.value.contains(characteristic)){
-      this._characteristics.value.add(characteristic);
+    if(!this.characteristics.value.contains(characteristic)){
+      this.characteristics.value.add(characteristic);
     }
     // update();
   }
@@ -127,7 +129,7 @@ class CatalogController extends GetxController {
 
   Future<dynamic> removethroughtParent(String url, String id) async {
     final json =  await api.removethroughtParent(url, id);
-    product.value = Product.fromJson(json);
-    return product.value;
+    product!.value = Product.fromJson(json);
+    return product!.value;
   }
 }
