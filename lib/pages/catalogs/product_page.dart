@@ -7,12 +7,12 @@ import 'package:onlinestoredashboard/models/catalogs/Catalog.dart';
 import 'package:onlinestoredashboard/models/catalogs/Product.dart';
 import 'package:onlinestoredashboard/pages/catalogs/dialogs/addcharacteristic_dialog.dart';
 import 'package:onlinestoredashboard/pages/catalogs/dialogs/delete_dialog.dart';
-import 'package:onlinestoredashboard/pages/catalogs/dialogs/editProduct_dialog.dart';
 import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../generated/l10n.dart';
+import 'dialogs/editProduct_dialog.dart';
 
 final CatalogController _controller = Get.put(CatalogController());
 
@@ -275,6 +275,9 @@ class ProductDataGridSource extends DataGridSource {
                       itemBuilder: (BuildContext context) => [
                         PopupMenuItem(
                             onTap: () {
+                              if (_controller.catalog.value.id == null){
+                                return;
+                              }
                               _controller.changeProduct(_controller
                                   .productlist.value[dataGridRows.indexOf(row)]);
                               showDialog(

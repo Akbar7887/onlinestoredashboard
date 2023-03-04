@@ -23,8 +23,8 @@ class EditProductDialog extends StatelessWidget {
   int? catalog_id;
 
   @override
-  Widget build(BuildContext context) {
-    return Obx(() {
+  Widget build(BuildContext context)  {
+    return  Obx(() {
       if (_controller.product.value.id != null) {
         _nameController.text = _controller.product.value.name!;
         _descriptionController.text = _controller.product.value.description!;
@@ -39,7 +39,7 @@ class EditProductDialog extends StatelessWidget {
             .firstWhere((element) => element.id == catalog_id);
       }
 
-      return AlertDialog(
+      return  AlertDialog(
         title: Text(S.of(context).catalog_show_diagram),
         content: SafeArea(
             child: Form(
