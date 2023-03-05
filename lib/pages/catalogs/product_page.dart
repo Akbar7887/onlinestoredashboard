@@ -30,13 +30,11 @@ class ProductPage extends GetView<CatalogController> {
             child: Column(
       children: [
         Container(
-            height: 20,
-            child: FittedBox(
-              fit: BoxFit.fill,
-              child: Text(
-                S.of(context).catalog,
-              ),
-            )),
+          height: 20,
+          child: Text(
+            S.of(context).catalog,
+          ),
+        ),
         Divider(),
         Expanded(child: TreeView(nodes: treeList(context, catalogs)))
       ],
@@ -103,17 +101,12 @@ class ProductPage extends GetView<CatalogController> {
                     alignment: Alignment.topLeft,
                     child: ElevatedButton(
                         onPressed: () {
-
-                          if (_controller.catalog.value.id == null){
+                          if (_controller.catalog.value.id == null) {
                             return;
                           }
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return EditProductDialog(
-                                    catalog_id: _controller.catalog.value.id!);
-                              }).then((value) => _controller.fetchGetAll());
+                          _controller.product.value.id = null;
+                          showDialogEditProdiuct(context)
+                              .then((value) => _controller.fetchGetAll());
                         },
                         style: ButtonStyle(
                             backgroundColor:
@@ -194,7 +187,6 @@ class ProductPage extends GetView<CatalogController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-
       // _controller.getProducts(_controller.catalogs.value.first);
       _productDataGridSource = ProductDataGridSource(_controller.productlist);
 
@@ -238,6 +230,24 @@ class ProductPage extends GetView<CatalogController> {
   }
 }
 
+Future<void> showDialogEditProdiuct(BuildContext context) async {
+  return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return EditProductDialog();
+      });
+}
+
+Future<void> showDialogCharacteristic(BuildContext context) async {
+  return await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AddcharacteristicDialog();
+      });
+}
+
 class ProductDataGridSource extends DataGridSource {
   ProductDataGridSource(List<Product> products) {
     dataGridRows = products
@@ -275,18 +285,15 @@ class ProductDataGridSource extends DataGridSource {
                       itemBuilder: (BuildContext context) => [
                         PopupMenuItem(
                             onTap: () {
-                              if (_controller.catalog.value.id == null){
+                              if (_controller.catalog.value.id == null) {
                                 return;
                               }
-                              _controller.changeProduct(_controller
-                                  .productlist.value[dataGridRows.indexOf(row)]);
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return EditProductDialog(
-                                        catalog_id: _controller.catalog.value.id!);
-                                  });
+                              _controller.product.value = _controller
+                                  .productlist.value[dataGridRows.indexOf(row)];
+                              showDialogEditProdiuct(context)
+                                  .then((value) => print("ok"))
+                                  .catchError(
+                                      (Exception e) => print(e.toString()));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -313,12 +320,7 @@ class ProductDataGridSource extends DataGridSource {
                                         .value[dataGridRows.indexOf(row)].id
                                         .toString())
                                 .then((value) {
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (BuildContext context) {
-                                    return AddcharacteristicDialog();
-                                  });
+                              showDialogCharacteristic(context);
                             });
                           },
                           child: Row(

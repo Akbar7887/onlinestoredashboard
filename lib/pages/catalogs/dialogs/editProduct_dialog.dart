@@ -14,16 +14,14 @@ import '../../../models/constants/main_constant.dart';
 TextEditingController _nameController = TextEditingController();
 TextEditingController _descriptionController = TextEditingController();
 String _id = '';
-final _keyForm = GlobalKey<FormState>();
+final _keyFormEdit = GlobalKey<FormState>();
 final CatalogController _controller = Get.put(CatalogController());
 
 class EditProductDialog extends StatelessWidget {
-   EditProductDialog({Key? key, required int catalog_id}) : super(key: key);
-
-  int? catalog_id;
+   EditProductDialog({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context)  {
+  Widget build(BuildContext dialogcontext)  {
     return  Obx(() {
       if (_controller.product.value.id != null) {
         _nameController.text = _controller.product.value.name!;
@@ -34,21 +32,21 @@ class EditProductDialog extends StatelessWidget {
         _nameController.clear();
         _descriptionController.clear();
       }
-      if(catalog_id != null){
+      if(_controller.catalog.value.id != null){
         _controller.catalog.value = _controller.catalogslist.value
-            .firstWhere((element) => element.id == catalog_id);
+            .firstWhere((element) => element.id == _controller.catalog.value.id);
       }
 
       return  AlertDialog(
-        title: Text(S.of(context).catalog_show_diagram),
+        title: Text(S.of(dialogcontext).catalog_show_diagram),
         content: SafeArea(
             child: Form(
-                key: _keyForm,
-                child: Container(
+                key: _keyFormEdit,
+                child: StatefulBuilder(
+                    builder: (BuildContext context, setState) => Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
-                    child: StatefulBuilder(
-                        builder: (BuildContext context, setState) => Column(
+                    child:  Column(
                               children: [
                                 DropdownButton<Catalog>(
                                   isExpanded: true,
@@ -105,7 +103,7 @@ class EditProductDialog extends StatelessWidget {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              if (!_keyForm.currentState!.validate()) {
+              if (!_keyFormEdit.currentState!.validate()) {
                 return;
               }
               Product? _product;
@@ -120,15 +118,15 @@ class EditProductDialog extends StatelessWidget {
                       _controller.catalog.value.id!)
                   .then((value) {
                 _controller.fetchGetAll();
-                Navigator.of(context).pop(); // Dismiss alert dialog
+                Navigator.of(dialogcontext).pop(); // Dismiss alert dialog
               });
             },
-            child: Text(S.of(context).save),
+            child: Text(S.of(dialogcontext).save),
           ),
           TextButton(
-            child: Text(S.of(context).cancel),
+            child: Text(S.of(dialogcontext).cancel),
             onPressed: () {
-              Navigator.of(context).pop(); // Dismiss alert dialog
+              Navigator.of(dialogcontext).pop(); // Dismiss alert dialog
             },
           ),
         ],
