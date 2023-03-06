@@ -29,7 +29,6 @@ class AddcharacteristicDialog extends StatelessWidget {
     _characteristicController
         .getCharasteristic(_productController.product.value.id.toString());
     return Obx(() {
-
       CharacteristicDataGridSource _characteristicDataGridSource =
           CharacteristicDataGridSource(
               characteristics: _characteristicController.characteristics,
@@ -176,12 +175,12 @@ class AddcharacteristicDialog extends StatelessWidget {
                         _characteristicController.characteristics.value
                             .indexOf(element)]
                     .text;
+                element.product = _productController.product.value;
+                element.productId = _productController.product.value.id;
               });
 
-
               _characteristicController
-                  .savelist(
-                      "doc/characteristic/save",
+                  .savelist("doc/characteristic/save",
                       _characteristicController.characteristics.value)
                   .then((value) {
                 _characteristicController.characteristics.value = value;

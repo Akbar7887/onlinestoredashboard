@@ -6,7 +6,7 @@ import 'ApiConnector.dart';
 
 class ProductController extends GetxController {
   final api = ApiConnector();
-  final CatalogController _catalogController = Get.put(CatalogController());
+  //
 
   var products = <Product>[].obs;
   Rx<Product> product = Product().obs;
@@ -27,4 +27,9 @@ class ProductController extends GetxController {
     final json = await api.save(url, product);
     return Product.fromJson(json);
   }
+
+  Future<bool> deleteById(id) async {
+    return await api.deleteById("doc/product/delete", id);
+  }
+
 }

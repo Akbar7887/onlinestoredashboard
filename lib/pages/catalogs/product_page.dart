@@ -12,6 +12,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../generated/l10n.dart';
 import 'dialogs/addcharacteristic_dialog.dart';
+import 'dialogs/delete_dialog.dart';
 import 'dialogs/editProduct_dialog.dart';
 
 final CatalogController _catalogController = Get.put(CatalogController());
@@ -346,19 +347,20 @@ class ProductDataGridSource extends DataGridSource {
                         ),
                         PopupMenuItem(
                           onTap: () {
-                            // _controller.changeProduct(_controller
-                            //     .productlist.value[dataGridRows.indexOf(row)]);
-                            // Future.delayed(
-                            //     const Duration(seconds: 0),
-                            //     () => showDialog(
-                            //         context: context,
-                            //         barrierDismissible: true,
-                            //         builder: (BuildContext dialogContext) {
-                            //           return DeleteDialog(
-                            //             url: "doc/product/delete",
-                            //             index: dataGridRows.indexOf(row),
-                            //           );
-                            //         }));
+                            _productController.product.value =
+                                _productController.products
+                                    .value[dataGridRows.indexOf(row)];
+                            Future.delayed(
+                                const Duration(seconds: 0),
+                                () => showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext dialogContext) {
+                                      return DeleteDialog(
+                                        url: "doc/product/delete",
+                                        index: dataGridRows.indexOf(row),
+                                      );
+                                    }));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
