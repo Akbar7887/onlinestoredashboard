@@ -172,7 +172,7 @@ class AddcharacteristicDialog extends StatelessWidget {
 
               _characteristicController
                   .savelist(
-                      "doc/characteristic/addcharacterlist",
+                      "doc/characteristic/save",
                   _productController.product.value.id.toString(),
                   _characteristicController.characteristics.value)
                   .then((value) {
