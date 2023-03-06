@@ -83,8 +83,7 @@ class ProductPage extends GetView<CatalogController> {
   }
 
   Widget table(BuildContext context) {
-    return StatefulBuilder(
-        builder: (context, setState) => Card(
+    return Card(
             elevation: 5,
             child: Padding(
                 padding: EdgeInsets.all(10),
@@ -115,12 +114,13 @@ class ProductPage extends GetView<CatalogController> {
                                       builder: (BuildContext context) {
                                         return EditProductDialog();
                                       })).then((value) {
-                                _controller.fetchGetAll();
-                                setState(() {
-                                  _productDataGridSource =
-                                      ProductDataGridSource(
-                                          _controller.productlist.value);
-                                });
+                                 // _controller.fetchGetAll().then((value) {
+                                 //  setState(() {
+                                 //    _productDataGridSource =
+                                 //        ProductDataGridSource(
+                                 //            _controller.productlist.value);
+                                 //  // });
+                                 // });
                               });
                             },
                             style: ButtonStyle(
@@ -199,7 +199,7 @@ class ProductPage extends GetView<CatalogController> {
                           ]),
                     ))
                   ],
-                ))));
+                )));
   }
 
   @override
@@ -317,7 +317,6 @@ class ProductDataGridSource extends DataGridSource {
                           onTap: () {
                             _controller.changeProduct(_controller
                                 .productlist.value[dataGridRows.indexOf(row)]);
-
                             _controller
                                 .getCharasteristic(
                                     "doc/characteristic/get",

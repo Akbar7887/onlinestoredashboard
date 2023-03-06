@@ -35,7 +35,7 @@ class CatalogController extends GetxController {
   }
 
 
-  fetchGetAll() async {
+  Future<void> fetchGetAll() async {
     final json = await api.getAll("doc/catalog/get");
     this.catalogs.value = json.map((e) => Catalog.fromJson(e)).toList();
 
