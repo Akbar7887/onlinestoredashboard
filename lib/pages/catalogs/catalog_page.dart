@@ -198,7 +198,6 @@ class CatalogPage extends StatelessWidget {
 
                         if (_catalog == null) {
                           _catalog = new Catalog();
-                          _catalog!.active = 'ACTIVE';
                         }
                         _catalog!.catalogname = _controllercatalogName.text;
 

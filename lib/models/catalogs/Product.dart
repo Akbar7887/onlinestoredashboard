@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:onlinestoredashboard/models/catalogs/ProductImage.dart';
 
+import 'Catalog.dart';
 import 'Characteristic.dart';
 
 class Product {
@@ -13,6 +14,7 @@ class Product {
   List<ProductImage>? productImages;
   int? catalogId;
   List<Characteristic>? characteristics;
+  Catalog? catalog;
 
   Product(
       {this.id,
@@ -22,7 +24,8 @@ class Product {
       this.active,
       this.productImages,
       this.catalogId,
-      this.characteristics});
+      this.characteristics,
+      this.catalog});
 
   Product.fromJson(dynamic json) {
     id = json['id'];
@@ -43,6 +46,7 @@ class Product {
         characteristics!.add(Characteristic.fromJson(c));
       });
     }
+    catalog = json["catalog"];
   }
 
   Map<String, dynamic> toJson() {
@@ -58,6 +62,7 @@ class Product {
     if (characteristics != null) {
       map['characteristics'] = characteristics!.map((v) => v.toJson()).toList();
     }
+    map['catalog'] = catalog;
     return map;
   }
 }

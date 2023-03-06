@@ -10,12 +10,9 @@ class CatalogController extends GetxController {
   final api = ApiConnector();
 
   var catalogs = <Catalog>[].obs;
-  var products = <Product>[].obs;
   var catalogslist = <Catalog>[].obs;
-  var productlist = <Product>[].obs;
   Rx<Catalog> catalog = Catalog().obs;
-  var characteristics = <Characteristic>[].obs;
-  Rx<Product> product = Product().obs;
+  // var characteristics = <Characteristic>[].obs;
 
 
   // RxList<Catalog> get catalogs => _catalogs;
@@ -52,27 +49,21 @@ class CatalogController extends GetxController {
     });
   }
 
-  Future<void> getCharasteristic(String url, String id) async {
-    this.characteristics.value = [];
-    final json = await api.getByParentId(url, id);
-    this.characteristics.value =
-        json.map((e) => Characteristic.fromJson(e)).toList();
-    update();
+  // Future<void> getCharasteristic(String url, String id) async {
+  //   this.characteristics.value = [];
+  //   final json = await api.getByParentId(url, id);
+  //   this.characteristics.value =
+  //       json.map((e) => Characteristic.fromJson(e)).toList();
+  //   update();
+  //
+  // }
 
-  }
 
 
-
-  getProducts(Catalog catalog) {
-    this.productlist.value = catalog.products!;
-    // update();
-  }
-
-  changeProducts(List<Product> products) {
-    this.products.value = products;
-    // update();
-    // notifyChildrens();
-  }
+  // getProducts(Catalog catalog) {
+  //   this.productlist.value = catalog.products!;
+  //   // update();
+  // }
 
   addCatalog(Catalog catalog) {
     this.catalogs.add(catalog);
@@ -80,24 +71,12 @@ class CatalogController extends GetxController {
     // notifyChildrens();
   }
 
-
-  changeProduct(Product product)   {
-    this.product.value = product;
-    // update();
-  }
-
-   addCharacteristic(Characteristic characteristic)  {
-    if(!this.characteristics.value.contains(characteristic)){
-      this.characteristics.value.add(characteristic);
-    }
-    // update();
-  }
-
   Future<Catalog> savesub(String url, Catalog catalog, int id) async {
     final json = await api.savesub(url, catalog, id.toString());
     catalog = Catalog.fromJson(json);
     return catalog;
   }
+
 
   Future<List<Characteristic>> savelist(
     String url,
@@ -115,7 +94,7 @@ class CatalogController extends GetxController {
   Future<Catalog> deleteActive(String url, int id) async {
     final json = await api.deleteActive(url, id.toString());
     catalog.value = Catalog.fromJson(json);
-    return catalog.value!;
+    return catalog.value;
   }
 
   Future<bool> deleteById(url, id) async {
@@ -128,9 +107,4 @@ class CatalogController extends GetxController {
     return catalog.value;
   }
 
-  Future<dynamic> removethroughtParent(String url, String id) async {
-    final json =  await api.removethroughtParent(url, id);
-    product.value = Product.fromJson(json);
-    return product.value;
-  }
 }

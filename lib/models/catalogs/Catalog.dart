@@ -6,7 +6,7 @@ class Catalog {
   String? imagepath;
   String? active;
   List<Catalog>? catalogs;
-  List<Product>? products;
+  // List<Product>? products;
   int? parentId;
   Catalog? parent;
 
@@ -16,7 +16,7 @@ class Catalog {
       this.imagepath,
       this.active,
       this.catalogs,
-      this.products,
+      // this.products,
       this.parentId,
       this.parent});
 
@@ -31,12 +31,12 @@ class Catalog {
         catalogs!.add(Catalog.fromJson(v));
       });
     }
-    if (json['products'] != null) {
-      products = [];
-      json['products'].forEach((v) {
-        products!.add(Product.fromJson(v));
-      });
-    }
+    // if (json['products'] != null) {
+    //   products = [];
+    //   json['products'].forEach((v) {
+    //     products!.add(Product.fromJson(v));
+    //   });
+    // }
     parentId = json['parentId'];
     // if(json['parentId'] != null){
     //   parent = catalogs!.firstWhere((element) => element.parent!.id == json['parentId']);
@@ -53,9 +53,9 @@ class Catalog {
     if (catalogs != null) {
       map['catalogs'] = catalogs!.map((v) => v.toJson()).toList();
     }
-    if (products != null) {
-      map['products'] = products!.map((v) => v.toJson()).toList();
-    }
+    // if (products != null) {
+    //   map['products'] = products!.map((v) => v.toJson()).toList();
+    // }
     map["parentId"] = parentId;
     return map;
   }

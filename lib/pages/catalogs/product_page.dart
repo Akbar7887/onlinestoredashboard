@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:get/get.dart';
 import 'package:onlinestoredashboard/controller/CatalogController.dart';
+import 'package:onlinestoredashboard/controller/ProductController.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 import 'package:onlinestoredashboard/models/catalogs/Catalog.dart';
 import 'package:onlinestoredashboard/models/catalogs/Product.dart';
-import 'package:onlinestoredashboard/pages/catalogs/dialogs/addcharacteristic_dialog.dart';
-import 'package:onlinestoredashboard/pages/catalogs/dialogs/delete_dialog.dart';
 import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -14,7 +13,8 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../generated/l10n.dart';
 import 'dialogs/editProduct_dialog.dart';
 
-final CatalogController _controller = Get.put(CatalogController());
+final CatalogController _catalogController = Get.put(CatalogController());
+final ProductController _productController = Get.put(ProductController());
 
 Product? _product;
 late ProductDataGridSource _productDataGridSource;
@@ -46,12 +46,13 @@ class ProductPage extends GetView<CatalogController> {
         .map((e) => TreeNode(
             content: InkWell(
                 onTap: () {
-                  _controller.fetchGetAll();
-                  _controller.getProducts(e);
-                  _controller.catalog.value = _controller.catalogslist
+                  _catalogController.fetchGetAll();
+                   // _controller.getProducts(e);
+                  _catalogController.catalog.value = _catalogController
+                      .catalogslist
                       .firstWhere((element) => element.id == e.id);
                   _productDataGridSource =
-                      ProductDataGridSource(_controller.productlist.value);
+                      ProductDataGridSource(_productController.products.value);
                 },
                 child: Container(
                     height: 50,
@@ -84,122 +85,121 @@ class ProductPage extends GetView<CatalogController> {
 
   Widget table(BuildContext context) {
     return Card(
-            elevation: 5,
-            child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Container(
-                        height: 20,
-                        child: FittedBox(
-                          fit: BoxFit.fill,
-                          child: Text(
-                            S.of(context).product,
-                          ),
-                        )),
-                    Divider(),
-                    Container(
-                        alignment: Alignment.topLeft,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              if (_controller.catalog.value.id == null) {
-                                return;
-                              }
-                              _controller.product.value.id = null;
-                              Future.delayed(
-                                  const Duration(seconds: 0),
-                                  () => showDialog(
-                                      context: context,
-                                      barrierDismissible: true,
-                                      builder: (BuildContext context) {
-                                        return EditProductDialog();
-                                      })).then((value) {
-                                 // _controller.fetchGetAll().then((value) {
-                                 //  setState(() {
-                                 //    _productDataGridSource =
-                                 //        ProductDataGridSource(
-                                 //            _controller.productlist.value);
-                                 //  // });
-                                 // });
-                              });
-                            },
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.grey[800])),
-                            child: Text("Добавить"))),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Expanded(
-                        child: SfDataGridTheme(
-                      data: SfDataGridThemeData(
-                        headerColor: Colors.grey[700],
-                        rowHoverColor: Colors.grey,
-                        gridLineStrokeWidth: 1,
-                        rowHoverTextStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
+        elevation: 5,
+        child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Container(
+                    height: 20,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: Text(
+                        S.of(context).product,
                       ),
-                      child: SfDataGrid(
-                          source: _productDataGridSource,
-                          selectionMode: SelectionMode.single,
-                          headerGridLinesVisibility:
-                              GridLinesVisibility.vertical,
-                          columnWidthMode: ColumnWidthMode.fill,
-                          isScrollbarAlwaysShown: true,
-                          // allowFiltering: true,
-                          allowSorting: true,
-                          allowEditing: true,
-                          gridLinesVisibility: GridLinesVisibility.both,
-                          onQueryRowHeight: (details) {
-                            return UiO.datagrig_height;
-                          },
-                          headerRowHeight: UiO.datagrig_height,
-                          onCellTap: (cell) {},
-                          columns: [
-                            GridColumn(
-                                columnName: 'id',
-                                width: 50,
-                                label: Center(
-                                  child: Text(
-                                    "№",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                )),
-                            GridColumn(
-                              columnName: 'name',
-                              // width: MediaQuery.of(context).size.width/2,
-                              label: Center(
+                    )),
+                Divider(),
+                Container(
+                    alignment: Alignment.topLeft,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (_catalogController.catalog.value.id == null) {
+                            return;
+                          }
+                          _productController.product.value.id = null;
+                          Future.delayed(
+                              const Duration(seconds: 0),
+                              () => showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return EditProductDialog();
+                                  })).then((value) {
+                            // _controller.fetchGetAll().then((value) {
+                            //  setState(() {
+                            //    _productDataGridSource =
+                            //        ProductDataGridSource(
+                            //            _controller.productlist.value);
+                            //  // });
+                            // });
+                          });
+                        },
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.grey[800])),
+                        child: Text("Добавить"))),
+                SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                    child: SfDataGridTheme(
+                  data: SfDataGridThemeData(
+                    headerColor: Colors.grey[700],
+                    rowHoverColor: Colors.grey,
+                    gridLineStrokeWidth: 1,
+                    rowHoverTextStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
+                  child: SfDataGrid(
+                      source: _productDataGridSource,
+                      selectionMode: SelectionMode.single,
+                      headerGridLinesVisibility: GridLinesVisibility.vertical,
+                      columnWidthMode: ColumnWidthMode.fill,
+                      isScrollbarAlwaysShown: true,
+                      // allowFiltering: true,
+                      allowSorting: true,
+                      allowEditing: true,
+                      gridLinesVisibility: GridLinesVisibility.both,
+                      onQueryRowHeight: (details) {
+                        return UiO.datagrig_height;
+                      },
+                      headerRowHeight: UiO.datagrig_height,
+                      onCellTap: (cell) {},
+                      columns: [
+                        GridColumn(
+                            columnName: 'id',
+                            width: 50,
+                            label: Center(
+                              child: Text(
+                                "№",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                        GridColumn(
+                          columnName: 'name',
+                          // width: MediaQuery.of(context).size.width/2,
+                          label: Center(
+                            child: Text(
+                              S.of(context).name,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                            columnName: "edit",
+                            maximumWidth: 150,
+                            label: Container(
+                                padding: EdgeInsets.all(5.0),
+                                alignment: Alignment.center,
                                 child: Text(
-                                  S.of(context).name,
+                                  S.of(context).edit,
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            GridColumn(
-                                columnName: "edit",
-                                maximumWidth: 150,
-                                label: Container(
-                                    padding: EdgeInsets.all(5.0),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      S.of(context).edit,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ))),
-                          ]),
-                    ))
-                  ],
-                )));
+                                ))),
+                      ]),
+                ))
+              ],
+            )));
   }
 
   @override
@@ -207,7 +207,7 @@ class ProductPage extends GetView<CatalogController> {
     return Obx(() {
       // _controller.getProducts(_controller.catalogs.value.first);
       _productDataGridSource =
-          ProductDataGridSource(_controller.productlist.value);
+          ProductDataGridSource(_productController.products.value);
 
       return Scaffold(
           appBar: OnlineAppBar(), // extendBodyBehindAppBar: true,
@@ -233,7 +233,9 @@ class ProductPage extends GetView<CatalogController> {
                     //     border: Border.all(color: Colors.blue.shade800)),
                     child: Row(
                   children: [
-                    Expanded(child: tree(context, _controller.catalogs.value)),
+                    Expanded(
+                        child:
+                            tree(context, _catalogController.catalogs.value)),
                     Expanded(flex: 3, child: table(context)),
                   ],
                 ))
@@ -253,7 +255,7 @@ class ProductDataGridSource extends DataGridSource {
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<int>(
                   columnName: 'id',
-                  value: _controller.productlist.value.indexOf(e) + 1),
+                  value: _productController.products.value.indexOf(e) + 1),
               DataGridCell<String>(columnName: 'name', value: e.name),
               DataGridCell<Icon>(
                   columnName: 'delete', value: Icon(Icons.more_vert_outlined)),
@@ -285,11 +287,12 @@ class ProductDataGridSource extends DataGridSource {
                         PopupMenuItem(
                             value: 0,
                             onTap: () async {
-                              if (_controller.catalog.value.id == null) {
+                              if (_catalogController.catalog.value.id == null) {
                                 return;
                               }
-                              _controller.product.value = _controller
-                                  .productlist.value[dataGridRows.indexOf(row)];
+                              _productController.product.value =
+                                  _productController.products
+                                      .value[dataGridRows.indexOf(row)];
 
                               Future.delayed(
                                   const Duration(seconds: 0),
@@ -315,24 +318,24 @@ class ProductDataGridSource extends DataGridSource {
                             )),
                         PopupMenuItem(
                           onTap: () {
-                            _controller.changeProduct(_controller
-                                .productlist.value[dataGridRows.indexOf(row)]);
-                            _controller
-                                .getCharasteristic(
-                                    "doc/characteristic/get",
-                                    _controller.productlist
-                                        .value[dataGridRows.indexOf(row)].id
-                                        .toString())
-                                .then((value) {
-                              Future.delayed(
-                                  const Duration(seconds: 0),
-                                  () => showDialog(
-                                      context: context,
-                                      barrierDismissible: true,
-                                      builder: (BuildContext context) {
-                                        return AddcharacteristicDialog();
-                                      }));
-                            });
+                            _productController.product.value = _productController
+                                .products.value[dataGridRows.indexOf(row)];
+                            // _controller
+                            //     .getCharasteristic(
+                            //         "doc/characteristic/get",
+                            //         _controller.productlist
+                            //             .value[dataGridRows.indexOf(row)].id
+                            //             .toString())
+                            //     .then((value) {
+                            //   Future.delayed(
+                            //       const Duration(seconds: 0),
+                            //       () => showDialog(
+                            //           context: context,
+                            //           barrierDismissible: true,
+                            //           builder: (BuildContext context) {
+                            //             return AddcharacteristicDialog();
+                            //           }));
+                            // });
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -350,19 +353,19 @@ class ProductDataGridSource extends DataGridSource {
                         ),
                         PopupMenuItem(
                           onTap: () {
-                            _controller.changeProduct(_controller
-                                .productlist.value[dataGridRows.indexOf(row)]);
-                            Future.delayed(
-                                const Duration(seconds: 0),
-                                () => showDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (BuildContext dialogContext) {
-                                      return DeleteDialog(
-                                        url: "doc/product/delete",
-                                        index: dataGridRows.indexOf(row),
-                                      );
-                                    }));
+                            // _controller.changeProduct(_controller
+                            //     .productlist.value[dataGridRows.indexOf(row)]);
+                            // Future.delayed(
+                            //     const Duration(seconds: 0),
+                            //     () => showDialog(
+                            //         context: context,
+                            //         barrierDismissible: true,
+                            //         builder: (BuildContext dialogContext) {
+                            //           return DeleteDialog(
+                            //             url: "doc/product/delete",
+                            //             index: dataGridRows.indexOf(row),
+                            //           );
+                            //         }));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

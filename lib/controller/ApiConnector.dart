@@ -16,6 +16,11 @@ class ApiConnector extends GetConnect{
     return json;
   }
 
+  Future<List<dynamic>> getByParentId(String url, String id ) async {
+    final json = await api.getByParentId(url, id);
+    return json;
+  }
+
   Future<dynamic> save(String url, Object object) async {
     return await api.post(url, object);
   }
@@ -40,8 +45,5 @@ class ApiConnector extends GetConnect{
     return await api.removethroughtParent(url, id);
   }
 
-  Future<List<dynamic>> getByParentId(String url, String id ) async {
-    final json = await api.getByParentId(url, id);
-    return json;
-  }
+
 }

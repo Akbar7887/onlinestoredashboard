@@ -150,7 +150,6 @@ class Api {
       return true;
     } else {
       throw Exception("Error");
-      return false;
     }
   }
 }
