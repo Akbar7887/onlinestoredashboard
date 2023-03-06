@@ -13,13 +13,13 @@ class ProductController extends GetxController {
 
   @override
   void onInit() {
-    fetchgetAll(
-        "doc/product/get", _catalogController.catalog.value.id.toString());
+
+    fetchgetAll("0");
     super.onInit();
   }
 
-  fetchgetAll(String url, String id) async {
-    final json = await api.getByParentId(url, id);
+  Future<void> fetchgetAll(String id) async {
+    final json = await api.getByParentId("doc/product/get", id);
     this.products.value = json.map((e) => Product.fromJson(e)).toList();
   }
 

@@ -4,6 +4,7 @@ import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:onlinestoredashboard/controller/ApiConnector.dart';
 import 'package:onlinestoredashboard/controller/CatalogController.dart';
+import 'package:onlinestoredashboard/controller/CharacteristicController.dart';
 import 'package:onlinestoredashboard/controller/ProductController.dart';
 import 'package:onlinestoredashboard/models/Organization.dart';
 
@@ -49,5 +50,7 @@ class HomeBindings extends Bindings {
     Get.lazyPut(() => Controller());
     Get.lazyPut(() => CatalogController());
     Get.lazyPut(() => ProductController());
+    Get.lazyPut(() => CharacteristicController());
+
   }
 }

@@ -46,13 +46,11 @@ class ProductPage extends GetView<CatalogController> {
         .map((e) => TreeNode(
             content: InkWell(
                 onTap: () {
-                  _catalogController.fetchGetAll();
-                   // _controller.getProducts(e);
-                  _catalogController.catalog.value = _catalogController
-                      .catalogslist
-                      .firstWhere((element) => element.id == e.id);
-                  _productDataGridSource =
-                      ProductDataGridSource(_productController.products.value);
+                  _catalogController.catalog.value = e;
+                  _productController.fetchgetAll(e.id.toString()).then((value) {
+                    _productDataGridSource = ProductDataGridSource(
+                        _productController.products.value);
+                  });
                 },
                 child: Container(
                     height: 50,
@@ -114,15 +112,16 @@ class ProductPage extends GetView<CatalogController> {
                                   barrierDismissible: true,
                                   builder: (BuildContext context) {
                                     return EditProductDialog();
-                                  })).then((value) {
-                            // _controller.fetchGetAll().then((value) {
-                            //  setState(() {
-                            //    _productDataGridSource =
-                            //        ProductDataGridSource(
-                            //            _controller.productlist.value);
-                            //  // });
-                            // });
-                          });
+                                  }));
+                          // .then((value) {
+                          // _controller.fetchGetAll().then((value) {
+                          //  setState(() {
+                          //    _productDataGridSource =
+                          //        ProductDataGridSource(
+                          //            _controller.productlist.value);
+                          //  // });
+                          // });
+                          // });
                         },
                         style: ButtonStyle(
                             backgroundColor:
@@ -318,8 +317,9 @@ class ProductDataGridSource extends DataGridSource {
                             )),
                         PopupMenuItem(
                           onTap: () {
-                            _productController.product.value = _productController
-                                .products.value[dataGridRows.indexOf(row)];
+                            _productController.product.value =
+                                _productController
+                                    .products.value[dataGridRows.indexOf(row)];
                             // _controller
                             //     .getCharasteristic(
                             //         "doc/characteristic/get",

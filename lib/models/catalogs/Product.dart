@@ -24,8 +24,7 @@ class Product {
       this.active,
       this.productImages,
       this.catalogId,
-      this.characteristics,
-      this.catalog});
+      this.characteristics});
 
   Product.fromJson(dynamic json) {
     id = json['id'];
@@ -40,13 +39,14 @@ class Product {
       });
     }
     catalogId = json['catalogId'];
-    if(json['characteristics'] != null){
+    if (json['characteristics'] != null) {
       characteristics = [];
-      json['characteristics'].forEach((c){
+      json['characteristics'].forEach((c) {
         characteristics!.add(Characteristic.fromJson(c));
       });
     }
-    catalog = json["catalog"];
+    catalog =
+        json['catalog'] != null ? Catalog.fromJson(json['catalog']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -62,7 +62,9 @@ class Product {
     if (characteristics != null) {
       map['characteristics'] = characteristics!.map((v) => v.toJson()).toList();
     }
-    map['catalog'] = catalog;
+    if (this.catalog != null) {
+      map['catalog'] = this.catalog!.toJson();
+    }
     return map;
   }
 }

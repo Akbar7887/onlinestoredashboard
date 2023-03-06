@@ -12,7 +12,6 @@ class CatalogController extends GetxController {
   var catalogs = <Catalog>[].obs;
   var catalogslist = <Catalog>[].obs;
   Rx<Catalog> catalog = Catalog().obs;
-  // var characteristics = <Characteristic>[].obs;
 
 
   // RxList<Catalog> get catalogs => _catalogs;
@@ -27,6 +26,9 @@ class CatalogController extends GetxController {
   @override
   void onInit() {
     fetchGetAll();
+    if(catalogs.value.length > 0){
+      catalog.value = catalogs.first;
+    }
     // getProducts(this.catalogs.value.first);
     super.onInit();
   }
@@ -49,14 +51,6 @@ class CatalogController extends GetxController {
     });
   }
 
-  // Future<void> getCharasteristic(String url, String id) async {
-  //   this.characteristics.value = [];
-  //   final json = await api.getByParentId(url, id);
-  //   this.characteristics.value =
-  //       json.map((e) => Characteristic.fromJson(e)).toList();
-  //   update();
-  //
-  // }
 
 
 
@@ -75,20 +69,6 @@ class CatalogController extends GetxController {
     final json = await api.savesub(url, catalog, id.toString());
     catalog = Catalog.fromJson(json);
     return catalog;
-  }
-
-
-  Future<List<Characteristic>> savelist(
-    String url,
-    String id,
-    List<Characteristic> list,
-  ) async {
-    final json = await api.saveList(url, id.toString(), list);
-
-    List<Characteristic> characteristics = json.map((e) => Characteristic.fromJson(e)).toList();
-
-    // _list.sort((a, b) => a.id!.compareTo(b.id!));
-    return characteristics;
   }
 
   Future<Catalog> deleteActive(String url, int id) async {

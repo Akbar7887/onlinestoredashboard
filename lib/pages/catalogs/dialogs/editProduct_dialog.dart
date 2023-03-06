@@ -122,8 +122,9 @@ class EditProductDialog extends StatelessWidget {
               _productController
                   .save("doc/product/save", _product)
                   .then((value) {
-                // _productController.products.value .catalog.value);
-                 Navigator.of(context).pop(); // Dismiss alert dialog
+                _productController.fetchgetAll(
+                    _catalogController.catalog.value.id.toString());
+                Navigator.of(context).pop(); // Dismiss alert dialog
               });
             },
             child: Text(S.of(context).save),

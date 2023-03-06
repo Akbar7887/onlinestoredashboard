@@ -38,9 +38,10 @@ class Catalog {
     //   });
     // }
     parentId = json['parentId'];
-    // if(json['parentId'] != null){
-    //   parent = catalogs!.firstWhere((element) => element.parent!.id == json['parentId']);
-    // }
+
+    if(json['parentId'] != null){
+      parent = catalogs!.firstWhere((element) => element.parent!.id == json['parentId']);
+    }
 
   }
 
