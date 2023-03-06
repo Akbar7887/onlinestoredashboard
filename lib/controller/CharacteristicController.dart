@@ -8,9 +8,9 @@ class CharacteristicController extends GetxController {
   final api = ApiConnector();
   var characteristics = <Characteristic>[].obs;
 
-  Future<void> getCharasteristic(String url, String id) async {
+  Future<void> getCharasteristic(String id) async {
     this.characteristics.value = [];
-    final json = await api.getByParentId(url, id);
+    final json = await api.getByParentId("doc/characteristic/get", id);
     this.characteristics.value =
         json.map((e) => Characteristic.fromJson(e)).toList();
     update();
@@ -18,10 +18,9 @@ class CharacteristicController extends GetxController {
 
   Future<List<Characteristic>> savelist(
     String url,
-    String id,
     List<Characteristic> list,
   ) async {
-    final json = await api.saveList(url, id.toString(), list);
+    final json = await api.saveList(url, list);
 
     List<Characteristic> characteristics =
         json.map((e) => Characteristic.fromJson(e)).toList();

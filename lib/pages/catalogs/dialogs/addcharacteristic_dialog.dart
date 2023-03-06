@@ -26,10 +26,14 @@ class AddcharacteristicDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _characteristicController
+        .getCharasteristic(_productController.product.value.id.toString());
     return Obx(() {
+
       CharacteristicDataGridSource _characteristicDataGridSource =
           CharacteristicDataGridSource(
-              characteristics: _characteristicController.characteristics, emptycount: 0);
+              characteristics: _characteristicController.characteristics,
+              emptycount: 0);
 
       return AlertDialog(
         title: Text(
@@ -52,14 +56,15 @@ class AddcharacteristicDialog extends StatelessWidget {
                                       alignment: Alignment.topLeft,
                                       child: ElevatedButton(
                                           onPressed: () {
-                                            _characteristicController.characteristics.value.add(
-                                                Characteristic(
+                                            _characteristicController
+                                                .characteristics.value
+                                                .add(Characteristic(
                                                     name: "", valuename: ""));
                                             setState(() {
                                               _characteristicDataGridSource =
                                                   CharacteristicDataGridSource(
                                                       characteristics:
-                                                      _characteristicController
+                                                          _characteristicController
                                                               .characteristics,
                                                       emptycount: 1);
                                             });
@@ -73,8 +78,8 @@ class AddcharacteristicDialog extends StatelessWidget {
                                   Expanded(
                                       child: FittedBox(
                                           fit: BoxFit.contain,
-                                          child: Text(
-                                              _productController.product.value.name!)))
+                                          child: Text(_productController
+                                              .product.value.name!)))
                                 ],
                               )),
                           SizedBox(
@@ -161,20 +166,23 @@ class AddcharacteristicDialog extends StatelessWidget {
                 return;
               }
 
-              _characteristicController.characteristics.value.forEach((element) {
-                element.name = _namecontroller[
-                _characteristicController.characteristics.value.indexOf(element)]
+              _characteristicController.characteristics.value
+                  .forEach((element) {
+                element.name = _namecontroller[_characteristicController
+                        .characteristics.value
+                        .indexOf(element)]
                     .text;
                 element.valuename = _valuenamecontroller[
-                _characteristicController.characteristics.value.indexOf(element)]
+                        _characteristicController.characteristics.value
+                            .indexOf(element)]
                     .text;
               });
+
 
               _characteristicController
                   .savelist(
                       "doc/characteristic/save",
-                  _productController.product.value.id.toString(),
-                  _characteristicController.characteristics.value)
+                      _characteristicController.characteristics.value)
                   .then((value) {
                 _characteristicController.characteristics.value = value;
                 Navigator.of(context).pop(); // Dismiss alert dialog
@@ -202,7 +210,9 @@ class CharacteristicDataGridSource extends DataGridSource {
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<int>(
                   columnName: 'id',
-                  value: _characteristicController.characteristics.value.indexOf(e) + 1),
+                  value: _characteristicController.characteristics.value
+                          .indexOf(e) +
+                      1),
               DataGridCell<String>(columnName: 'name', value: e.name),
               DataGridCell<String>(columnName: 'valuename', value: e.valuename),
               DataGridCell<Icon>(
@@ -290,17 +300,21 @@ class CharacteristicDataGridSource extends DataGridSource {
         child: InkWell(
           child: row.getCells()[3].value,
           onTap: () {
-            if (_characteristicController.characteristics[dataGridRows.indexOf(row)].id ==
+            if (_characteristicController
+                    .characteristics[dataGridRows.indexOf(row)].id ==
                 null) {
-              _characteristicController.characteristics.removeAt(dataGridRows.indexOf(row));
+              _characteristicController.characteristics
+                  .removeAt(dataGridRows.indexOf(row));
             }
             _characteristicController
                 .deleteById(
                     "doc/characteristic/removecharacter",
-                _characteristicController.characteristics[dataGridRows.indexOf(row)].id
+                    _characteristicController
+                        .characteristics[dataGridRows.indexOf(row)].id
                         .toString())
                 .then((value) {
-              _characteristicController.characteristics.removeAt(dataGridRows.indexOf(row));
+              _characteristicController.characteristics
+                  .removeAt(dataGridRows.indexOf(row));
             });
           },
         ),

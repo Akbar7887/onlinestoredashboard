@@ -87,10 +87,10 @@ class Api {
     }
   }
 
-  Future<List<dynamic>> saveList(String url, String id, List<dynamic> list) async {
-    Map<String, dynamic> param = {'id': id};
+  Future<List<dynamic>> saveList(String url, List<dynamic> list) async {
+    // Map<String, dynamic> param = {'id': id};
 
-    Uri uri = Uri.parse("${UiO.url}${url}").replace(queryParameters: param);
+    Uri uri = Uri.parse("${UiO.url}${url}");
 
     // Uri uri = Uri.https(UiO.url, url,{"id": id});
     final response =

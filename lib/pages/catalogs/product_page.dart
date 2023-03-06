@@ -11,6 +11,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../generated/l10n.dart';
+import 'dialogs/addcharacteristic_dialog.dart';
 import 'dialogs/editProduct_dialog.dart';
 
 final CatalogController _catalogController = Get.put(CatalogController());
@@ -320,22 +321,14 @@ class ProductDataGridSource extends DataGridSource {
                             _productController.product.value =
                                 _productController
                                     .products.value[dataGridRows.indexOf(row)];
-                            // _controller
-                            //     .getCharasteristic(
-                            //         "doc/characteristic/get",
-                            //         _controller.productlist
-                            //             .value[dataGridRows.indexOf(row)].id
-                            //             .toString())
-                            //     .then((value) {
-                            //   Future.delayed(
-                            //       const Duration(seconds: 0),
-                            //       () => showDialog(
-                            //           context: context,
-                            //           barrierDismissible: true,
-                            //           builder: (BuildContext context) {
-                            //             return AddcharacteristicDialog();
-                            //           }));
-                            // });
+                            Future.delayed(
+                                const Duration(seconds: 0),
+                                () => showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext context) {
+                                      return AddcharacteristicDialog();
+                                    }));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
