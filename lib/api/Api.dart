@@ -114,10 +114,12 @@ class Api {
     final response = await http.put(uri, headers: header);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final json = jsonDecode(utf8.decode(response.bodyBytes));
-
-      return json; //json.map((e) => Catalog.fromJson(e)).toList();
+      // final json = jsonDecode(utf8.decode(response.bodyBytes));
+      //
+      return true; //json.map((e) => Catalog.fromJson(e)).toList();
     } else {
+      return false; //json.map((e) => Catalog.fromJson(e)).toList();
+
       throw Exception("Error");
     }
   }

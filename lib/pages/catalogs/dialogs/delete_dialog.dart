@@ -29,7 +29,7 @@ class DeleteDialog extends StatelessWidget {
             onPressed: () {
               // if (object.runtimeType == Product) {
               _productController
-                  .deleteById(
+                  .deleteActive(
                       _productController.products.value[index].id.toString())
                   .then((value) {
                 _productController.fetchgetAll(

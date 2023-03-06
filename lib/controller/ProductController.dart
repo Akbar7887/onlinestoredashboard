@@ -28,8 +28,8 @@ class ProductController extends GetxController {
     return Product.fromJson(json);
   }
 
-  Future<bool> deleteById(id) async {
-    return await api.deleteById("doc/product/delete", id);
+  Future<bool> deleteActive(String id) async {
+    return await api.deleteActive("doc/product/delete", id);
   }
 
 }
