@@ -21,7 +21,7 @@ class EditProductDialog extends StatelessWidget {
    EditProductDialog({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext dialogcontext)  {
+  Widget build(BuildContext context)  {
     return  Obx(() {
       if (_controller.product.value.id != null) {
         _nameController.text = _controller.product.value.name!;
@@ -38,15 +38,15 @@ class EditProductDialog extends StatelessWidget {
       }
 
       return  AlertDialog(
-        title: Text(S.of(dialogcontext).catalog_show_diagram),
+        title: Text(S.of(context).catalog_show_diagram),
         content: SafeArea(
-            child: Form(
-                key: _keyFormEdit,
-                child: StatefulBuilder(
+            child:  StatefulBuilder(
                     builder: (BuildContext context, setState) => Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
-                    child:  Column(
+                    child:  Form(
+                        key: _keyFormEdit,
+                        child: Column(
                               children: [
                                 DropdownButton<Catalog>(
                                   isExpanded: true,
@@ -117,16 +117,15 @@ class EditProductDialog extends StatelessWidget {
                   .saveProduct("doc/catalog/saveproduct", _product,
                       _controller.catalog.value.id!)
                   .then((value) {
-                _controller.fetchGetAll();
-                Navigator.of(dialogcontext).pop(); // Dismiss alert dialog
+                 Navigator.of(context).pop(); // Dismiss alert dialog
               });
             },
-            child: Text(S.of(dialogcontext).save),
+            child: Text(S.of(context).save),
           ),
           TextButton(
-            child: Text(S.of(dialogcontext).cancel),
+            child: Text(S.of(context).cancel),
             onPressed: () {
-              Navigator.of(dialogcontext).pop(); // Dismiss alert dialog
+              Navigator.of(context).pop(); // Dismiss alert dialog
             },
           ),
         ],

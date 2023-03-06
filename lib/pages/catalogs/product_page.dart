@@ -46,6 +46,7 @@ class ProductPage extends GetView<CatalogController> {
         .map((e) => TreeNode(
             content: InkWell(
                 onTap: () {
+                  _controller.fetchGetAll();
                   _controller.getProducts(e);
                   _controller.catalog.value = _controller.catalogslist
                       .firstWhere((element) => element.id == e.id);
@@ -82,170 +83,168 @@ class ProductPage extends GetView<CatalogController> {
   }
 
   Widget table(BuildContext context) {
-    return Card(
-        elevation: 5,
-        child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Container(
-                    height: 20,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: Text(
-                        S.of(context).product,
-                      ),
-                    )),
-                Divider(),
-                Container(
-                    alignment: Alignment.topLeft,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          if (_controller.catalog.value.id == null) {
-                            return;
-                          }
-                          _controller.product.value.id = null;
-                          showDialogEditProdiuct(context)
-                              .then((value) => _controller.fetchGetAll());
-                        },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.grey[800])),
-                        child: Text("Добавить"))),
-                SizedBox(
-                  height: 20,
-                ),
-                SfDataGridTheme(
-                  data: SfDataGridThemeData(
-                    headerColor: Colors.grey[700],
-                    rowHoverColor: Colors.grey,
-                    gridLineStrokeWidth: 1,
-                    rowHoverTextStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  ),
-                  child: SfDataGrid(
-                      source: _productDataGridSource,
-                      selectionMode: SelectionMode.single,
-                      headerGridLinesVisibility: GridLinesVisibility.vertical,
-                      columnWidthMode: ColumnWidthMode.fill,
-                      // allowFiltering: true,
-                      allowSorting: true,
-                      allowEditing: true,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      onQueryRowHeight: (details) {
-                        return UiO.datagrig_height;
-                      },
-                      headerRowHeight: UiO.datagrig_height,
-                      onCellTap: (cell) {},
-                      columns: [
-                        GridColumn(
-                            columnName: 'id',
-                            width: 50,
-                            label: Center(
-                              child: Text(
-                                "№",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                        GridColumn(
-                          columnName: 'name',
-                          // width: MediaQuery.of(context).size.width/2,
-                          label: Center(
-                            child: Text(
-                              S.of(context).name,
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
+    return StatefulBuilder(
+        builder: (context, setState) => Card(
+            elevation: 5,
+            child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Container(
+                        height: 20,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Text(
+                            S.of(context).product,
                           ),
+                        )),
+                    Divider(),
+                    Container(
+                        alignment: Alignment.topLeft,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              if (_controller.catalog.value.id == null) {
+                                return;
+                              }
+                              _controller.product.value.id = null;
+                              Future.delayed(
+                                  const Duration(seconds: 0),
+                                  () => showDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      builder: (BuildContext context) {
+                                        return EditProductDialog();
+                                      })).then((value) {
+                                _controller.fetchGetAll();
+                                setState(() {
+                                  _productDataGridSource =
+                                      ProductDataGridSource(
+                                          _controller.productlist.value);
+                                });
+                              });
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.grey[800])),
+                            child: Text("Добавить"))),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Expanded(
+                        child: SfDataGridTheme(
+                      data: SfDataGridThemeData(
+                        headerColor: Colors.grey[700],
+                        rowHoverColor: Colors.grey,
+                        gridLineStrokeWidth: 1,
+                        rowHoverTextStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
                         ),
-                        GridColumn(
-                            columnName: "edit",
-                            maximumWidth: 150,
-                            label: Container(
-                                padding: EdgeInsets.all(5.0),
-                                alignment: Alignment.center,
+                      ),
+                      child: SfDataGrid(
+                          source: _productDataGridSource,
+                          selectionMode: SelectionMode.single,
+                          headerGridLinesVisibility:
+                              GridLinesVisibility.vertical,
+                          columnWidthMode: ColumnWidthMode.fill,
+                          isScrollbarAlwaysShown: true,
+                          // allowFiltering: true,
+                          allowSorting: true,
+                          allowEditing: true,
+                          gridLinesVisibility: GridLinesVisibility.both,
+                          onQueryRowHeight: (details) {
+                            return UiO.datagrig_height;
+                          },
+                          headerRowHeight: UiO.datagrig_height,
+                          onCellTap: (cell) {},
+                          columns: [
+                            GridColumn(
+                                columnName: 'id',
+                                width: 50,
+                                label: Center(
+                                  child: Text(
+                                    "№",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )),
+                            GridColumn(
+                              columnName: 'name',
+                              // width: MediaQuery.of(context).size.width/2,
+                              label: Center(
                                 child: Text(
-                                  S.of(context).edit,
+                                  S.of(context).name,
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
-                                ))),
-                      ]),
-                )
-              ],
-            )));
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                                columnName: "edit",
+                                maximumWidth: 150,
+                                label: Container(
+                                    padding: EdgeInsets.all(5.0),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      S.of(context).edit,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ))),
+                          ]),
+                    ))
+                  ],
+                ))));
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       // _controller.getProducts(_controller.catalogs.value.first);
-      _productDataGridSource = ProductDataGridSource(_controller.productlist);
+      _productDataGridSource =
+          ProductDataGridSource(_controller.productlist.value);
 
-      return SafeArea(
-          child: Scaffold(
-        appBar: OnlineAppBar(), // extendBodyBehindAppBar: true,
-        body: Padding(
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: ListView(children: [
-            Container(
-              alignment: Alignment.center,
-              child: Text(
-                S.of(context).product_page_name,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: UiO.font,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blue.shade800)),
-                child: Row(
+      return Scaffold(
+          appBar: OnlineAppBar(), // extendBodyBehindAppBar: true,
+          body: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Column(children: [
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    S.of(context).product_page_name,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: UiO.font,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                    // decoration: BoxDecoration(
+                    //     border: Border.all(color: Colors.blue.shade800)),
+                    child: Row(
                   children: [
                     Expanded(child: tree(context, _controller.catalogs.value)),
                     Expanded(flex: 3, child: table(context)),
                   ],
                 ))
-          ]),
-        ),
-        // drawer: DskNavigationDrawer(),
+              ]),
+            ),
+            // drawer: DskNavigationDrawer(),
 
-        // drawer: DskNavigationDrawer(),
-      ));
+            // drawer: DskNavigationDrawer(),
+          ));
     });
   }
-}
-
-Future<void> showDialogEditProdiuct(BuildContext context) async {
-  return await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return EditProductDialog();
-      });
-}
-
-Future<void> showDialogCharacteristic(BuildContext context) async {
-  return await showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AddcharacteristicDialog();
-      });
 }
 
 class ProductDataGridSource extends DataGridSource {
@@ -284,16 +283,22 @@ class ProductDataGridSource extends DataGridSource {
                       // tooltip: "Изменение строки",
                       itemBuilder: (BuildContext context) => [
                         PopupMenuItem(
-                            onTap: () {
+                            value: 0,
+                            onTap: () async {
                               if (_controller.catalog.value.id == null) {
                                 return;
                               }
                               _controller.product.value = _controller
                                   .productlist.value[dataGridRows.indexOf(row)];
-                              showDialogEditProdiuct(context)
-                                  .then((value) => print("ok"))
-                                  .catchError(
-                                      (Exception e) => print(e.toString()));
+
+                              Future.delayed(
+                                  const Duration(seconds: 0),
+                                  () => showDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      builder: (BuildContext context) {
+                                        return EditProductDialog();
+                                      }));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -320,7 +325,14 @@ class ProductDataGridSource extends DataGridSource {
                                         .value[dataGridRows.indexOf(row)].id
                                         .toString())
                                 .then((value) {
-                              showDialogCharacteristic(context);
+                              Future.delayed(
+                                  const Duration(seconds: 0),
+                                  () => showDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      builder: (BuildContext context) {
+                                        return AddcharacteristicDialog();
+                                      }));
                             });
                           },
                           child: Row(
@@ -341,15 +353,17 @@ class ProductDataGridSource extends DataGridSource {
                           onTap: () {
                             _controller.changeProduct(_controller
                                 .productlist.value[dataGridRows.indexOf(row)]);
-                            showDialog(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (BuildContext dialogContext) {
-                                  return DeleteDialog(
-                                    url: "doc/product/delete",
-                                    index: dataGridRows.indexOf(row),
-                                  );
-                                });
+                            Future.delayed(
+                                const Duration(seconds: 0),
+                                () => showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext dialogContext) {
+                                      return DeleteDialog(
+                                        url: "doc/product/delete",
+                                        index: dataGridRows.indexOf(row),
+                                      );
+                                    }));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

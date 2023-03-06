@@ -125,7 +125,7 @@ class CatalogController extends GetxController {
   Future<Catalog> saveProduct(String url, Product product, int id) async {
     final json = await api.savesub(url, product, id.toString());
     catalog.value = Catalog.fromJson(json);
-    return catalog.value!;
+    return catalog.value;
   }
 
   Future<dynamic> removethroughtParent(String url, String id) async {

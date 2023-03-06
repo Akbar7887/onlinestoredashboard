@@ -1,14 +1,16 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:onlinestoredashboard/controller/CatalogController.dart';
-import 'package:onlinestoredashboard/models/catalogs/Characteristic.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../controller/CatalogController.dart';
 import '../../../generated/l10n.dart';
 import '../../../models/UiO.dart';
+import '../../../models/catalogs/Characteristic.dart';
 
 final CatalogController _controller = Get.put(CatalogController());
 List<TextEditingController> _namecontroller = [];
@@ -91,6 +93,8 @@ class AddcharacteristicDialog extends StatelessWidget {
                                 headerGridLinesVisibility:
                                     GridLinesVisibility.vertical,
                                 columnWidthMode: ColumnWidthMode.fill,
+                                isScrollbarAlwaysShown: true,
+
                                 // allowFiltering: true,
                                 allowSorting: true,
                                 allowEditing: true,
