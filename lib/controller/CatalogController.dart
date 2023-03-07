@@ -65,26 +65,30 @@ class CatalogController extends GetxController {
     // notifyChildrens();
   }
 
+  Future<Catalog> save(String url, Catalog catalog) async {
+    final json = await api.save(url, catalog);
+    catalog = Catalog.fromJson(json);
+    return catalog;
+  }
+
   Future<Catalog> savesub(String url, Catalog catalog, int id) async {
     final json = await api.savesub(url, catalog, id.toString());
     catalog = Catalog.fromJson(json);
     return catalog;
   }
 
-  Future<Catalog> deleteActive(String url, int id) async {
-    final json = await api.deleteActive(url, id.toString());
-    catalog.value = Catalog.fromJson(json);
-    return catalog.value;
+  Future<bool> deleteActive(String url, int id) async {
+    return await api.deleteActive(url, id.toString());
   }
 
   Future<bool> deleteById(url, id) async {
     return await api.deleteById(url, id);
   }
 
-  Future<Catalog> saveProduct(String url, Product product, int id) async {
-    final json = await api.savesub(url, product, id.toString());
-    catalog.value = Catalog.fromJson(json);
-    return catalog.value;
-  }
+  // Future<Catalog> saveProduct(String url, Product product, int id) async {
+  //   final json = await api.savesub(url, product, id.toString());
+  //   catalog.value = Catalog.fromJson(json);
+  //   return catalog.value;
+  // }
 
 }

@@ -1,4 +1,5 @@
-import 'Product.dart';
+
+import 'package:onlinestoredashboard/models/catalogs/Product.dart';
 
 class Price {
 

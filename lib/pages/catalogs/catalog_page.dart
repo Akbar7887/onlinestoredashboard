@@ -23,26 +23,30 @@ class CatalogPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            appBar: OnlineAppBar(),
-            body: Obx(() {
-              return Padding(
+    return Scaffold(
+        appBar: OnlineAppBar(),
+        body: Obx(() {
+          return SafeArea(
+              child: Padding(
                   padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
+                  child: SingleChildScrollView(
+                      child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                     Header(S.of(context).catalog_page_name),
-                      ElevatedButton(
-                        onPressed: () {
-                          dropDownValue = null;
-                          _catalog = null;
-                          showDialogCatalog(context);
-                        },
-                        child: FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: Text(S.of(context).add)),
-                      ),
+                      Header(S.of(context).catalog_page_name),
+                      Container(
+                          child: SizedBox(
+                              width: 200,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  dropDownValue = null;
+                                  _catalog = null;
+                                  showDialogCatalog(context);
+                                },
+                                child: FittedBox(
+                                    fit: BoxFit.fitWidth,
+                                    child: Text(S.of(context).add)),
+                              ))),
                       SizedBox(
                         height: 10,
                       ),
@@ -51,8 +55,8 @@ class CatalogPage extends StatelessWidget {
                               nodes: createCatalogHiriarh(
                                   context, _catalogController.catalogs)))
                     ],
-                  ));
-            })));
+                  ))));
+        }));
   }
 
   List<TreeNode> createCatalogHiriarh(
@@ -135,9 +139,9 @@ class CatalogPage extends StatelessWidget {
     getDropDownCatalogs(_catalogController.catalogs);
 
     if (_catalog != null) {
-      if (_catalog!.parentId != null) {
-        dropDownValue =
-            _catalogs.firstWhere((element) => _catalog!.parentId == element.id);
+      if (_catalog!.parent != null) {
+        dropDownValue = _catalogs
+            .firstWhere((element) => _catalog!.parent!.id == element.id);
       } else {
         dropDownValue = null;
       }
@@ -162,7 +166,7 @@ class CatalogPage extends StatelessWidget {
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width / 2,
                           height: MediaQuery.of(context).size.height / 3,
-                          child: Column(
+                          child: ListView(
                             children: [
                               Container(
                                   padding: EdgeInsets.only(bottom: 20),
@@ -196,18 +200,29 @@ class CatalogPage extends StatelessWidget {
                           return;
                         }
 
-                        if (_catalog == null) {
-                          _catalog = new Catalog();
-                        }
-                        _catalog!.catalogname = _controllercatalogName.text;
+                        _catalogController.catalog.value.catalogname =
+                            _controllercatalogName.text;
+                        _catalogController.catalog.value.parent = dropDownValue;
 
-                        _catalogController
-                            .savesub("doc/catalog/savesub", _catalog!,
-                                dropDownValue!.id!)
-                            .then((value) {
-                          _catalogController.fetchGetAll();
-                          Navigator.of(dialogContext).pop();
-                        });
+                        if (_catalogController.catalog.value.parent == null) {
+                          _catalogController
+                              .save("doc/catalog/save",
+                                  _catalogController.catalog.value)
+                              .then((value) {
+                            _catalogController.fetchGetAll();
+                            Navigator.of(dialogContext).pop();
+                          });
+                        } else {
+                          _catalogController
+                              .savesub(
+                                  "doc/catalog/savesub",
+                                  _catalogController.catalog.value,
+                                  dropDownValue!.id!)
+                              .then((value) {
+                            _catalogController.fetchGetAll();
+                            Navigator.of(dialogContext).pop();
+                          });
+                        }
                       },
                     ),
                     TextButton(

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -18,12 +19,17 @@ import '../../../models/constants/main_constant.dart';
 
 TextEditingController _nameController = TextEditingController();
 TextEditingController _descriptionController = TextEditingController();
+TextEditingController _dateController = TextEditingController();
+TextEditingController _ratesController = TextEditingController();
+TextEditingController _priceController = TextEditingController();
 
 String _id = '';
 final _keyFormEdit = GlobalKey<FormState>();
 final CatalogController _catalogController = Get.put(CatalogController());
 final ProductController _productController = Get.put(ProductController());
 final UniversalController _universalController = Get.put(UniversalController());
+
+
 var _formatter = new DateFormat('yyyy-MM-dd');
 
 class EditProductDialog extends StatelessWidget {
@@ -98,47 +104,215 @@ class EditProductDialog extends StatelessWidget {
         _universalController.prices.value =
             value.map((e) => Price.fromJson(e)).toList());
     return Container(
-      child: ListView.builder(
-          itemCount: _universalController.prices.value.length,
-          itemBuilder: (context, idx) {
-            return Container(
-              decoration: BoxDecoration(color: Colors.black),
-              height: 50,
-              child: Row(
-                children: [
-                  Container(
-                      padding: EdgeInsets.all(5),
-                      child: Card(
-                          child: Container(
-                              padding: EdgeInsets.all(5),
-                              child: Text(
-                                  style: TextStyle(fontSize: 20),
-                                  _formatter.format(DateTime.parse(
-                                    _universalController
-                                        .prices.value[idx].date!,
-                                  )))))),
-                  Container(
-                      padding: EdgeInsets.all(5),
-                      child: Card(
-                          child: Container(
-                              padding: EdgeInsets.all(5),
-                              child: Text(
-                                _universalController.prices.value[idx].rates!,
-                                style: TextStyle(fontSize: 20),
-                              )))),
-                  Container(
-                      padding: EdgeInsets.all(5),
-                      child: Card(
-                          child: Container(
-                              padding: EdgeInsets.all(5),
-                              child: Text(
-                                  _universalController.prices.value[idx].price
-                                      .toString(),
-                                  style: TextStyle(fontSize: 20))))),
-                ],
-              ),
-            );
-          }),
+        padding: EdgeInsets.only(left: 200, right: 200),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+                alignment: Alignment.topLeft,
+                child: ElevatedButton(
+                    onPressed: () {
+                      Future.delayed(const Duration(seconds: 0),
+                          () => showdialogPrice(context));
+                    },
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.grey[800])),
+                    child: Text(S.of(context).add))),
+            Expanded(
+                child: ListView.builder(
+                    itemCount: _universalController.prices.value.length,
+                    itemBuilder: (context, idx) {
+                      return Container(
+                          // width: MediaQuery.of(context).size.width/8,
+                          height: 80,
+                          child: Card(
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.black26),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Container(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Card(
+                                            child: Container(
+                                                padding: EdgeInsets.all(5),
+                                                child: Text(
+                                                    // style: TextStyle(fontSize: 20),
+                                                    _formatter
+                                                        .format(DateTime.parse(
+                                                  _universalController
+                                                      .prices.value[idx].date!,
+                                                )))))),
+                                    Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Card(
+                                            child: Container(
+                                                padding: EdgeInsets.all(5),
+                                                child: Text(
+                                                  _universalController
+                                                      .prices.value[idx].rates!,
+                                                  // style: TextStyle(fontSize: 20),
+                                                )))),
+                                    Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Card(
+                                            child: Container(
+                                                padding: EdgeInsets.all(5),
+                                                child: Text(
+                                                  _universalController
+                                                      .prices.value[idx].price
+                                                      .toString(),
+                                                )))),
+                                  ],
+                                ),
+                              )));
+                    })),
+          ],
+        ));
+  }
+
+  Future<void> showdialogPrice(BuildContext context) async {
+    // if (_universalController.exchange.value.date != null) {
+    //   _dateController.text = _formatter
+    //       .format(DateTime.parse(_exchangeController.exchange.value.date!));
+    //   _ratesController.text = _exchangeController.exchange.value.rates!;
+    //   _valuerateController.text =
+    //       _exchangeController.exchange.value.ratevalue.toString();
+    // } else {
+    //   _dateController.clear();
+    //   _ratesController.text = RATE.USD.name;
+    //   _valuerateController.clear();
+    // }
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      // false = user must tap button, true = tap outside dialog
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(S.of(context).form_dialog),
+          content: Container(
+              height: MediaQuery.of(context).size.height / 2,
+              width: MediaQuery.of(context).size.width / 2,
+              child: Form(
+                  key: _keyFormEdit,
+                  child: Column(
+                    children: [
+                      Container(
+                          width: MediaQuery.of(context).size.width / 2,
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return S.of(context).validate;
+                              }
+                            },
+                            keyboardType: TextInputType.datetime,
+
+                            // O
+                            controller: _dateController,
+                            style: GoogleFonts.openSans(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w200,
+                                color: Colors.black),
+                            decoration:
+                            MainConstant.decoration(S.of(context).date),
+                            onTap: () async {
+                              await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2015),
+                                lastDate: DateTime(2030),
+                              ).then((selectedDate) {
+                                if (selectedDate != null) {
+                                  _dateController.text =
+                                      _formatter.format(selectedDate);
+                                }
+                              });
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
+                            },
+                          )),
+                      Container(
+                          padding: EdgeInsets.only(bottom: 10),
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: TextFormField(
+                              enabled: false,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return S.of(context).validate;
+                                }
+                              },
+                              controller: _ratesController,
+                              style: GoogleFonts.openSans(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w200,
+                                  color: Colors.black),
+                              decoration:
+                              MainConstant.decoration(S.of(context).rate))),
+                      Container(
+                          width: MediaQuery.of(context).size.width / 2,
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return S.of(context).validate;
+                                }
+                              },
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              // Only numbers can be entered
+
+                              controller: _priceController,
+                              style: GoogleFonts.openSans(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w200,
+                                  color: Colors.black),
+                              decoration: MainConstant.decoration(
+                                  S.of(context).valuerate))),
+                    ],
+                  ))),
+          actions: <Widget>[
+            TextButton(
+              child: Text(S.of(context).save),
+              onPressed: () {
+                if (!_keyFormEdit.currentState!.validate()) {
+                  return;
+                }
+
+                // _exchangeController.exchange.value.date =
+                //     DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                //         .format(DateTime.parse(_dateController.text));
+                // _exchangeController.exchange.value.rates =
+                //     _ratesController.text;
+                // _exchangeController.exchange.value.ratevalue =
+                //     double.parse(_valuerateController.text);
+                //
+                // _exchangeController
+                //     .save(_exchangeController.exchange.value)
+                //     .then((value) {
+                //   _exchangeController.fetchAll();
+                //   Navigator.of(dialogContext).pop();
+                // });
+              },
+            ),
+            TextButton(
+              child: Text(S.of(context).cancel),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
