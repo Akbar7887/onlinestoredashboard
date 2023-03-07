@@ -15,14 +15,14 @@ class ExchangeController extends GetxController {
     super.onInit();
   }
 
-  fetchAll() async {
-    final json = await api.getAll("/doc/exchange/get");
+  Future<void> fetchAll() async {
+    final json = await api.getAll("doc/exchange/get");
     this.exchanges.value = json.map((e) => Exchange.fromJson(e)).toList();
   }
 
   Future<Exchange> save(Exchange exchange) async {
 
-    final json =  await api.save("/doc/exchange/save", exchange);
+    final json =  await api.save("doc/exchange/save", exchange);
     return Exchange.fromJson(json);
   }
 

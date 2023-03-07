@@ -229,6 +229,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Курс валют`
+  String get exchange {
+    return Intl.message(
+      'Курс валют',
+      name: 'exchange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Валюта`
+  String get rate {
+    return Intl.message(
+      'Валюта',
+      name: 'rate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Курс`
+  String get valuerate {
+    return Intl.message(
+      'Курс',
+      name: 'valuerate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Дата`
+  String get date {
+    return Intl.message(
+      'Дата',
+      name: 'date',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

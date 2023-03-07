@@ -17,4 +17,8 @@
   "characteristic": "Харак-ка",
   "characteristics": "характеристики",
   "valuename": "Значение",
+  "exchange": "Курс валют",
+  "rate": "Валюта",
+  "valuerate": "Курс",
+  "date": "Дата"
 }

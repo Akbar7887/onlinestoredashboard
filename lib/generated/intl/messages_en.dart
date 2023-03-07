@@ -31,17 +31,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "characteristic": MessageLookupByLibrary.simpleMessage("Харак-ка"),
         "characteristics":
             MessageLookupByLibrary.simpleMessage("характеристики"),
+        "date": MessageLookupByLibrary.simpleMessage("Дата"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "description": MessageLookupByLibrary.simpleMessage("Описание"),
         "edit": MessageLookupByLibrary.simpleMessage("Изменить"),
+        "exchange": MessageLookupByLibrary.simpleMessage("Курс валют"),
         "name": MessageLookupByLibrary.simpleMessage("Наименование"),
         "parent": MessageLookupByLibrary.simpleMessage("Родитель"),
         "product": MessageLookupByLibrary.simpleMessage("Продукты"),
         "product_page_name": MessageLookupByLibrary.simpleMessage("Продукты"),
+        "rate": MessageLookupByLibrary.simpleMessage("Валюта"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "validate":
             MessageLookupByLibrary.simpleMessage("Просим заплнить поля"),
         "valuename": MessageLookupByLibrary.simpleMessage("Значение"),
+        "valuerate": MessageLookupByLibrary.simpleMessage("Курс"),
         "wanttoremove": MessageLookupByLibrary.simpleMessage("Хотите удалить ?")
       };
 }

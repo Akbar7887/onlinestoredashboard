@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
+import 'package:onlinestoredashboard/pages/calculate/exchange_page.dart';
 import 'package:onlinestoredashboard/pages/catalogs/catalog_page.dart';
 import 'package:onlinestoredashboard/pages/catalogs/product_page.dart';
 import 'package:onlinestoredashboard/pages/home.dart';
@@ -45,9 +46,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       initialBinding: HomeBindings(),
       getPages: [
-        GetPage(name: '/', page: () => ProductPage()),
+        GetPage(name: '/exchange', page: () => ProductPage()),
         GetPage(name: '/cat', page: () => CatalogPage()),
         GetPage(name: '/org', page: () => OrganizationPage()),
+        GetPage(name: '/', page: () => ExchangePage()),
 
       ],
     );

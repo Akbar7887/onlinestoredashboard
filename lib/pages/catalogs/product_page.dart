@@ -18,7 +18,6 @@ import 'dialogs/editProduct_dialog.dart';
 final CatalogController _catalogController = Get.put(CatalogController());
 final ProductController _productController = Get.put(ProductController());
 
-Product? _product;
 late ProductDataGridSource _productDataGridSource;
 // final _keyForm = GlobalKey<FormState>();
 // Catalog? dropDownValue;
