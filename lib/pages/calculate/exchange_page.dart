@@ -15,6 +15,8 @@ import '../../models/UiO.dart';
 import '../../models/constants/main_constant.dart';
 import '../../widgets/onlineAppBar.dart';
 
+enum RATE { USD, EUR, UZS }
+
 final ExchangeController _exchangeController = Get.put(ExchangeController());
 late ExchangeDataGridSource _exchangeDataGridSource;
 var formatter = new DateFormat('yyyy-MM-dd');
@@ -35,7 +37,7 @@ class ExchangePage extends StatelessWidget {
           _exchangeController.exchange.value.ratevalue.toString();
     } else {
       _dateController.clear();
-      _ratesController.clear();
+      _ratesController.text = RATE.USD.name;
       _valuerateController.clear();
     }
 
@@ -147,9 +149,10 @@ class ExchangePage extends StatelessWidget {
 
                 _exchangeController
                     .save(_exchangeController.exchange.value)
-                    .then((value) => Navigator.of(dialogContext)
-                            .pop() // Dismiss alert dial
-                        );
+                    .then((value) {
+                  _exchangeController.fetchAll();
+                  Navigator.of(dialogContext).pop();
+                });
               },
             ),
             TextButton(
@@ -188,6 +191,21 @@ class ExchangePage extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 10,
+                ),
+                Container(
+                    alignment: Alignment.topLeft,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          _exchangeController.exchange = Exchange().obs;
+                          Future.delayed(const Duration(seconds: 0),
+                              () => showDialogForm(context));
+                        },
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.grey[800])),
+                        child: Text(S.of(context).add))),
+                SizedBox(
+                  height: 20,
                 ),
                 Expanded(
                     child: SfDataGridTheme(
@@ -308,11 +326,15 @@ class ExchangeDataGridSource extends DataGridSource {
                   value: formatter.format(DateTime.parse(e.date!))),
               DataGridCell<String>(columnName: 'rates', value: e.rates),
               DataGridCell<double>(columnName: 'ratevalue', value: e.ratevalue),
-              DataGridCell<Icon>(
+              DataGridCell<IconButton>(
                   columnName: 'delete',
-                  value: Icon(
-                    Icons.delete,
-                    size: 15,
+                  value: IconButton(
+                    onPressed: () {
+                      _exchangeController.delete(e.id.toString()).then((value) {
+                        _exchangeController.fetchAll();
+                      });
+                    },
+                    icon: Icon(Icons.delete, size: 15),
                   )),
             ]))
         .toList();

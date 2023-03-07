@@ -127,7 +127,7 @@ class ProductPage extends GetView<CatalogController> {
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.grey[800])),
-                        child: Text("Добавить"))),
+                        child: Text(S.of(context).add))),
                 SizedBox(
                   height: 20,
                 ),
