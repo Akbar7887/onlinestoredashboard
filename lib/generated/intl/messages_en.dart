@@ -36,8 +36,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "exchange": MessageLookupByLibrary.simpleMessage("Курс валют"),
         "form_dialog": MessageLookupByLibrary.simpleMessage(
             "Форма для измениие или добавление!"),
+        "main": MessageLookupByLibrary.simpleMessage("Основное"),
         "name": MessageLookupByLibrary.simpleMessage("Наименование"),
         "parent": MessageLookupByLibrary.simpleMessage("Родитель"),
+        "price": MessageLookupByLibrary.simpleMessage("Цены"),
         "product": MessageLookupByLibrary.simpleMessage("Продукты"),
         "product_page_name": MessageLookupByLibrary.simpleMessage("Продукты"),
         "rate": MessageLookupByLibrary.simpleMessage("Валюта"),

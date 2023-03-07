@@ -28,6 +28,6 @@ class ExchangeController extends GetxController {
 
   Future<void> delete(String id) async {
 
-     await api.deleteById("/doc/exchange/delete", id);
+     await api.deleteById("doc/exchange/delete", id);
   }
 }
