@@ -19,7 +19,7 @@ enum RATE { USD, EUR, UZS }
 
 final ExchangeController _exchangeController = Get.put(ExchangeController());
 late ExchangeDataGridSource _exchangeDataGridSource;
-var formatter = new DateFormat('yyyy-MM-dd');
+var _formatter = new DateFormat('yyyy-MM-dd');
 TextEditingController _dateController = TextEditingController();
 TextEditingController _ratesController = TextEditingController();
 TextEditingController _valuerateController = TextEditingController();
@@ -30,7 +30,7 @@ class ExchangePage extends StatelessWidget {
 
   Future<void> showDialogForm(BuildContext context) async {
     if (_exchangeController.exchange.value.date != null) {
-      _dateController.text = formatter
+      _dateController.text = _formatter
           .format(DateTime.parse(_exchangeController.exchange.value.date!));
       _ratesController.text = _exchangeController.exchange.value.rates!;
       _valuerateController.text =
@@ -83,7 +83,7 @@ class ExchangePage extends StatelessWidget {
                               ).then((selectedDate) {
                                 if (selectedDate != null) {
                                   _dateController.text =
-                                      formatter.format(selectedDate);
+                                      _formatter.format(selectedDate);
                                 }
                               });
                               FocusScope.of(context)
@@ -323,7 +323,7 @@ class ExchangeDataGridSource extends DataGridSource {
                   value: _exchangeController.exchanges.value.indexOf(e) + 1),
               DataGridCell<String>(
                   columnName: "date",
-                  value: formatter.format(DateTime.parse(e.date!))),
+                  value: _formatter.format(DateTime.parse(e.date!))),
               DataGridCell<String>(columnName: 'rates', value: e.rates),
               DataGridCell<double>(columnName: 'ratevalue', value: e.ratevalue),
               DataGridCell<IconButton>(

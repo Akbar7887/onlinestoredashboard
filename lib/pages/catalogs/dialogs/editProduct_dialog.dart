@@ -4,11 +4,14 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/controller/ProductController.dart';
+import 'package:onlinestoredashboard/controller/UniversalController.dart';
 
 import '../../../controller/CatalogController.dart';
 import '../../../generated/l10n.dart';
 import '../../../models/UiO.dart';
+import '../../../models/calculate/Price.dart';
 import '../../../models/catalogs/Catalog.dart';
 import '../../../models/catalogs/Product.dart';
 import '../../../models/constants/main_constant.dart';
@@ -20,6 +23,8 @@ String _id = '';
 final _keyFormEdit = GlobalKey<FormState>();
 final CatalogController _catalogController = Get.put(CatalogController());
 final ProductController _productController = Get.put(ProductController());
+final UniversalController _universalController = Get.put(UniversalController());
+var _formatter = new DateFormat('yyyy-MM-dd');
 
 class EditProductDialog extends StatelessWidget {
   EditProductDialog({Key? key}) : super(key: key);
@@ -88,6 +93,55 @@ class EditProductDialog extends StatelessWidget {
             ));
   }
 
+  Widget priceTab(BuildContext context) {
+    _universalController.getAll("doc/price/get").then((value) =>
+        _universalController.prices.value =
+            value.map((e) => Price.fromJson(e)).toList());
+    return Container(
+      child: ListView.builder(
+          itemCount: _universalController.prices.value.length,
+          itemBuilder: (context, idx) {
+            return Container(
+              decoration: BoxDecoration(color: Colors.black),
+              height: 50,
+              child: Row(
+                children: [
+                  Container(
+                      padding: EdgeInsets.all(5),
+                      child: Card(
+                          child: Container(
+                              padding: EdgeInsets.all(5),
+                              child: Text(
+                                  style: TextStyle(fontSize: 20),
+                                  _formatter.format(DateTime.parse(
+                                    _universalController
+                                        .prices.value[idx].date!,
+                                  )))))),
+                  Container(
+                      padding: EdgeInsets.all(5),
+                      child: Card(
+                          child: Container(
+                              padding: EdgeInsets.all(5),
+                              child: Text(
+                                _universalController.prices.value[idx].rates!,
+                                style: TextStyle(fontSize: 20),
+                              )))),
+                  Container(
+                      padding: EdgeInsets.all(5),
+                      child: Card(
+                          child: Container(
+                              padding: EdgeInsets.all(5),
+                              child: Text(
+                                  _universalController.prices.value[idx].price
+                                      .toString(),
+                                  style: TextStyle(fontSize: 20))))),
+                ],
+              ),
+            );
+          }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -124,7 +178,7 @@ class EditProductDialog extends StatelessWidget {
                             unselectedLabelColor: Colors.black,
                             labelStyle:
                                 TextStyle(fontSize: 15, fontFamily: UiO.font),
-                            indicatorColor: Colors.white,
+                            indicatorColor: Colors.red,
                             isScrollable: false,
                             tabs: [
                               Tab(text: S.of(context).main),
@@ -132,8 +186,10 @@ class EditProductDialog extends StatelessWidget {
                             ],
                           )),
                           Expanded(
-                              child: TabBarView(
-                                  children: [mainTab(context), Container()]))
+                              child: TabBarView(children: [
+                            mainTab(context),
+                            priceTab(context)
+                          ]))
                         ]))))),
         actions: <Widget>[
           TextButton(

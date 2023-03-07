@@ -7,6 +7,7 @@ import 'package:onlinestoredashboard/controller/CatalogController.dart';
 import 'package:onlinestoredashboard/controller/CharacteristicController.dart';
 import 'package:onlinestoredashboard/controller/ExchangeController.dart';
 import 'package:onlinestoredashboard/controller/ProductController.dart';
+import 'package:onlinestoredashboard/controller/UniversalController.dart';
 import 'package:onlinestoredashboard/models/Organization.dart';
 
 class Controller extends GetxController {
@@ -53,7 +54,6 @@ class HomeBindings extends Bindings {
     Get.lazyPut(() => ProductController());
     Get.lazyPut(() => CharacteristicController());
     Get.lazyPut(() => ExchangeController());
-
-
+    Get.lazyPut(() => UniversalController());
   }
 }
