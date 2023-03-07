@@ -156,7 +156,7 @@ class CatalogPage extends StatelessWidget {
       builder: (BuildContext dialogContext) {
         return StatefulBuilder(
             builder: (context, setState) => AlertDialog(
-                  title: Text(S.of(context).catalog_show_diagram),
+                  title: Text(S.of(context).form_dialog),
                   content: Form(
                       key: _keyForm,
                       child: SizedBox(

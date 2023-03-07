@@ -42,7 +42,7 @@ class EditProductDialog extends StatelessWidget {
       }
 
       return AlertDialog(
-        title: Text(S.of(context).catalog_show_diagram),
+        title: Text(S.of(context).form_dialog),
         content: SafeArea(
             child: StatefulBuilder(
                 builder: (BuildContext context, setState) => Container(

@@ -36,7 +36,7 @@ class AddcharacteristicDialog extends StatelessWidget {
 
       return AlertDialog(
         title: Text(
-            '${S.of(context).catalog_show_diagram} ${S.of(context).characteristics}'),
+            '${S.of(context).form_dialog} ${S.of(context).characteristics}'),
         content: SafeArea(
             child: Form(
                 key: _keyForm,

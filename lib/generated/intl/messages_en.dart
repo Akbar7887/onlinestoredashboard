@@ -26,8 +26,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "catalog": MessageLookupByLibrary.simpleMessage("Каталог"),
         "catalog_page_name": MessageLookupByLibrary.simpleMessage("Каталог"),
-        "catalog_show_diagram": MessageLookupByLibrary.simpleMessage(
-            "Форма для измениие или добавление!"),
         "characteristic": MessageLookupByLibrary.simpleMessage("Харак-ка"),
         "characteristics":
             MessageLookupByLibrary.simpleMessage("характеристики"),
@@ -36,6 +34,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "description": MessageLookupByLibrary.simpleMessage("Описание"),
         "edit": MessageLookupByLibrary.simpleMessage("Изменить"),
         "exchange": MessageLookupByLibrary.simpleMessage("Курс валют"),
+        "form_dialog": MessageLookupByLibrary.simpleMessage(
+            "Форма для измениие или добавление!"),
         "name": MessageLookupByLibrary.simpleMessage("Наименование"),
         "parent": MessageLookupByLibrary.simpleMessage("Родитель"),
         "product": MessageLookupByLibrary.simpleMessage("Продукты"),

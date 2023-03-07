@@ -51,10 +51,10 @@ class S {
   }
 
   /// `Форма для измениие или добавление!`
-  String get catalog_show_diagram {
+  String get form_dialog {
     return Intl.message(
       'Форма для измениие или добавление!',
-      name: 'catalog_show_diagram',
+      name: 'form_dialog',
       desc: '',
       args: [],
     );

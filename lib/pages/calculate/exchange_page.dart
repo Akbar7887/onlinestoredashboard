@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/controller/ExchangeController.dart';
 import 'package:onlinestoredashboard/models/calculate/Exchange.dart';
@@ -10,20 +12,163 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../generated/l10n.dart';
 import '../../models/UiO.dart';
+import '../../models/constants/main_constant.dart';
 import '../../widgets/onlineAppBar.dart';
 
 final ExchangeController _exchangeController = Get.put(ExchangeController());
 late ExchangeDataGridSource _exchangeDataGridSource;
 var formatter = new DateFormat('yyyy-MM-dd');
+TextEditingController _dateController = TextEditingController();
+TextEditingController _ratesController = TextEditingController();
+TextEditingController _valuerateController = TextEditingController();
+final _keyFormEdit = GlobalKey<FormState>();
 
 class ExchangePage extends StatelessWidget {
   const ExchangePage({Key? key}) : super(key: key);
 
+  Future<void> showDialogForm(BuildContext context) async {
+    if (_exchangeController.exchange.value.date != null) {
+      _dateController.text = formatter
+          .format(DateTime.parse(_exchangeController.exchange.value.date!));
+      _ratesController.text = _exchangeController.exchange.value.rates!;
+      _valuerateController.text =
+          _exchangeController.exchange.value.ratevalue.toString();
+    } else {
+      _dateController.clear();
+      _ratesController.clear();
+      _valuerateController.clear();
+    }
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      // false = user must tap button, true = tap outside dialog
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(S.of(context).form_dialog),
+          content: Container(
+              height: MediaQuery.of(context).size.height / 2,
+              width: MediaQuery.of(context).size.width / 2,
+              child: Form(
+                  key: _keyFormEdit,
+                  child: Column(
+                    children: [
+                      Container(
+                          width: MediaQuery.of(context).size.width / 2,
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return S.of(context).validate;
+                              }
+                            },
+                            keyboardType: TextInputType.datetime,
+
+                            // O
+                            controller: _dateController,
+                            style: GoogleFonts.openSans(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w200,
+                                color: Colors.black),
+                            decoration:
+                                MainConstant.decoration(S.of(context).date),
+                            onTap: () async {
+                              await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2015),
+                                lastDate: DateTime(2030),
+                              ).then((selectedDate) {
+                                if (selectedDate != null) {
+                                  _dateController.text =
+                                      formatter.format(selectedDate);
+                                }
+                              });
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
+                            },
+                          )),
+                      Container(
+                          padding: EdgeInsets.only(bottom: 10),
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: TextFormField(
+                              enabled: false,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return S.of(context).validate;
+                                }
+                              },
+                              controller: _ratesController,
+                              style: GoogleFonts.openSans(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w200,
+                                  color: Colors.black),
+                              decoration:
+                                  MainConstant.decoration(S.of(context).rate))),
+                      Container(
+                          width: MediaQuery.of(context).size.width / 2,
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return S.of(context).validate;
+                                }
+                              },
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              // Only numbers can be entered
+
+                              controller: _valuerateController,
+                              style: GoogleFonts.openSans(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w200,
+                                  color: Colors.black),
+                              decoration: MainConstant.decoration(
+                                  S.of(context).valuerate))),
+                    ],
+                  ))),
+          actions: <Widget>[
+            TextButton(
+              child: Text(S.of(context).save),
+              onPressed: () {
+                if (!_keyFormEdit.currentState!.validate()) {
+                  return;
+                }
+
+                _exchangeController.exchange.value.date =
+                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                        .format(DateTime.parse(_dateController.text));
+                _exchangeController.exchange.value.rates =
+                    _ratesController.text;
+                _exchangeController.exchange.value.ratevalue =
+                    double.parse(_valuerateController.text);
+
+                _exchangeController
+                    .save(_exchangeController.exchange.value)
+                    .then((value) => Navigator.of(dialogContext)
+                            .pop() // Dismiss alert dial
+                        );
+              },
+            ),
+            TextButton(
+              child: Text(S.of(context).cancel),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      _exchangeDataGridSource = ExchangeDataGridSource(
-          exchanges: _exchangeController.exchanges.value);
+      _exchangeDataGridSource =
+          ExchangeDataGridSource(_exchangeController.exchanges.value);
 
       return Scaffold(
           appBar: OnlineAppBar(), // extendBodyBehindAppBar: true,
@@ -69,6 +214,12 @@ class ExchangePage extends StatelessWidget {
                         return UiO.datagrig_height;
                       },
                       headerRowHeight: UiO.datagrig_height,
+                      onCellDoubleTap: (cell) {
+                        _exchangeController.exchange.value = _exchangeController
+                            .exchanges.value[cell.rowColumnIndex.rowIndex - 1];
+                        Future.delayed(const Duration(seconds: 0),
+                            () => showDialogForm(context));
+                      },
                       onCellTap: (cell) {},
                       columns: [
                         GridColumn(
@@ -125,7 +276,13 @@ class ExchangePage extends StatelessWidget {
                         GridColumn(
                           columnName: "delete",
                           maximumWidth: 100,
-                          label: Text(S.of(context).delete),
+                          label: Text(
+                            S.of(context).delete,
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         )
                       ]),
                 ))
@@ -140,7 +297,7 @@ class ExchangePage extends StatelessWidget {
 }
 
 class ExchangeDataGridSource extends DataGridSource {
-  ExchangeDataGridSource({required List<Exchange> exchanges}) {
+  ExchangeDataGridSource(List<Exchange> exchanges) {
     dataGridRows = exchanges
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<int>(
@@ -179,14 +336,13 @@ class ExchangeDataGridSource extends DataGridSource {
             );
             break;
           }
-        case "date":
+        case "id":
           {
             return Container(
-                child: Padding(
-                    padding: EdgeInsets.all(5),
+                child: Center(
                     child: Text(
-                      e.value.toString(),
-                    )));
+              e.value.toString(),
+            )));
             break;
           }
         default:
