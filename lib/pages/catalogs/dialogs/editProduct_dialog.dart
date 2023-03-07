@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/controller/ProductController.dart';
 import 'package:onlinestoredashboard/controller/UniversalController.dart';
+import 'package:onlinestoredashboard/pages/catalogs/catalog_page.dart';
 
 import '../../../controller/CatalogController.dart';
 import '../../../generated/l10n.dart';
@@ -16,6 +17,7 @@ import '../../../models/calculate/Price.dart';
 import '../../../models/catalogs/Catalog.dart';
 import '../../../models/catalogs/Product.dart';
 import '../../../models/constants/main_constant.dart';
+import '../../calculate/exchange_page.dart';
 
 TextEditingController _nameController = TextEditingController();
 TextEditingController _descriptionController = TextEditingController();
@@ -28,7 +30,6 @@ final _keyFormEdit = GlobalKey<FormState>();
 final CatalogController _catalogController = Get.put(CatalogController());
 final ProductController _productController = Get.put(ProductController());
 final UniversalController _universalController = Get.put(UniversalController());
-
 
 var _formatter = new DateFormat('yyyy-MM-dd');
 
@@ -100,11 +101,13 @@ class EditProductDialog extends StatelessWidget {
   }
 
   Widget priceTab(BuildContext context) {
-    _universalController.getAll("doc/price/get").then((value) =>
-        _universalController.prices.value =
+    _universalController
+        .getByParentId("doc/price/get",
+            _productController.product.value.id.toString())
+        .then((value) => _universalController.prices.value =
             value.map((e) => Price.fromJson(e)).toList());
     return Container(
-        padding: EdgeInsets.only(left: 200, right: 200),
+        padding: EdgeInsets.only(left: 50, right: 50),
         child: Column(
           children: [
             SizedBox(
@@ -178,17 +181,16 @@ class EditProductDialog extends StatelessWidget {
   }
 
   Future<void> showdialogPrice(BuildContext context) async {
-    // if (_universalController.exchange.value.date != null) {
-    //   _dateController.text = _formatter
-    //       .format(DateTime.parse(_exchangeController.exchange.value.date!));
-    //   _ratesController.text = _exchangeController.exchange.value.rates!;
-    //   _valuerateController.text =
-    //       _exchangeController.exchange.value.ratevalue.toString();
-    // } else {
-    //   _dateController.clear();
-    //   _ratesController.text = RATE.USD.name;
-    //   _valuerateController.clear();
-    // }
+    if (_universalController.price.value.date != null) {
+      _dateController.text = _formatter
+          .format(DateTime.parse(_universalController.price.value.date!));
+      _ratesController.text = _universalController.price.value.rates!;
+      _priceController.text = _universalController.price.value.toString();
+    } else {
+      _dateController.clear();
+      _ratesController.text = RATE.USD.name;
+      _priceController.clear();
+    }
 
     await showDialog<void>(
       context: context,
@@ -222,7 +224,7 @@ class EditProductDialog extends StatelessWidget {
                                 fontWeight: FontWeight.w200,
                                 color: Colors.black),
                             decoration:
-                            MainConstant.decoration(S.of(context).date),
+                                MainConstant.decoration(S.of(context).date),
                             onTap: () async {
                               await showDatePicker(
                                 context: context,
@@ -255,7 +257,7 @@ class EditProductDialog extends StatelessWidget {
                                   fontWeight: FontWeight.w200,
                                   color: Colors.black),
                               decoration:
-                              MainConstant.decoration(S.of(context).rate))),
+                                  MainConstant.decoration(S.of(context).rate))),
                       Container(
                           width: MediaQuery.of(context).size.width / 2,
                           padding: EdgeInsets.only(bottom: 10),

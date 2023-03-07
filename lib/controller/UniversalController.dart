@@ -13,8 +13,8 @@ class UniversalController extends GetxController {
     super.onInit();
   }
 
-  Future<List<dynamic>> getAll(String url) async {
-    return await api.getAll(url);
+  Future<List<dynamic>> getByParentId(String url, String id) async {
+    return await api.getByParentId(url, id);
   }
 
 
