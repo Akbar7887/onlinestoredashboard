@@ -224,7 +224,7 @@ class EditProductDialog extends StatelessWidget {
           content: Container(
               height: MediaQuery.of(dialogContext).size.height / 2,
               width: MediaQuery.of(dialogContext).size.width / 2,
-              child: SafeArea(
+              child: Obx(() =>SafeArea(
                   child: Form(
                       key: _keyPrice,
                       child: Column(
@@ -260,7 +260,6 @@ class EditProductDialog extends StatelessWidget {
                                       _dateController.text =
                                           _formatter.format(selectedDate);
                                       MainConstant.getRate(selectedDate);
-
                                     }
                                   });
                                   FocusScope.of(dialogContext)
@@ -318,7 +317,7 @@ class EditProductDialog extends StatelessWidget {
                                   decoration: MainConstant.decoration(
                                       '${S.of(dialogContext).priceUE} ${RATE.UZS.name}'))),
                         ],
-                      )))),
+                      ))))),
           actions: <Widget>[
             TextButton(
               child: Text(S.of(context).save),
