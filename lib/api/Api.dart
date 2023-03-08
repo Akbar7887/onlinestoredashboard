@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 import 'package:onlinestoredashboard/models/catalogs/Product.dart';
 
@@ -12,6 +13,8 @@ class Api {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE',
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept'
   };
+  var _formatterToSend = new DateFormat('yyyy-MM-dd HH:mm:ss');
+
 
   Future<dynamic> getfirst(String url) async {
     Uri uri = Uri.parse("${UiO.url}${url}");
@@ -25,6 +28,21 @@ class Api {
       throw Exception("Error");
     }
   }
+
+  Future<dynamic> getRatefirst(String url, DateTime dateTime) async {
+    Map<String, dynamic> param = {"date": _formatterToSend.format(dateTime)};
+    Uri uri = Uri.parse("${UiO.url}${url}").replace(queryParameters: param);
+    final response = await http.get(uri, headers: header);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
+
+      return json;
+    } else {
+      throw Exception("Error");
+    }
+  }
+
 
   Future<dynamic> getall(String url) async {
     Uri uri = Uri.parse("${UiO.url}${url}");

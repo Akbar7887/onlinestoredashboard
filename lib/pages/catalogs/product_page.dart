@@ -11,6 +11,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../generated/l10n.dart';
+import '../../models/constants/main_constant.dart';
 import 'dialogs/addcharacteristic_dialog.dart';
 import 'dialogs/delete_dialog.dart';
 import 'dialogs/editProduct_dialog.dart';
@@ -205,6 +206,8 @@ class ProductPage extends GetView<CatalogController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      MainConstant.getRate(DateTime.now());
+
       // _controller.getProducts(_controller.catalogs.value.first);
       _productDataGridSource =
           ProductDataGridSource(_productController.products.value);

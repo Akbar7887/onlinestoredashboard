@@ -299,6 +299,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Сум`
+  String get sum {
+    return Intl.message(
+      'Сум',
+      name: 'sum',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
