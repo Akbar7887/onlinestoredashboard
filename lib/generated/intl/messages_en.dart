@@ -40,6 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "name": MessageLookupByLibrary.simpleMessage("Наименование"),
         "parent": MessageLookupByLibrary.simpleMessage("Родитель"),
         "price": MessageLookupByLibrary.simpleMessage("Цены"),
+        "priceUE": MessageLookupByLibrary.simpleMessage("Цена в "),
         "product": MessageLookupByLibrary.simpleMessage("Продукты"),
         "product_page_name": MessageLookupByLibrary.simpleMessage("Продукты"),
         "rate": MessageLookupByLibrary.simpleMessage("Валюта"),

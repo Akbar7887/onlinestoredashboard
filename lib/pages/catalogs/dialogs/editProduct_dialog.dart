@@ -1,14 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/controller/ProductController.dart';
 import 'package:onlinestoredashboard/controller/UniversalController.dart';
-import 'package:onlinestoredashboard/pages/catalogs/catalog_page.dart';
 
 import '../../../controller/CatalogController.dart';
 import '../../../generated/l10n.dart';
@@ -26,7 +22,7 @@ TextEditingController _ratesController = TextEditingController();
 TextEditingController _priceController = TextEditingController();
 
 String _id = '';
-final _keyFormEdit = GlobalKey<FormState>();
+final _keyEdit = GlobalKey<FormState>();
 final CatalogController _catalogController = Get.put(CatalogController());
 final ProductController _productController = Get.put(ProductController());
 final UniversalController _universalController = Get.put(UniversalController());
@@ -102,8 +98,8 @@ class EditProductDialog extends StatelessWidget {
 
   Widget priceTab(BuildContext context) {
     _universalController
-        .getByParentId("doc/price/get",
-            _productController.product.value.id.toString())
+        .getByParentId(
+            "doc/price/get", _productController.product.value.id.toString())
         .then((value) => _universalController.prices.value =
             value.map((e) => Price.fromJson(e)).toList());
     return Container(
@@ -116,9 +112,8 @@ class EditProductDialog extends StatelessWidget {
             Container(
                 alignment: Alignment.topLeft,
                 child: ElevatedButton(
-                    onPressed: () {
-                      Future.delayed(const Duration(seconds: 0),
-                          () => showdialogPrice(context));
+                    onPressed: () async {
+                       await showdialogPrice(context);
                     },
                     style: ButtonStyle(
                         backgroundColor:
@@ -199,15 +194,16 @@ class EditProductDialog extends StatelessWidget {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text(S.of(context).form_dialog),
+          // titlePadding: EdgeInsetsGeometry(),
           content: Container(
               height: MediaQuery.of(context).size.height / 2,
               width: MediaQuery.of(context).size.width / 2,
               child: Form(
-                  key: _keyFormEdit,
+                  key: _keyEdit,
                   child: Column(
                     children: [
                       Container(
-                          width: MediaQuery.of(context).size.width / 2,
+                          // width: MediaQuery.of(context).size.width / 2,
                           padding: EdgeInsets.only(bottom: 10),
                           child: TextFormField(
                             validator: (value) {
@@ -216,8 +212,6 @@ class EditProductDialog extends StatelessWidget {
                               }
                             },
                             keyboardType: TextInputType.datetime,
-
-                            // O
                             controller: _dateController,
                             style: GoogleFonts.openSans(
                                 fontSize: 20,
@@ -256,8 +250,8 @@ class EditProductDialog extends StatelessWidget {
                                   fontSize: 20,
                                   fontWeight: FontWeight.w200,
                                   color: Colors.black),
-                              decoration:
-                                  MainConstant.decoration(S.of(context).rate))),
+                              decoration: MainConstant.decoration(
+                                  '${S.of(context).priceUE} ${_ratesController.text}'))),
                       Container(
                           width: MediaQuery.of(context).size.width / 2,
                           padding: EdgeInsets.only(bottom: 10),
@@ -286,7 +280,7 @@ class EditProductDialog extends StatelessWidget {
             TextButton(
               child: Text(S.of(context).save),
               onPressed: () {
-                if (!_keyFormEdit.currentState!.validate()) {
+                if (!_keyEdit.currentState!.validate()) {
                   return;
                 }
 
@@ -346,7 +340,7 @@ class EditProductDialog extends StatelessWidget {
                 child: DefaultTabController(
                     length: 2,
                     child: Form(
-                        key: _keyFormEdit,
+                        key: _keyEdit,
                         child: Column(children: [
                           Container(
                               child: TabBar(
@@ -370,7 +364,7 @@ class EditProductDialog extends StatelessWidget {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              if (!_keyFormEdit.currentState!.validate()) {
+              if (!_keyEdit.currentState!.validate()) {
                 return;
               }
               Product? _product;

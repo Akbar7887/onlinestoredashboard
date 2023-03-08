@@ -289,6 +289,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Цена в `
+  String get priceUE {
+    return Intl.message(
+      'Цена в ',
+      name: 'priceUE',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
