@@ -23,6 +23,7 @@ TextEditingController _priceController = TextEditingController();
 
 String _id = '';
 final _keyEdit = GlobalKey<FormState>();
+final _keyPrice = GlobalKey<FormState>();
 final CatalogController _catalogController = Get.put(CatalogController());
 final ProductController _productController = Get.put(ProductController());
 final UniversalController _universalController = Get.put(UniversalController());
@@ -113,7 +114,7 @@ class EditProductDialog extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: ElevatedButton(
                     onPressed: () async {
-                       await showdialogPrice(context);
+                      await showdialogPrice(context);
                     },
                     style: ButtonStyle(
                         backgroundColor:
@@ -196,86 +197,84 @@ class EditProductDialog extends StatelessWidget {
           title: Text(S.of(context).form_dialog),
           // titlePadding: EdgeInsetsGeometry(),
           content: Container(
-              height: MediaQuery.of(context).size.height / 2,
-              width: MediaQuery.of(context).size.width / 2,
-              child: Form(
-                  key: _keyEdit,
-                  child: Column(
-                    children: [
-                      Container(
-                          // width: MediaQuery.of(context).size.width / 2,
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return S.of(context).validate;
-                              }
-                            },
-                            keyboardType: TextInputType.datetime,
-                            controller: _dateController,
-                            style: GoogleFonts.openSans(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w200,
-                                color: Colors.black),
-                            decoration:
-                                MainConstant.decoration(S.of(context).date),
-                            onTap: () async {
-                              await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2015),
-                                lastDate: DateTime(2030),
-                              ).then((selectedDate) {
-                                if (selectedDate != null) {
-                                  _dateController.text =
-                                      _formatter.format(selectedDate);
-                                }
-                              });
-                              FocusScope.of(context)
-                                  .requestFocus(new FocusNode());
-                            },
-                          )),
-                      Container(
-                          padding: EdgeInsets.only(bottom: 10),
-                          width: MediaQuery.of(context).size.width / 2,
-                          child: TextFormField(
-                              enabled: false,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return S.of(context).validate;
-                                }
-                              },
-                              controller: _ratesController,
-                              style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w200,
-                                  color: Colors.black),
-                              decoration: MainConstant.decoration(
-                                  '${S.of(context).priceUE} ${_ratesController.text}'))),
-                      Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: TextFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return S.of(context).validate;
-                                }
-                              },
-                              keyboardType: TextInputType.number,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              // Only numbers can be entered
+              height: MediaQuery.of(dialogContext).size.height/2,
+              width: MediaQuery.of(dialogContext).size.width/2,
+              child: SafeArea(
+                  child: Form(
+                      key: _keyPrice,
+                      child: Column(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.only(bottom: 10),
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return S.of(dialogContext).validate;
+                                  }
+                                },
+                                keyboardType: TextInputType.datetime,
+                                controller: _dateController,
+                                style: GoogleFonts.openSans(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w200,
+                                    color: Colors.black),
+                                decoration:
+                                    MainConstant.decoration(S.of(context).date),
+                                onTap: () async {
+                                  await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2015),
+                                    lastDate: DateTime(2030),
+                                  ).then((selectedDate) {
+                                    if (selectedDate != null) {
+                                      _dateController.text =
+                                          _formatter.format(selectedDate);
+                                    }
+                                  });
+                                  FocusScope.of(dialogContext)
+                                      .requestFocus(new FocusNode());
+                                },
+                              )),
+                          Container(
+                              padding: EdgeInsets.only(bottom: 10),
+                              child: TextFormField(
+                                  enabled: false,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return S.of(dialogContext).validate;
+                                    }
+                                  },
+                                  controller: _ratesController,
+                                  style: GoogleFonts.openSans(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.black),
+                                  decoration: MainConstant.decoration(
+                                      '${S.of(dialogContext).priceUE} ${_ratesController.text}'))),
+                          Container(
+                              padding: EdgeInsets.only(bottom: 10),
+                              child: TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return S.of(dialogContext).validate;
+                                    }
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  // Only numbers can be entered
 
-                              controller: _priceController,
-                              style: GoogleFonts.openSans(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w200,
-                                  color: Colors.black),
-                              decoration: MainConstant.decoration(
-                                  S.of(context).valuerate))),
-                    ],
-                  ))),
+                                  controller: _priceController,
+                                  style: GoogleFonts.openSans(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.black),
+                                  decoration: MainConstant.decoration(
+                                      S.of(dialogContext).valuerate))),
+                        ],
+                      )))),
           actions: <Widget>[
             TextButton(
               child: Text(S.of(context).save),
@@ -284,24 +283,22 @@ class EditProductDialog extends StatelessWidget {
                   return;
                 }
 
-                // _exchangeController.exchange.value.date =
-                //     DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                //         .format(DateTime.parse(_dateController.text));
-                // _exchangeController.exchange.value.rates =
-                //     _ratesController.text;
-                // _exchangeController.exchange.value.ratevalue =
-                //     double.parse(_valuerateController.text);
-                //
-                // _exchangeController
-                //     .save(_exchangeController.exchange.value)
-                //     .then((value) {
-                //   _exchangeController.fetchAll();
-                //   Navigator.of(dialogContext).pop();
-                // });
+                _universalController.price.value.date =
+                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                        .format(DateTime.parse(_dateController.text));
+                _universalController.price.value.rates =
+                    _ratesController.text;
+                _universalController.price.value.price =
+                    double.parse(_priceController.text);
+
+                _universalController.save("doc/price/save", _universalController.price.value)
+                    .then((value) {
+                  Navigator.of(dialogContext).pop();
+                });
               },
             ),
             TextButton(
-              child: Text(S.of(context).cancel),
+              child: Text(S.of(dialogContext).cancel),
               onPressed: () {
                 Navigator.of(dialogContext).pop(); // Dismiss alert dialog
               },
