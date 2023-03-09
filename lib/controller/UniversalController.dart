@@ -2,6 +2,7 @@
 import 'package:get/get.dart';
 import 'package:onlinestoredashboard/controller/ApiConnector.dart';
 import 'package:onlinestoredashboard/models/calculate/Price.dart';
+import 'package:onlinestoredashboard/models/catalogs/ProductImage.dart';
 
 class UniversalController extends GetxController {
   final api = ApiConnector();
@@ -9,11 +10,13 @@ class UniversalController extends GetxController {
   var prices = <Price>[].obs;
   Rx<Price> price = Price().obs;
   var rate = 0.0.obs;
+  var productImages = <ProductImage>[].obs;
 
   @override
   void onInit() {
     super.onInit();
   }
+
 
   Future<List<dynamic>> getByParentId(String url, String id) async {
     return await api.getByParentId(url, id);

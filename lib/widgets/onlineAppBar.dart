@@ -36,38 +36,29 @@ class OnlineAppBar extends StatelessWidget with PreferredSizeWidget {
                 ),
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
                       PopupMenuItem(
-                        child: TextButton(
-                            onPressed: () {
-                              // Get.offAll(OrderPage());
-                              Get.to(() => OrganizationPage());
-                            },
-                            child: Text(
-                              S.of(context).organization,
-                              style: TextStyle(fontSize: 20),
-                            )),
-                      ),
+                          onTap: () {
+                            Get.to(() => OrganizationPage());
+                          },
+                          child: Text(
+                            S.of(context).organization,
+                            style: TextStyle(fontSize: 20),
+                          )),
                       PopupMenuItem(
-                        child: TextButton(
-                            onPressed: () {
-                              // Get.offAll(OrderPage());
-                              Get.to(() => CatalogPage());
-                            },
-                            child: Text(
-                              S.of(context).catalog,
-                              style: TextStyle(fontSize: 20),
-                            )),
-                      ),
+                          onTap: () {
+                            Get.to(() => CatalogPage());
+                          },
+                          child: Text(
+                            S.of(context).catalog,
+                            style: TextStyle(fontSize: 20),
+                          )),
                       PopupMenuItem(
-                        child: TextButton(
-                            onPressed: () {
-                              // Get.offAll(OrderPage());
-                              Get.to(() => ProductPage());
-                            },
-                            child: Text(
-                              S.of(context).product_page_name,
-                              style: TextStyle(fontSize: 20),
-                            )),
-                      )
+                          onTap: () {
+                            Get.to(() => ProductPage());
+                          },
+                          child: Text(
+                            S.of(context).product_page_name,
+                            style: TextStyle(fontSize: 20),
+                          )),
                     ])),
       ],
 

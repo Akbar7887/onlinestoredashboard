@@ -1,4 +1,8 @@
 class ProductImage {
+  int? id;
+  String? imagepath;
+  bool? mainimg;
+
   ProductImage({
       this.id, 
       this.imagepath, 
@@ -9,9 +13,7 @@ class ProductImage {
     imagepath = json['imagepath'];
     mainimg = json['mainimg'];
   }
-  int? id;
-  String? imagepath;
-  bool? mainimg;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

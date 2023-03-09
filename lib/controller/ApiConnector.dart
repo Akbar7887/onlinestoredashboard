@@ -5,6 +5,13 @@ class ApiConnector extends GetConnect{
 
   final api = Api();
 
+
+  @override
+  void onInit() {
+
+    super.onInit();
+  }
+
   Future<dynamic> getfirst(String url) async {
     final json = await api.getfirst(url);
 
