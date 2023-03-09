@@ -309,6 +309,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Курс 1 долл США`
+  String get doll {
+    return Intl.message(
+      'Курс 1 долл США',
+      name: 'doll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Организация`
+  String get organization {
+    return Intl.message(
+      'Организация',
+      name: 'organization',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

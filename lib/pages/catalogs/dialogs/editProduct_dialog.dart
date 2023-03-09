@@ -37,7 +37,6 @@ class EditProductDialog extends StatelessWidget {
   EditProductDialog({Key? key}) : super(key: key);
 
   Widget mainTab(BuildContext context) {
-
     return StatefulBuilder(
         builder: (BuildContext context, setState) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,7 +196,6 @@ class EditProductDialog extends StatelessWidget {
         ));
   }
 
-
   Future<void> showdialogPrice(BuildContext context) async {
     if (_universalController.price.value.date != null) {
       _dateController.text = _formatter
@@ -224,17 +222,17 @@ class EditProductDialog extends StatelessWidget {
           content: Container(
               height: MediaQuery.of(dialogContext).size.height / 2,
               width: MediaQuery.of(dialogContext).size.width / 2,
-              child: Obx(() =>SafeArea(
+              child: Obx(() => SafeArea(
                   child: Form(
                       key: _keyPrice,
                       child: Column(
                         children: [
                           Container(
-                            child: Text(_universalController.rate.value.toString()),
-                          ),
-                          Container(
-                              padding: EdgeInsets.only(bottom: 10),
-                              child: TextFormField(
+                              child: Row(
+                            children: [
+                              Expanded(
+                                  // padding: EdgeInsets.only(bottom: 10),
+                                  child: TextFormField(
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return S.of(dialogContext).validate;
@@ -248,7 +246,6 @@ class EditProductDialog extends StatelessWidget {
                                     color: Colors.black),
                                 decoration:
                                     MainConstant.decoration(S.of(context).date),
-
                                 onTap: () async {
                                   await showDatePicker(
                                     context: context,
@@ -266,6 +263,23 @@ class EditProductDialog extends StatelessWidget {
                                       .requestFocus(new FocusNode());
                                 },
                               )),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '${S.of(context).doll} ${_universalController.rate.value.toString()} ${S.of(context).sum}',
+                                  style: GoogleFonts.openSans(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ],
+                          )),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Container(
                               // padding: EdgeInsets.only(bottom: 10),
                               child: TextFormField(
