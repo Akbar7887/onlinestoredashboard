@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "exchange": MessageLookupByLibrary.simpleMessage("Курс валют"),
         "form_dialog": MessageLookupByLibrary.simpleMessage(
             "Форма для измениие или добавление!"),
+        "image_store": MessageLookupByLibrary.simpleMessage("Картинки"),
         "main": MessageLookupByLibrary.simpleMessage("Основное"),
         "name": MessageLookupByLibrary.simpleMessage("Наименование"),
         "organization": MessageLookupByLibrary.simpleMessage("Организация"),

@@ -1,20 +1,24 @@
 class ProductImage {
-    int? id;
-    String? imagepath;
+  ProductImage({
+      this.id, 
+      this.imagepath, 
+      this.mainimg,});
 
-    ProductImage({this.id, this.imagepath});
+  ProductImage.fromJson(dynamic json) {
+    id = json['id'];
+    imagepath = json['imagepath'];
+    mainimg = json['mainimg'];
+  }
+  int? id;
+  String? imagepath;
+  bool? mainimg;
 
-    factory ProductImage.fromJson(Map<String, dynamic> json) {
-        return ProductImage(
-            id: json['id'], 
-            imagepath: json['imagepath'], 
-        );
-    }
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['imagepath'] = imagepath;
+    map['mainimg'] = mainimg;
+    return map;
+  }
 
-    Map<String, dynamic> toJson() {
-        final Map<String, dynamic> data = new Map<String, dynamic>();
-        data['id'] = this.id;
-        data['imagepath'] = this.imagepath;
-        return data;
-    }
 }

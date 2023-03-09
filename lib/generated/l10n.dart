@@ -329,6 +329,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Картинки`
+  String get image_store {
+    return Intl.message(
+      'Картинки',
+      name: 'image_store',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

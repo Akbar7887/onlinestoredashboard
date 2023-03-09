@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/controller/ProductController.dart';
 import 'package:onlinestoredashboard/controller/UniversalController.dart';
 import 'package:onlinestoredashboard/models/calculate/Exchange.dart';
+import 'package:onlinestoredashboard/pages/catalogs/dialogs/productImage_part.dart';
 
 import '../../../controller/CatalogController.dart';
 import '../../../generated/l10n.dart';
@@ -396,7 +397,7 @@ class EditProductDialog extends StatelessWidget {
                 width: MediaQuery.of(context).size.width / 1.2,
                 height: MediaQuery.of(context).size.height,
                 child: DefaultTabController(
-                    length: 2,
+                    length: 3,
                     child: Form(
                         key: _keyEdit,
                         child: Column(children: [
@@ -411,12 +412,14 @@ class EditProductDialog extends StatelessWidget {
                             tabs: [
                               Tab(text: S.of(context).main),
                               Tab(text: S.of(context).price),
+                              Tab(text: S.of(context).image_store),
                             ],
                           )),
                           Expanded(
                               child: TabBarView(children: [
                             mainTab(context),
-                            priceTab(context)
+                            priceTab(context),
+                            ProductImagePart()
                           ]))
                         ]))))),
         actions: <Widget>[
