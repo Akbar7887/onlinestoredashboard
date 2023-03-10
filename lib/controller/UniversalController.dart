@@ -1,4 +1,6 @@
 
+import 'dart:typed_data';
+
 import 'package:get/get.dart';
 import 'package:onlinestoredashboard/controller/ApiConnector.dart';
 import 'package:onlinestoredashboard/models/calculate/Price.dart';
@@ -34,5 +36,10 @@ class UniversalController extends GetxController {
 
   Future<dynamic> getRateFirst(String url, DateTime  dateTime) async {
     return  await api.getRateFirst(url, dateTime);
+  }
+
+  Future<dynamic> saveImage(
+      String url, Uint8List data, Map<String, dynamic> param, String name) async {
+    return await api.saveImage(url, data, param, name);
   }
 }

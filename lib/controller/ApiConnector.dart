@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:get/get.dart';
 import 'package:onlinestoredashboard/api/Api.dart';
 
@@ -54,6 +56,11 @@ class ApiConnector extends GetConnect{
 
   Future<dynamic> removethroughtParent(String url, String id) async {
     return await api.removethroughtParent(url, id);
+  }
+
+  Future<dynamic> saveImage(
+      String url, Uint8List data, Map<String, dynamic> param, String name) async {
+    return await api.saveImage(url, data, param, name);
   }
 
 
