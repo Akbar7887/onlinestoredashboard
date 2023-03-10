@@ -46,9 +46,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       initialBinding: HomeBindings(),
       getPages: [
-        GetPage(name: '/product', page: () => Home()),
-        GetPage(name: '/', page: () => ProductPage()),
-        GetPage(name: '/cat', page: () => CatalogPage()),
+        GetPage(name: '/cat', page: () => Home()),
+        GetPage(name: '/product', page: () => ProductPage()),
+        GetPage(name: '/', page: () => CatalogPage()),
         GetPage(name: '/org', page: () => OrganizationPage()),
         GetPage(name: '/exchange', page: () => ExchangePage()),
 

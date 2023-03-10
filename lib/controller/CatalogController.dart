@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:onlinestoredashboard/models/catalogs/Catalog.dart';
@@ -85,6 +87,10 @@ class CatalogController extends GetxController {
     return await api.deleteById(url, id);
   }
 
+  Future<dynamic> saveImage(
+      String url, Uint8List data, Map<String, dynamic> param, String name) async {
+    return await api.saveImage(url, data, param, name);
+  }
   // Future<Catalog> saveProduct(String url, Product product, int id) async {
   //   final json = await api.savesub(url, product, id.toString());
   //   catalog.value = Catalog.fromJson(json);
