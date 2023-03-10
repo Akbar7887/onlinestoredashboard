@@ -189,6 +189,19 @@ class EditProductDialog extends StatelessWidget {
                                                   .prices.value[idx].pricesum
                                                   .toString(),
                                             )),
+                                        Spacer(),
+                                        Container(
+                                            padding: EdgeInsets.all(5),
+                                            child: IconButton(
+                                              icon: Icon(Icons.delete),
+                                              onPressed: () {
+                                                _universalController.delete(
+                                                    "doc/price/delete",
+                                                    _universalController
+                                                        .prices.value[idx].id
+                                                        .toString());
+                                              },
+                                            )),
                                       ],
                                     ),
                                   ))));
