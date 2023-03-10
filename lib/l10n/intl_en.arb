@@ -27,6 +27,8 @@
   "sum": "Сум",
   "doll": "Курс 1 долл США",
   "organization": "Организация",
-  "image_store": "Картинки"
+  "image_store": "Картинки",
+  "dashboard": "Dashboard",
+  "groups": "Группы"
 
 }

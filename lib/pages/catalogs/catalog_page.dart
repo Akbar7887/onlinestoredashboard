@@ -25,40 +25,38 @@ class CatalogPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: OnlineAppBar(),
-        body: Obx(() {
-          return SafeArea(
-              child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: SingleChildScrollView(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Header(S.of(context).catalog_page_name),
-                      Container(
-                          child: SizedBox(
-                              width: 200,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  dropDownValue = null;
-                                  _catalog = null;
-                                  showDialogCatalog(context);
-                                },
-                                child: FittedBox(
-                                    fit: BoxFit.fitWidth,
-                                    child: Text(S.of(context).add)),
-                              ))),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                          child: TreeView(
-                              nodes: createCatalogHiriarh(
-                                  context, _catalogController.catalogs)))
-                    ],
-                  ))));
-        }));
+    return Obx(() {
+      return SafeArea(
+          child: Padding(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: SingleChildScrollView(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Header(S.of(context).catalog_page_name),
+                  Container(
+                      child: SizedBox(
+                          width: 200,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              dropDownValue = null;
+                              _catalog = null;
+                              showDialogCatalog(context);
+                            },
+                            child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(S.of(context).add)),
+                          ))),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      child: TreeView(
+                          nodes: createCatalogHiriarh(
+                              context, _catalogController.catalogs)))
+                ],
+              ))));
+    });
   }
 
   List<TreeNode> createCatalogHiriarh(
@@ -132,9 +130,9 @@ class CatalogPage extends StatelessWidget {
                             },
                           )),
                           Container(
-                              child:
-                                  Image.network("${UiO.url}doc/catalog/download/${e.id.toString()}",
-                                      errorBuilder: (
+                              child: Image.network(
+                                  "${UiO.url}doc/catalog/download/${e.id.toString()}",
+                                  errorBuilder: (
                             BuildContext context,
                             Object error,
                             StackTrace? stackTrace,

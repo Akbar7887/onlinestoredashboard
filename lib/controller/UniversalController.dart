@@ -9,6 +9,7 @@ import 'package:onlinestoredashboard/models/catalogs/ProductImage.dart';
 class UniversalController extends GetxController {
   final api = ApiConnector();
 
+  var page = 0.obs;
   var prices = <Price>[].obs;
   Rx<Price> price = Price().obs;
   var rate = 0.0.obs;

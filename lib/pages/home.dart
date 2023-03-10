@@ -1,12 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:onlinestoredashboard/controller/UniversalController.dart';
+import 'package:onlinestoredashboard/pages/catalogs/product_page.dart';
 import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
+import 'package:onlinestoredashboard/widgets/onlineDrawer.dart';
 
 import '../controller/Controller.dart';
-import '../models/Organization.dart';
+import 'catalogs/catalog_page.dart';
+
+final UniversalController _universalController = Get.put(UniversalController());
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -27,7 +29,36 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: OnlineAppBar(),
-      body: Container(),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Row(
+          children: [
+            Expanded(child: OnlineDrawer()),
+            // VerticalDivider(),
+            Expanded(flex: 4, child: selectPage())
+          ],
+        ),
+      ),
     );
+  }
+
+  selectPage() {
+    switch (_universalController.page.value) {
+      case 1:
+        {
+          return CatalogPage();
+        }
+        break;
+      case 0:
+        {
+          return ProductPage();
+        }
+        break;
+      default:
+        {
+          return Container();
+        }
+    }
   }
 }

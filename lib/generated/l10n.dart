@@ -339,6 +339,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Dashboard`
+  String get dashboard {
+    return Intl.message(
+      'Dashboard',
+      name: 'dashboard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Группы`
+  String get groups {
+    return Intl.message(
+      'Группы',
+      name: 'groups',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -21,74 +21,10 @@ final ProductController _productController = Get.put(ProductController());
 
 late ProductDataGridSource _productDataGridSource;
 // final _keyForm = GlobalKey<FormState>();
-// Catalog? dropDownValue;
+Catalog? dropDownValue;
 
 class ProductPage extends GetView<CatalogController> {
   ProductPage() : super();
-
-  Widget tree(BuildContext context, List<Catalog> catalogs) {
-    return Container(
-        child: Card(
-            child: Column(
-      children: [
-        SizedBox(
-          height: 20,
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Text(
-              S.of(context).catalog,
-            ),
-          ),
-        ),
-        Divider(),
-        Expanded(child: SingleChildScrollView(child: TreeView(nodes: treeList(context, catalogs))))
-      ],
-    )));
-  }
-
-  List<TreeNode> treeList(BuildContext context, List<Catalog> list) {
-    return list
-        .map((e) => TreeNode(
-            content: InkWell(
-                onTap: () {
-                  _catalogController.catalog.value = e;
-                  _productController.fetchgetAll(e.id.toString()).then((value) {
-                    _productDataGridSource = ProductDataGridSource(
-                        _productController.products.value);
-                  });
-                },
-                child: Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width / 10,
-                    //constraints: BoxConstraints.expand(),
-                    child: Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.black38)),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              flex: 6,
-                                    child: Container(
-                                      padding: EdgeInsets.all(5),
-                                      child: Text(
-                                        e.catalogname!,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        style:
-                                            TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-
-                            Spacer(),
-                          ],
-                        )))),
-            children: treeList(context, e.catalogs!)))
-        .toList();
-  }
 
   Widget table(BuildContext context) {
     return Card(
@@ -107,35 +43,56 @@ class ProductPage extends GetView<CatalogController> {
                     )),
                 Divider(),
                 Container(
-                    alignment: Alignment.topLeft,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          if (_catalogController.catalog.value.id == null) {
-                            return;
-                          }
-                          _productController.product.value.id = null;
-                          Future.delayed(
-                              const Duration(seconds: 0),
-                              () => showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (BuildContext context) {
-                                    return EditProductDialog();
-                                  }));
-                          // .then((value) {
-                          // _controller.fetchGetAll().then((value) {
-                          //  setState(() {
-                          //    _productDataGridSource =
-                          //        ProductDataGridSource(
-                          //            _controller.productlist.value);
-                          //  // });
-                          // });
-                          // });
-                        },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.grey[800])),
-                        child: Text(S.of(context).add))),
+                    child: Row(
+                  children: [
+                    Container(
+                        alignment: Alignment.topLeft,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              if (_catalogController.catalog.value.id == null) {
+                                return;
+                              }
+                              _productController.product.value.id = null;
+                              Future.delayed(
+                                  const Duration(seconds: 0),
+                                  () => showDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      builder: (BuildContext context) {
+                                        return EditProductDialog();
+                                      }));
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.grey[800])),
+                            child: Text(S.of(context).add))),
+                    SizedBox(
+                      width: 100,
+                    ),
+                    Expanded(
+                        child: DropdownButtonFormField<Catalog>(
+                            hint: Text(S.of(context).catalog),
+                            isExpanded: true,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder()),
+                            items: _catalogController.catalogslist.value
+                                .map((e) => DropdownMenuItem(
+                                      child: Text(e.catalogname!),
+                                      value: e,
+                                    ))
+                                .toList(),
+                            value: dropDownValue,
+                            onChanged: (value) {
+                              dropDownValue = value!;
+                              _productController
+                                  .fetchgetAll(value.id.toString())
+                                  .then((value) {
+                                _productDataGridSource = ProductDataGridSource(
+                                    _productController.products.value);
+                              });
+                            }))
+                  ],
+                )),
                 SizedBox(
                   height: 20,
                 ),
@@ -164,7 +121,24 @@ class ProductPage extends GetView<CatalogController> {
                         return UiO.datagrig_height;
                       },
                       headerRowHeight: UiO.datagrig_height,
-                      onCellTap: (cell) {},
+                      onCellTap: ((cell) {
+                        // print("pk");
+                        // if (_catalogController.catalog.value.id == null) {
+                        //   return;
+                        // }
+                        _productController.product.value =
+                        _productController.products
+                            .value[cell.rowColumnIndex.rowIndex];
+
+                        Future.delayed(
+                            const Duration(seconds: 0),
+                                () => showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return EditProductDialog();
+                                }));
+                      }),
                       columns: [
                         GridColumn(
                             columnName: 'id',
@@ -214,47 +188,32 @@ class ProductPage extends GetView<CatalogController> {
   Widget build(BuildContext context) {
     return Obx(() {
       MainConstant.getRate(DateTime.now());
-
-      // _controller.getProducts(_controller.catalogs.value.first);
       _productDataGridSource =
           ProductDataGridSource(_productController.products.value);
-
-      return Scaffold(
-          appBar: OnlineAppBar(), // extendBodyBehindAppBar: true,
-          body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: Column(children: [
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    S.of(context).product_page_name,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: UiO.font,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                    // decoration: BoxDecoration(
-                    //     border: Border.all(color: Colors.blue.shade800)),
-                    child: Row(
-                  children: [
-                    Expanded(
-                        child:
-                            tree(context, _catalogController.catalogs.value)),
-                    Expanded(flex: 3, child: table(context)),
-                  ],
-                ))
-              ]),
+      return SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child: Column(children: [
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                S.of(context).product_page_name,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: UiO.font,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
-            // drawer: DskNavigationDrawer(),
+            SizedBox(
+              height: 10,
+            ),
+            Expanded(flex: 3, child: table(context)),
+          ]),
+        ),
+        // drawer: DskNavigationDrawer(),
 
-            // drawer: DskNavigationDrawer(),
-          ));
+        // drawer: DskNavigationDrawer(),
+      );
     });
   }
 }
@@ -357,8 +316,8 @@ class ProductDataGridSource extends DataGridSource {
                         PopupMenuItem(
                           onTap: () {
                             _productController.product.value =
-                                _productController.products
-                                    .value[dataGridRows.indexOf(row)];
+                                _productController
+                                    .products.value[dataGridRows.indexOf(row)];
                             Future.delayed(
                                 const Duration(seconds: 0),
                                 () => showDialog(

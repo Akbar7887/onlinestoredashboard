@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "characteristic": MessageLookupByLibrary.simpleMessage("Харак-ка"),
         "characteristics":
             MessageLookupByLibrary.simpleMessage("характеристики"),
+        "dashboard": MessageLookupByLibrary.simpleMessage("Dashboard"),
         "date": MessageLookupByLibrary.simpleMessage("Дата"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "description": MessageLookupByLibrary.simpleMessage("Описание"),
@@ -37,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "exchange": MessageLookupByLibrary.simpleMessage("Курс валют"),
         "form_dialog": MessageLookupByLibrary.simpleMessage(
             "Форма для измениие или добавление!"),
+        "groups": MessageLookupByLibrary.simpleMessage("Группы"),
         "image_store": MessageLookupByLibrary.simpleMessage("Картинки"),
         "main": MessageLookupByLibrary.simpleMessage("Основное"),
         "name": MessageLookupByLibrary.simpleMessage("Наименование"),

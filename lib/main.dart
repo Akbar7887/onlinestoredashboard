@@ -39,16 +39,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: TextTheme(),
         fontFamily: UiO.font,
-        // textTheme: TextTheme(bodyText1: ),
+         // textTheme: TextTheme(bodyText1: ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         //primarySwatch: Colors.black87,
       ),
       initialRoute: '/',
       initialBinding: HomeBindings(),
       getPages: [
-        GetPage(name: '/cat', page: () => Home()),
+        GetPage(name: '/', page: () => Home()),
         GetPage(name: '/product', page: () => ProductPage()),
-        GetPage(name: '/', page: () => CatalogPage()),
+        GetPage(name: '/cat', page: () => CatalogPage()),
         GetPage(name: '/org', page: () => OrganizationPage()),
         GetPage(name: '/exchange', page: () => ExchangePage()),
 
