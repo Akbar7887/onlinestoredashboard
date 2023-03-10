@@ -24,68 +24,65 @@ class ProductImagePart extends StatelessWidget {
   Widget build(BuildContext context) {
     _universalController
         .getByParentId("doc/productimage/get",
-        _productController.product.value.id.toString())
+            _productController.product.value.id.toString())
         .then((value) {
+      // if (value.isNotEmpty) {
       _universalController.productImages.value =
           value.map((e) => ProductImage.fromJson(e)).toList();
+      // } else {}
     });
-    return Obx(() =>
-    _universalController.productImages.length == 0
-        ? Center(
-      child: CircularProgressIndicator(),
-    )
-        : SafeArea(
-        child: Row(
+    return Obx(() => SafeArea(
+            child: Container(
+                child: Row(
           children: [
             Expanded(
                 child: Column(
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                        alignment: Alignment.topLeft,
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              XFile? image = await ImagePicker()
-                                  .pickImage(source: ImageSource.gallery);
-                              if (image != null) {
-                                var f = await image.readAsBytes();
-                                _webImage = f;
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                    alignment: Alignment.topLeft,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          XFile? image = await ImagePicker()
+                              .pickImage(source: ImageSource.gallery);
+                          if (image != null) {
+                            var f = await image.readAsBytes();
+                            _webImage = f;
 
-                                Map<String, dynamic> param = {
-                                  "id": "",
-                                  "parent_id": _productController.product.value
-                                      .id
-                                      .toString(),
-                                  "mainimg": false.toString()
-                                };
-                                _universalController.saveImage(
-                                    "doc/productimage/upload",
-                                    f,
-                                    param,
-                                    image.name);
-                              }
-                            },
-                            style: ButtonStyle(
-                                backgroundColor:
+                            Map<String, dynamic> param = {
+                              "id": "",
+                              "parent_id": _productController.product.value.id
+                                  .toString(),
+                              "mainimg": false.toString()
+                            };
+                            _universalController.saveImage(
+                                "doc/productimage/upload",
+                                f,
+                                param,
+                                image.name);
+                          }
+                        },
+                        style: ButtonStyle(
+                            backgroundColor:
                                 MaterialStateProperty.all(Colors.grey[800])),
-                            child: Text(S
-                                .of(context)
-                                .add))),
-                    SizedBox(
-                      height: 10,
-                    ),
+                        child: Text(S.of(context).add))),
+                SizedBox(
+                  height: 10,
+                ),
 
-                    Expanded(
-                        child: ListView.builder(
+                Expanded(
+                    child: _universalController.productImages.value.isEmpty
+                        ? Container()
+                        : ListView.builder(
                             itemCount:
-                            _universalController.productImages.value.length,
+                                _universalController.productImages.value.length,
                             itemBuilder: (context, inx) {
                               return Container(
                                   decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.black26)),
+                                      border:
+                                          Border.all(color: Colors.black26)),
                                   child: Row(
                                     children: [
                                       Expanded(
@@ -96,44 +93,41 @@ class ProductImagePart extends StatelessWidget {
                                               },
                                               child: Card(
                                                 child: Image.network(
-                                                    '${UiO
-                                                        .url}doc/productimage/download/${_universalController
-                                                        .productImages
-                                                        .value[inx].id}'),
+                                                    '${UiO.url}doc/productimage/download/${_universalController.productImages.value[inx].id}'),
                                               ))),
                                       Expanded(
                                           child: IconButton(
-                                            icon: Icon(
-                                              Icons.delete,
-                                              color: Colors.red,
-                                            ),
-                                            onPressed: () {
-                                              _universalController.delete(
-                                                  "doc/productimage/deleteimage",
-                                                  _universalController
-                                                      .productImages.value[inx]
-                                                      .id.toString());
-                                            },
-                                          ))
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          _universalController.delete(
+                                              "doc/productimage/deleteimage",
+                                              _universalController
+                                                  .productImages.value[inx].id
+                                                  .toString());
+                                        },
+                                      ))
                                     ],
                                   ));
                             }))
 
-                    // ListView(children: _universalController,)
-                  ],
-                )),
+                // ListView(children: _universalController,)
+              ],
+            )),
             VerticalDivider(),
             Expanded(
               flex: 3,
-              child: Container(
-                child: Card(
-                    child: Image.network(
-                        '${UiO
-                            .url}doc/productimage/download/${_universalController
-                            .productImages.value[idx].id}')),
-              ),
+              child: _universalController.productImages.value.isEmpty
+                  ? Container()
+                  : Container(
+                      child: Card(
+                          child: Image.network(
+                              '${UiO.url}doc/productimage/download/${_universalController.productImages.value[idx].id}')),
+                    ),
             )
           ],
-        )));
+        ))));
   }
 }

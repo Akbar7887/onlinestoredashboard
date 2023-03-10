@@ -31,14 +31,17 @@ class ProductPage extends GetView<CatalogController> {
         child: Card(
             child: Column(
       children: [
-        Container(
+        SizedBox(
           height: 20,
-          child: Text(
-            S.of(context).catalog,
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: Text(
+              S.of(context).catalog,
+            ),
           ),
         ),
         Divider(),
-        Expanded(child: TreeView(nodes: treeList(context, catalogs)))
+        Expanded(child: SingleChildScrollView(child: TreeView(nodes: treeList(context, catalogs))))
       ],
     )));
   }
@@ -66,16 +69,20 @@ class ProductPage extends GetView<CatalogController> {
                         child: Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(
-                                padding: EdgeInsets.all(5),
-                                child: FittedBox(
-                                  fit: BoxFit.fill,
-                                  child: Text(
-                                    e.catalogname!,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                            Flexible(
+                              flex: 6,
+                                    child: Container(
+                                      padding: EdgeInsets.all(5),
+                                      child: Text(
+                                        e.catalogname!,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style:
+                                            TextStyle(fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
                                   ),
-                                )),
+
                             Spacer(),
                           ],
                         )))),
