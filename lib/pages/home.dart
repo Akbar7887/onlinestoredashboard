@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:onlinestoredashboard/pages/catalogs/product_page.dart';
+import 'package:onlinestoredashboard/pages/organization_page.dart';
 import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
 import 'package:onlinestoredashboard/widgets/onlineDrawer.dart';
 
@@ -72,10 +73,15 @@ class _HomeState extends State<Home> {
     switch (_controller.page.value) {
       case 0:
         {
-          return CatalogPage();
+          return OrganizationPage();
         }
         break;
       case 1:
+        {
+          return CatalogPage();
+        }
+        break;
+      case 2:
         {
           return ProductPage();
         }
@@ -90,10 +96,15 @@ class _HomeState extends State<Home> {
     switch (_controller.page.value) {
       case 0:
         {
-          return S.of(context).catalog_page_name;
+          return S.of(context).organization;
         }
         break;
       case 1:
+        {
+          return S.of(context).catalog_page_name;
+        }
+        break;
+      case 2:
         {
           return S.of(context).product;
         }

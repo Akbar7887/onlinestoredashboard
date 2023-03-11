@@ -39,7 +39,7 @@ class ProductPage extends GetView<Controller> {
                               if (_controller.catalog.value.id == null) {
                                 return;
                               }
-                              _controller.product.value.id = null;
+                              _controller.product = Product().obs;
                               Future.delayed(
                                   const Duration(seconds: 0),
                                   () => showDialog(

@@ -29,6 +29,17 @@ class OnlineDrawer extends StatelessWidget {
             Divider(
               color: Colors.white,
             ),
+            ListTile(
+              iconColor: Colors.white,
+              leading: Icon(Icons.home, color: Colors.white,),
+              title: Text(
+                S.of(context).organization,
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                _controller.page.value = 0;
+              },
+            ),
             ExpansionTile(
               collapsedIconColor: Colors.white,
               controlAffinity: ListTileControlAffinity.platform,
@@ -50,7 +61,7 @@ class OnlineDrawer extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   onTap: () {
-                    _controller.page.value = 0;
+                    _controller.page.value = 1;
                   },
                 ),
                 ListTile(
@@ -60,7 +71,7 @@ class OnlineDrawer extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   onTap: () {
-                    _controller.page.value = 1;
+                    _controller.page.value = 2;
                   },
                 ),
               ],

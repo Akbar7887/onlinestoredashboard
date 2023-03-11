@@ -39,247 +39,212 @@ class OrganizationPage extends StatelessWidget {
     }
 
     return SafeArea(
-        child: Scaffold(
-            appBar: OnlineAppBar(),
-            body: Padding(
-                padding: EdgeInsets.all(20),
-                child: Form(
-                  key: _keyForm,
-                  child: Column(
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Text(
-                          "Организация",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+        child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Form(
+              key: _keyForm,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 3,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.only(bottom: 20),
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    child: TextFormField(
+                                        controller: _nameController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Просим заплнить поля";
+                                          }
+                                        },
+                                        style: GoogleFonts.openSans(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                        decoration: MainConstant.decoration(
+                                            "Наименование"))),
+                                Container(
+                                    padding: EdgeInsets.only(bottom: 20),
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    child: TextFormField(
+                                        controller: _telephonController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Просим заплнить поля";
+                                          }
+                                        },
+                                        style: GoogleFonts.openSans(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                        decoration: MainConstant.decoration(
+                                            "Телефон"))),
+                                Container(
+                                    padding: EdgeInsets.only(bottom: 20),
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    child: TextFormField(
+                                        controller: _regionController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Просим заплнить поля";
+                                          }
+                                        },
+                                        style: GoogleFonts.openSans(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                        decoration:
+                                            MainConstant.decoration("Регион"))),
+                                Container(
+                                    padding: EdgeInsets.only(bottom: 20),
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    child: TextFormField(
+                                        controller: _adressController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Просим заплнить поля";
+                                          }
+                                        },
+                                        style: GoogleFonts.openSans(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                        decoration:
+                                            MainConstant.decoration("Адрес"))),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                      Divider(),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                          height: MediaQuery.of(context).size.height / 2,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                        padding: EdgeInsets.only(bottom: 20),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3,
-                                        child: TextFormField(
-                                            controller: _nameController,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Просим заплнить поля";
-                                              }
-                                            },
-                                            style: GoogleFonts.openSans(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w200,
-                                                color: Colors.black),
-                                            decoration: MainConstant.decoration(
-                                                "Наименование"))),
-                                    Container(
-                                        padding: EdgeInsets.only(bottom: 20),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3,
-                                        child: TextFormField(
-                                            controller: _telephonController,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Просим заплнить поля";
-                                              }
-                                            },
-                                            style: GoogleFonts.openSans(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w200,
-                                                color: Colors.black),
-                                            decoration: MainConstant.decoration(
-                                                "Телефон"))),
-                                    Container(
-                                        padding: EdgeInsets.only(bottom: 20),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3,
-                                        child: TextFormField(
-                                            controller: _regionController,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Просим заплнить поля";
-                                              }
-                                            },
-                                            style: GoogleFonts.openSans(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w200,
-                                                color: Colors.black),
-                                            decoration: MainConstant.decoration(
-                                                "Регион"))),
-                                    Container(
-                                        padding: EdgeInsets.only(bottom: 20),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3,
-                                        child: TextFormField(
-                                            controller: _adressController,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Просим заплнить поля";
-                                              }
-                                            },
-                                            style: GoogleFonts.openSans(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w200,
-                                                color: Colors.black),
-                                            decoration: MainConstant.decoration(
-                                                "Адрес"))),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                        padding: EdgeInsets.only(bottom: 20),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3,
-                                        child: TextFormField(
-                                            controller: _emailController,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Просим заплнить поля";
-                                              }
-                                            },
-                                            style: GoogleFonts.openSans(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w200,
-                                                color: Colors.black),
-                                            decoration: MainConstant.decoration(
-                                                "e-mail"))),
-                                    Container(
-                                        padding: EdgeInsets.only(bottom: 20),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3,
-                                        child: TextFormField(
-                                            controller: _facebookController,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Просим заплнить поля";
-                                              }
-                                            },
-                                            style: GoogleFonts.openSans(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w200,
-                                                color: Colors.black),
-                                            decoration: MainConstant.decoration(
-                                                "Facebook"))),
-                                    Container(
-                                        padding: EdgeInsets.only(bottom: 20),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3,
-                                        child: TextFormField(
-                                            controller: _instagramController,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Просим заплнить поля";
-                                              }
-                                            },
-                                            style: GoogleFonts.openSans(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w200,
-                                                color: Colors.black),
-                                            decoration: MainConstant.decoration(
-                                                "Instagram"))),
-                                    Container(
-                                        padding: EdgeInsets.only(bottom: 20),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3,
-                                        child: TextFormField(
-                                            controller: _telegramController,
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return "Просим заплнить поля";
-                                              }
-                                            },
-                                            style: GoogleFonts.openSans(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w200,
-                                                color: Colors.black),
-                                            decoration: MainConstant.decoration(
-                                                "Telegram"))),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
-                      Container(
-                          alignment: Alignment.center,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () {
-                                    if (!_keyForm.currentState!.validate()) {
-                                      return;
-                                    }
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.only(bottom: 20),
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    child: TextFormField(
+                                        controller: _emailController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Просим заплнить поля";
+                                          }
+                                        },
+                                        style: GoogleFonts.openSans(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                        decoration:
+                                            MainConstant.decoration("e-mail"))),
+                                Container(
+                                    padding: EdgeInsets.only(bottom: 20),
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    child: TextFormField(
+                                        controller: _facebookController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Просим заплнить поля";
+                                          }
+                                        },
+                                        style: GoogleFonts.openSans(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                        decoration: MainConstant.decoration(
+                                            "Facebook"))),
+                                Container(
+                                    padding: EdgeInsets.only(bottom: 20),
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    child: TextFormField(
+                                        controller: _instagramController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Просим заплнить поля";
+                                          }
+                                        },
+                                        style: GoogleFonts.openSans(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                        decoration: MainConstant.decoration(
+                                            "Instagram"))),
+                                Container(
+                                    padding: EdgeInsets.only(bottom: 20),
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    child: TextFormField(
+                                        controller: _telegramController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Просим заплнить поля";
+                                          }
+                                        },
+                                        style: GoogleFonts.openSans(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w200,
+                                            color: Colors.black),
+                                        decoration: MainConstant.decoration(
+                                            "Telegram"))),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )),
+                  Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () {
+                                if (!_keyForm.currentState!.validate()) {
+                                  return;
+                                }
 
-                                    if (_organization == null) {
-                                      _organization = Organization();
-                                    }
-                                    _organization!.name = _nameController!.text;
-                                    _organization!.adress =
-                                        _adressController!.text;
-                                    _organization!.email =
-                                        _emailController!.text;
-                                    _organization!.facebook =
-                                        _facebookController!.text;
-                                    _organization!.instagram =
-                                        _instagramController!.text;
-                                    _organization!.region =
-                                        _regionController!.text;
-                                    _organization!.telegram =
-                                        _telegramController!.text;
-                                    _organization!.telephon =
-                                        _telephonController!.text;
+                                if (_organization == null) {
+                                  _organization = Organization();
+                                }
+                                _organization!.name = _nameController!.text;
+                                _organization!.adress = _adressController!.text;
+                                _organization!.email = _emailController!.text;
+                                _organization!.facebook =
+                                    _facebookController!.text;
+                                _organization!.instagram =
+                                    _instagramController!.text;
+                                _organization!.region = _regionController!.text;
+                                _organization!.telegram =
+                                    _telegramController!.text;
+                                _organization!.telephon =
+                                    _telephonController!.text;
 
-                                    _controller
-                                        .changeObject(
-                                            "organization/save", _organization)
-                                        .then((value) => ScaffoldMessenger.of(
-                                                context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    "Организация было изменен!"))));
-                                  },
-                                  child: Text("Сохранить")),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              ElevatedButton(
-                                  onPressed: () {}, child: Text("Отмена")),
-                            ],
-                          ))
-                    ],
-                  ),
-                ))));
+                                _controller
+                                    .changeObject(
+                                        "organization/save", _organization)
+                                    .then((value) => ScaffoldMessenger.of(
+                                            context)
+                                        .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "Организация было изменен!"))));
+                              },
+                              child: Text("Сохранить")),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {}, child: Text("Отмена")),
+                        ],
+                      ))
+                ],
+              ),
+            )));
   }
 }

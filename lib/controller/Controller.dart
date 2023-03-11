@@ -46,6 +46,14 @@ class Controller extends GetxController {
     this.exchanges.value = json.map((e) => Exchange.fromJson(e)).toList();
   }
 
+  Future<void> fetchGetAll() async {
+    final json = await api.getAll("doc/catalog/get");
+    this.catalogs.value = json.map((e) => Catalog.fromJson(e)).toList();
+
+    this.catalogslist.value = <Catalog>[].obs;
+    creatCatalogList(this.catalogs.value);
+  }
+
   Future<void> fetchgetAll(String id) async {
     final json = await api.getByParentId("doc/product/get", id);
     this.products.value = json.map((e) => Product.fromJson(e)).toList();
@@ -70,14 +78,7 @@ class Controller extends GetxController {
     return catalog;
   }
 
-  Future<void> fetchGetAll() async {
-    final json = await api.getAll("doc/catalog/get");
-    this.catalogs.value = json.map((e) => Catalog.fromJson(e)).toList();
 
-    this.catalogslist.value = <Catalog>[].obs;
-    creatCatalogList(this.catalogs.value);
-    update();
-  }
 
   creatCatalogList(List<Catalog> catalogs) {
     catalogs.forEach((element) {

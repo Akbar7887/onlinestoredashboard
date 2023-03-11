@@ -35,8 +35,9 @@ class Api {
     final response = await http.get(uri, headers: header);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
 
-      return  jsonDecode(utf8.decode(response.bodyBytes));
+      return json;
     } else {
       throw Exception("Error");
     }
@@ -47,9 +48,8 @@ class Api {
     final response = await http.get(uri, headers: header);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final json = jsonDecode(utf8.decode(response.bodyBytes));
+      return jsonDecode(utf8.decode(response.bodyBytes));
 
-      return json;
     } else {
       throw Exception("Error");
     }

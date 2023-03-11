@@ -23,10 +23,8 @@ class ApiConnector extends GetConnect{
   Future<dynamic> getRateFirst(String url, DateTime dateTime) async {
     return await api.getRatefirst(url, dateTime);
   }
-  Future<List<dynamic>> getAll(String url) async {
-    final json = await api.getall(url);
-
-    return json;
+  Future<dynamic> getAll(String url) async {
+    return await api.getall(url);
   }
 
   Future<List<dynamic>> getByParentId(String url, String id ) async {
