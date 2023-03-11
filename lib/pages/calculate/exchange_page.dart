@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:onlinestoredashboard/controller/ExchangeController.dart';
+import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:onlinestoredashboard/models/calculate/Exchange.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -17,7 +17,7 @@ import '../../widgets/onlineAppBar.dart';
 
 enum RATE { USD, EUR, UZS }
 
-final ExchangeController _exchangeController = Get.put(ExchangeController());
+final Controller _controller = Get.put(Controller());
 late ExchangeDataGridSource _exchangeDataGridSource;
 var _formatter = new DateFormat('yyyy-MM-dd');
 TextEditingController _dateController = TextEditingController();
@@ -29,12 +29,12 @@ class ExchangePage extends StatelessWidget {
   const ExchangePage({Key? key}) : super(key: key);
 
   Future<void> showDialogForm(BuildContext context) async {
-    if (_exchangeController.exchange.value.date != null) {
+    if (_controller.exchange.value.date != null) {
       _dateController.text = _formatter
-          .format(DateTime.parse(_exchangeController.exchange.value.date!));
-      _ratesController.text = _exchangeController.exchange.value.rates!;
+          .format(DateTime.parse(_controller.exchange.value.date!));
+      _ratesController.text = _controller.exchange.value.rates!;
       _valuerateController.text =
-          _exchangeController.exchange.value.ratevalue.toString();
+          _controller.exchange.value.ratevalue.toString();
     } else {
       _dateController.clear();
       _ratesController.text = RATE.USD.name;
@@ -139,18 +139,18 @@ class ExchangePage extends StatelessWidget {
                   return;
                 }
 
-                _exchangeController.exchange.value.date =
+                _controller.exchange.value.date =
                     DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                         .format(DateTime.parse(_dateController.text));
-                _exchangeController.exchange.value.rates =
+                _controller.exchange.value.rates =
                     _ratesController.text;
-                _exchangeController.exchange.value.ratevalue =
+                _controller.exchange.value.ratevalue =
                     double.parse(_valuerateController.text);
 
-                _exchangeController
-                    .save(_exchangeController.exchange.value)
+                _controller
+                    .save("doc/exchange/save", _controller.exchange.value)
                     .then((value) {
-                  _exchangeController.fetchAll();
+                  _controller.fetchAll();
                   Navigator.of(dialogContext).pop();
                 });
               },
@@ -171,7 +171,7 @@ class ExchangePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       _exchangeDataGridSource =
-          ExchangeDataGridSource(_exchangeController.exchanges.value);
+          ExchangeDataGridSource(_controller.exchanges.value);
 
       return Scaffold(
           appBar: OnlineAppBar(), // extendBodyBehindAppBar: true,
@@ -196,7 +196,7 @@ class ExchangePage extends StatelessWidget {
                     alignment: Alignment.topLeft,
                     child: ElevatedButton(
                         onPressed: () {
-                          _exchangeController.exchange = Exchange().obs;
+                          _controller.exchange = Exchange().obs;
                           Future.delayed(const Duration(seconds: 0),
                               () => showDialogForm(context));
                         },
@@ -233,7 +233,7 @@ class ExchangePage extends StatelessWidget {
                       },
                       headerRowHeight: UiO.datagrig_height,
                       onCellDoubleTap: (cell) {
-                        _exchangeController.exchange.value = _exchangeController
+                        _controller.exchange.value = _controller
                             .exchanges.value[cell.rowColumnIndex.rowIndex - 1];
                         Future.delayed(const Duration(seconds: 0),
                             () => showDialogForm(context));
@@ -320,7 +320,7 @@ class ExchangeDataGridSource extends DataGridSource {
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<int>(
                   columnName: 'id',
-                  value: _exchangeController.exchanges.value.indexOf(e) + 1),
+                  value: _controller.exchanges.value.indexOf(e) + 1),
               DataGridCell<String>(
                   columnName: "date",
                   value: _formatter.format(DateTime.parse(e.date!))),
@@ -330,8 +330,8 @@ class ExchangeDataGridSource extends DataGridSource {
                   columnName: 'delete',
                   value: IconButton(
                     onPressed: () {
-                      _exchangeController.delete(e.id.toString()).then((value) {
-                        _exchangeController.fetchAll();
+                      _controller.deleteById("doc/exchange/delete", e.id.toString()).then((value) {
+                        _controller.fetchAll();
                       });
                     },
                     icon: Icon(Icons.delete, size: 15),

@@ -2,14 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:onlinestoredashboard/controller/ProductController.dart';
+import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:onlinestoredashboard/models/catalogs/Product.dart';
-
-import '../../../controller/CatalogController.dart';
 import '../../../generated/l10n.dart';
 
-final ProductController _productController = Get.put(ProductController());
-final CatalogController _catalogController = Get.put(CatalogController());
+final Controller _controller = Get.put(Controller());
 
 class DeleteDialog extends StatelessWidget {
   DeleteDialog({@required this.url, @required int? index}) : super();
@@ -28,12 +25,12 @@ class DeleteDialog extends StatelessWidget {
             child: Text('Да'),
             onPressed: () {
               // if (object.runtimeType == Product) {
-              _productController
-                  .deleteActive(
-                      _productController.products.value[index].id.toString())
+              _controller
+                  .deleteActive("doc/product/delete",
+                  _controller.products.value[index].id!)
                   .then((value) {
-                _productController.fetchgetAll(
-                    _catalogController.catalog.value.id.toString());
+                _controller.fetchgetAll(
+                    _controller.catalog.value.id.toString());
 
                 // _catalogController.getProducts(_controller.catalog.value);
                 Navigator.of(context).pop(); // Dismiss alert dialog

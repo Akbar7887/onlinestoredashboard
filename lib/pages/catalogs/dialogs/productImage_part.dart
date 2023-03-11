@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:onlinestoredashboard/controller/ProductController.dart';
+import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:onlinestoredashboard/controller/UniversalController.dart';
 import 'package:onlinestoredashboard/models/catalogs/ProductImage.dart';
 
@@ -13,7 +13,7 @@ import '../../../generated/l10n.dart';
 import '../../../models/UiO.dart';
 
 final UniversalController _universalController = Get.find();
-final ProductController _productController = Get.find();
+final Controller _controller = Get.find();
 int idx = 0;
 Uint8List? _webImage;
 
@@ -24,7 +24,7 @@ class ProductImagePart extends StatelessWidget {
   Widget build(BuildContext context) {
     _universalController
         .getByParentId("doc/productimage/get",
-            _productController.product.value.id.toString())
+        _controller.product.value.id.toString())
         .then((value) {
       // if (value.isNotEmpty) {
       _universalController.productImages.value =
@@ -53,7 +53,7 @@ class ProductImagePart extends StatelessWidget {
 
                             Map<String, dynamic> param = {
                               "id": "",
-                              "parent_id": _productController.product.value.id
+                              "parent_id": _controller.product.value.id
                                   .toString(),
                               "mainimg": false.toString()
                             };

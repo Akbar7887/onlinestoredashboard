@@ -3,19 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:onlinestoredashboard/controller/CharacteristicController.dart';
+import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../controller/CatalogController.dart';
-import '../../../controller/ProductController.dart';
 import '../../../generated/l10n.dart';
 import '../../../models/UiO.dart';
 import '../../../models/catalogs/Characteristic.dart';
 
-final CharacteristicController _characteristicController =
-    Get.put(CharacteristicController());
-final ProductController _productController = Get.put(ProductController());
+final Controller _controller = Get.put(Controller());
 
 List<TextEditingController> _namecontroller = [];
 List<TextEditingController> _valuenamecontroller = [];
@@ -26,12 +22,15 @@ class AddcharacteristicDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _characteristicController
-        .getCharasteristic(_productController.product.value.id.toString());
+    _controller
+        .getCharasteristic("doc/characteristic/get", _controller.product.value.id.toString()).then((value) {
+      _controller.characteristics.value =
+          value.map((e) => Characteristic.fromJson(e)).toList();
+    });
     return Obx(() {
       CharacteristicDataGridSource _characteristicDataGridSource =
           CharacteristicDataGridSource(
-              characteristics: _characteristicController.characteristics,
+              characteristics: _controller.characteristics,
               emptycount: 0);
 
       return AlertDialog(
@@ -55,7 +54,7 @@ class AddcharacteristicDialog extends StatelessWidget {
                                       alignment: Alignment.topLeft,
                                       child: ElevatedButton(
                                           onPressed: () {
-                                            _characteristicController
+                                            _controller
                                                 .characteristics.value
                                                 .add(Characteristic(
                                                     name: "", valuename: ""));
@@ -63,7 +62,7 @@ class AddcharacteristicDialog extends StatelessWidget {
                                               _characteristicDataGridSource =
                                                   CharacteristicDataGridSource(
                                                       characteristics:
-                                                          _characteristicController
+                                                      _controller
                                                               .characteristics,
                                                       emptycount: 1);
                                             });
@@ -77,7 +76,7 @@ class AddcharacteristicDialog extends StatelessWidget {
                                   Expanded(
                                       child: FittedBox(
                                           fit: BoxFit.contain,
-                                          child: Text(_productController
+                                          child: Text(_controller
                                               .product.value.name!)))
                                 ],
                               )),
@@ -165,25 +164,26 @@ class AddcharacteristicDialog extends StatelessWidget {
                 return;
               }
 
-              _characteristicController.characteristics.value
+              _controller.characteristics.value
                   .forEach((element) {
-                element.name = _namecontroller[_characteristicController
+                element.name = _namecontroller[_controller
                         .characteristics.value
                         .indexOf(element)]
                     .text;
                 element.valuename = _valuenamecontroller[
-                        _characteristicController.characteristics.value
+                _controller.characteristics.value
                             .indexOf(element)]
                     .text;
-                element.product = _productController.product.value;
-                element.productId = _productController.product.value.id;
+                element.product = _controller.product.value;
+                element.productId = _controller.product.value.id;
               });
 
-              _characteristicController
+              _controller
                   .savelist("doc/characteristic/save",
-                      _characteristicController.characteristics.value)
+                  _controller.characteristics.value)
                   .then((value) {
-                _characteristicController.characteristics.value = value;
+                _controller.characteristics.value =
+                    value.map((e) => Characteristic.fromJson(e)).toList();
                 Navigator.of(context).pop(); // Dismiss alert dialog
               });
             },
@@ -209,7 +209,7 @@ class CharacteristicDataGridSource extends DataGridSource {
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<int>(
                   columnName: 'id',
-                  value: _characteristicController.characteristics.value
+                  value: _controller.characteristics.value
                           .indexOf(e) +
                       1),
               DataGridCell<String>(columnName: 'name', value: e.name),
@@ -299,20 +299,20 @@ class CharacteristicDataGridSource extends DataGridSource {
         child: InkWell(
           child: row.getCells()[3].value,
           onTap: () {
-            if (_characteristicController
+            if (_controller
                     .characteristics[dataGridRows.indexOf(row)].id ==
                 null) {
-              _characteristicController.characteristics
+              _controller.characteristics
                   .removeAt(dataGridRows.indexOf(row));
             }
-            _characteristicController
+            _controller
                 .deleteById(
                     "doc/characteristic/removecharacter",
-                    _characteristicController
+                _controller
                         .characteristics[dataGridRows.indexOf(row)].id
                         .toString())
                 .then((value) {
-              _characteristicController.characteristics
+              _controller.characteristics
                   .removeAt(dataGridRows.indexOf(row));
             });
           },

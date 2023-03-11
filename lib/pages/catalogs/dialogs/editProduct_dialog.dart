@@ -3,12 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:onlinestoredashboard/controller/ProductController.dart';
+import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:onlinestoredashboard/controller/UniversalController.dart';
-import 'package:onlinestoredashboard/models/calculate/Exchange.dart';
 import 'package:onlinestoredashboard/pages/catalogs/dialogs/productImage_part.dart';
 
-import '../../../controller/CatalogController.dart';
 import '../../../generated/l10n.dart';
 import '../../../models/UiO.dart';
 import '../../../models/calculate/Price.dart';
@@ -27,8 +25,7 @@ TextEditingController _pricesumController = TextEditingController();
 String _id = '';
 final _keyEdit = GlobalKey<FormState>();
 final _keyPrice = GlobalKey<FormState>();
-final CatalogController _catalogController = Get.find();
-final ProductController _productController = Get.find();
+final Controller _controller = Get.find();
 final UniversalController _universalController = Get.find();
 
 var _formatter = new DateFormat('yyyy-MM-dd');
@@ -46,7 +43,7 @@ class EditProductDialog extends StatelessWidget {
                     width: MediaQuery.of(context).size.width / 2,
                     child: DropdownButton<Catalog>(
                       isExpanded: true,
-                      items: _catalogController.catalogslist.value
+                      items: _controller.catalogslist.value
                           .map<DropdownMenuItem<Catalog>>((e) {
                         return DropdownMenuItem(
                           child: Text(e.catalogname!),
@@ -54,13 +51,13 @@ class EditProductDialog extends StatelessWidget {
                         );
                       }).toList(),
                       onChanged: (value) {
-                        setState(() => _catalogController.catalogslist.value
+                        setState(() => _controller.catalogslist.value
                             .firstWhere((element) => element.id == value!.id));
                       },
-                      value: _catalogController.catalog.value.id == null? null: _catalogController.catalogslist.value.firstWhere(
+                      value: _controller.catalog.value.id == null? null: _controller.catalogslist.value.firstWhere(
                           (element) =>
                               element.id ==
-                              _catalogController.catalog.value.id),
+                                  _controller.catalog.value.id),
                     )),
                 Container(
                     alignment: Alignment.topLeft, child: Text('№ ${_id}')),
@@ -107,7 +104,7 @@ class EditProductDialog extends StatelessWidget {
   Widget priceTab(BuildContext context) {
     _universalController
         .getByParentId(
-            "doc/price/get", _productController.product.value.id.toString())
+            "doc/price/get", _controller.product.value.id.toString())
         .then((value) => _universalController.prices.value =
             value.map((e) => Price.fromJson(e)).toList());
     return Container(
@@ -364,7 +361,7 @@ class EditProductDialog extends StatelessWidget {
                     double.parse(_priceController.text);
 
                 _universalController.price.value.product =
-                    _productController.product.value;
+                    _controller.product.value;
                 _universalController.price.value.pricesum =
                     double.parse(_pricesumController.text);
                 _universalController
@@ -390,20 +387,20 @@ class EditProductDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (_productController.product.value.id != null) {
-        _nameController.text = _productController.product.value.name!;
+      if (_controller.product.value.id != null) {
+        _nameController.text = _controller.product.value.name!;
         _descriptionController.text =
-            _productController.product.value.description!;
-        _id = _productController.product.value.id.toString();
+        _controller.product.value.description!;
+        _id = _controller.product.value.id.toString();
       } else {
         _id = '';
         _nameController.clear();
         _descriptionController.clear();
       }
-      if (_catalogController.catalog.value.id != null) {
-        _catalogController.catalog.value = _catalogController.catalogslist.value
+      if (_controller.catalog.value.id != null) {
+        _controller.catalog.value = _controller.catalogslist.value
             .firstWhere(
-                (element) => element.id == _catalogController.catalog.value.id);
+                (element) => element.id == _controller.catalog.value.id);
       }
 
       return AlertDialog(
@@ -445,19 +442,20 @@ class EditProductDialog extends StatelessWidget {
                 return;
               }
               Product? _product;
-              _product = _productController.product.value;
+              _product = _controller.product.value;
               if (_product == null) {
                 _product = Product();
               }
               _product.name = _nameController.text;
               _product.description = _descriptionController.text;
 
-              _product.catalog = _catalogController.catalog.value;
-              _productController
+              _product.catalog = _controller.catalog.value;
+              _controller
                   .save("doc/product/save", _product)
                   .then((value) {
-                _productController.fetchgetAll(
-                    _catalogController.catalog.value.id.toString());
+                _controller.product.value = Product.fromJson(value);
+                _controller.fetchgetAll(
+                    _controller.catalog.value.id.toString());
                 Navigator.of(context).pop(); // Dismiss alert dialog
               });
             },

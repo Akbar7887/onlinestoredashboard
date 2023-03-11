@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:get/get.dart';
-import 'package:onlinestoredashboard/controller/CatalogController.dart';
-import 'package:onlinestoredashboard/controller/ProductController.dart';
+import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 import 'package:onlinestoredashboard/models/catalogs/Catalog.dart';
 import 'package:onlinestoredashboard/models/catalogs/Product.dart';
-import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -16,14 +13,13 @@ import 'dialogs/addcharacteristic_dialog.dart';
 import 'dialogs/delete_dialog.dart';
 import 'dialogs/editProduct_dialog.dart';
 
-final CatalogController _catalogController = Get.put(CatalogController());
-final ProductController _productController = Get.put(ProductController());
+final Controller _controller = Get.put(Controller());
 
 late ProductDataGridSource _productDataGridSource;
 // final _keyForm = GlobalKey<FormState>();
 Catalog? dropDownValue;
 
-class ProductPage extends GetView<CatalogController> {
+class ProductPage extends GetView<Controller> {
   ProductPage() : super();
 
   Widget table(BuildContext context) {
@@ -40,10 +36,10 @@ class ProductPage extends GetView<CatalogController> {
                         alignment: Alignment.topLeft,
                         child: ElevatedButton(
                             onPressed: () {
-                              if (_catalogController.catalog.value.id == null) {
+                              if (_controller.catalog.value.id == null) {
                                 return;
                               }
-                              _productController.product.value.id = null;
+                              _controller.product.value.id = null;
                               Future.delayed(
                                   const Duration(seconds: 0),
                                   () => showDialog(
@@ -66,7 +62,7 @@ class ProductPage extends GetView<CatalogController> {
                             isExpanded: true,
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder()),
-                            items: _catalogController.catalogslist.value
+                            items: _controller.catalogslist.value
                                 .map((e) => DropdownMenuItem(
                                       child: Text(e.catalogname!),
                                       value: e,
@@ -75,11 +71,11 @@ class ProductPage extends GetView<CatalogController> {
                             value: dropDownValue,
                             onChanged: (value) {
                               dropDownValue = value!;
-                              _productController
+                              _controller
                                   .fetchgetAll(value.id.toString())
                                   .then((value) {
                                 _productDataGridSource = ProductDataGridSource(
-                                    _productController.products.value);
+                                    _controller.products.value);
                               });
                             }))
                   ],
@@ -117,10 +113,10 @@ class ProductPage extends GetView<CatalogController> {
                         // if (_catalogController.catalog.value.id == null) {
                         //   return;
                         // }
-                        _productController.product.value = _productController
+                        _controller.product.value = _controller
                             .products.value[cell.rowColumnIndex.rowIndex - 1];
-                        _catalogController.catalog.value =
-                            _productController.product.value.catalog!;
+                        _controller.catalog.value =
+                            _controller.product.value.catalog!;
 
                         Future.delayed(
                             const Duration(seconds: 0),
@@ -181,7 +177,7 @@ class ProductPage extends GetView<CatalogController> {
     return Obx(() {
       MainConstant.getRate(DateTime.now());
       _productDataGridSource =
-          ProductDataGridSource(_productController.products.value);
+          ProductDataGridSource(_controller.products.value);
       return SafeArea(
         child: Column(children: [
           Expanded(flex: 3, child: table(context)),
@@ -201,7 +197,7 @@ class ProductDataGridSource extends DataGridSource {
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<int>(
                   columnName: 'id',
-                  value: _productController.products.value.indexOf(e) + 1),
+                  value: _controller.products.value.indexOf(e) + 1),
               DataGridCell<String>(columnName: 'name', value: e.name),
               DataGridCell<Icon>(
                   columnName: 'delete', value: Icon(Icons.more_vert_outlined)),
@@ -233,12 +229,11 @@ class ProductDataGridSource extends DataGridSource {
                         PopupMenuItem(
                             value: 0,
                             onTap: () async {
-                              if (_catalogController.catalog.value.id == null) {
+                              if (_controller.catalog.value.id == null) {
                                 return;
                               }
-                              _productController.product.value =
-                                  _productController.products
-                                      .value[dataGridRows.indexOf(row)];
+                              _controller.product.value = _controller
+                                  .products.value[dataGridRows.indexOf(row)];
 
                               Future.delayed(
                                   const Duration(seconds: 0),
@@ -264,9 +259,8 @@ class ProductDataGridSource extends DataGridSource {
                             )),
                         PopupMenuItem(
                           onTap: () {
-                            _productController.product.value =
-                                _productController
-                                    .products.value[dataGridRows.indexOf(row)];
+                            _controller.product.value = _controller
+                                .products.value[dataGridRows.indexOf(row)];
                             Future.delayed(
                                 const Duration(seconds: 0),
                                 () => showDialog(
@@ -292,9 +286,8 @@ class ProductDataGridSource extends DataGridSource {
                         ),
                         PopupMenuItem(
                           onTap: () {
-                            _productController.product.value =
-                                _productController
-                                    .products.value[dataGridRows.indexOf(row)];
+                            _controller.product.value = _controller
+                                .products.value[dataGridRows.indexOf(row)];
                             Future.delayed(
                                 const Duration(seconds: 0),
                                 () => showDialog(

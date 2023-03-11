@@ -1,25 +1,79 @@
+import 'dart:typed_data';
+
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/bindings_interface.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:onlinestoredashboard/controller/ApiConnector.dart';
-import 'package:onlinestoredashboard/controller/CatalogController.dart';
-import 'package:onlinestoredashboard/controller/CharacteristicController.dart';
-import 'package:onlinestoredashboard/controller/ExchangeController.dart';
-import 'package:onlinestoredashboard/controller/ProductController.dart';
 import 'package:onlinestoredashboard/controller/UniversalController.dart';
 import 'package:onlinestoredashboard/models/Organization.dart';
+
+import '../models/calculate/Exchange.dart';
+import '../models/catalogs/Catalog.dart';
+import '../models/catalogs/Characteristic.dart';
+import '../models/catalogs/Product.dart';
 
 class Controller extends GetxController {
   final api = ApiConnector();
   Organization? organization;
   var zero = 0.obs;
+  var catalogs = <Catalog>[].obs;
+  var catalogslist = <Catalog>[].obs;
+  Rx<Catalog> catalog = Catalog().obs;
+  var characteristics = <Characteristic>[].obs;
+  var exchanges = <Exchange>[].obs;
+  var exchange = Exchange().obs;
+  var products = <Product>[].obs;
+  Rx<Product> product = Product().obs;
+
+
+
 
   @override
   void onInit() {
-    super.onInit();
+    fetchGetAll();
+    fetchAll();
     fetchListOrganization();
+    fetchgetAll("0");
+
+    super.onInit();
   }
+  Future<void> fetchAll() async {
+    final json = await api.getAll("doc/exchange/get");
+    this.exchanges.value = json.map((e) => Exchange.fromJson(e)).toList();
+  }
+
+  Future<void> fetchgetAll(String id) async {
+    final json = await api.getByParentId("doc/product/get", id);
+    this.products.value = json.map((e) => Product.fromJson(e)).toList();
+  }
+
+
+  Future<dynamic> save(String url, dynamic object) async {
+    return await api.save(url, object);
+
+  }
+
+  Future<Catalog> savesub(String url, Catalog catalog, int id) async {
+    final json = await api.savesub(url, catalog, id.toString());
+    catalog = Catalog.fromJson(json);
+    return catalog;
+  }
+
+  Future<void> fetchGetAll() async {
+    final json = await api.getAll("doc/catalog/get");
+    this.catalogs.value = json.map((e) => Catalog.fromJson(e)).toList();
+
+    this.catalogslist.value = <Catalog>[].obs;
+    creatCatalogList(this.catalogs.value);
+    update();
+  }
+
+  creatCatalogList(List<Catalog> catalogs) {
+    catalogs.forEach((element) {
+      this.catalogslist.value.add(element);
+      creatCatalogList(element.catalogs!);
+      // update();
+    });
+  }
+
 
   fetchListOrganization() async {
     final json = await api.getfirst("organization/get");
@@ -44,16 +98,34 @@ class Controller extends GetxController {
   Future<bool> deleteById(url, id) async {
     return await api.deleteById(url, id);
   }
+
+  Future<bool> deleteActive(String url, int id) async {
+    return await api.deleteActive(url, id.toString());
+  }
+
+  Future<dynamic> saveImage(
+      String url, Uint8List data, Map<String, dynamic> param, String name) async {
+    return await api.saveImage(url, data, param, name);
+  }
+
+  Future<dynamic> getCharasteristic(String url, String id) async {
+    return await api.getByParentId(url, id);
+  }
+
+  Future<dynamic> savelist(String url,
+      List<Characteristic> list,
+  ) async {
+    return  await api.saveList(url, list);
+  }
+
+
 }
+
 
 class HomeBindings extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => Controller());
-    Get.lazyPut(() => CatalogController());
-    Get.lazyPut(() => ProductController());
-    Get.lazyPut(() => CharacteristicController());
-    Get.lazyPut(() => ExchangeController());
     Get.lazyPut(() => UniversalController());
   }
 }

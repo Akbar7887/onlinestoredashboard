@@ -4,7 +4,7 @@ import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:onlinestoredashboard/controller/CatalogController.dart';
+import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:onlinestoredashboard/widgets/header.dart';
 
 import '../../generated/l10n.dart';
@@ -13,7 +13,7 @@ import '../../models/catalogs/Catalog.dart';
 import '../../models/constants/main_constant.dart';
 import '../../widgets/onlineAppBar.dart';
 
-final CatalogController _catalogController = Get.put(CatalogController());
+final Controller _controller = Get.put(Controller());
 Catalog? _catalog;
 List<DropdownMenuItem<Catalog>> _catalogfordrop = [];
 Catalog? dropDownValue;
@@ -53,7 +53,7 @@ class CatalogPage extends StatelessWidget {
           Container(
               child: TreeView(
                   nodes: createCatalogHiriarh(
-                      context, _catalogController.catalogs)))
+                      context, _controller.catalogs)))
         ],
       ))));
     });
@@ -96,11 +96,11 @@ class CatalogPage extends StatelessWidget {
                             padding: EdgeInsets.only(right: 1),
                             child: IconButton(
                               onPressed: () {
-                                _catalogController
+                                _controller
                                     .deleteActive(
                                         "doc/catalog/deleteactive", e.id!)
                                     .then((value) =>
-                                        _catalogController.fetchGetAll());
+                                        _controller.fetchGetAll());
                               },
                               icon: Icon(
                                 Icons.delete,
@@ -124,7 +124,7 @@ class CatalogPage extends StatelessWidget {
                                 Map<String, dynamic> param = {
                                   "id": e.id.toString()
                                 };
-                                _catalogController.saveImage(
+                                _controller.saveImage(
                                     "doc/catalog/upload", f, param, image.name);
                               }
                             },
@@ -178,7 +178,7 @@ class CatalogPage extends StatelessWidget {
     //       _catalogController.catalogs.first.parent!.id == element.id);
     _catalogfordrop = [];
     _catalogs = [];
-    getDropDownCatalogs(_catalogController.catalogs);
+    getDropDownCatalogs(_controller.catalogs);
 
     if (_catalog != null) {
       if (_catalog!.parent != null) {
@@ -242,26 +242,27 @@ class CatalogPage extends StatelessWidget {
                           return;
                         }
 
-                        _catalogController.catalog.value.catalogname =
+                        _controller.catalog.value.catalogname =
                             _controllercatalogName.text;
-                        _catalogController.catalog.value.parent = dropDownValue;
+                        _controller.catalog.value.parent = dropDownValue;
 
-                        if (_catalogController.catalog.value.parent == null) {
-                          _catalogController
+                        if (_controller.catalog.value.parent == null) {
+                          _controller
                               .save("doc/catalog/save",
-                                  _catalogController.catalog.value)
+                              _controller.catalog.value)
                               .then((value) {
-                            _catalogController.fetchGetAll();
+                                _controller.catalog.value = Catalog.fromJson(value);
+                            _controller.fetchGetAll();
                             Navigator.of(dialogContext).pop();
                           });
                         } else {
-                          _catalogController
+                          _controller
                               .savesub(
                                   "doc/catalog/savesub",
-                                  _catalogController.catalog.value,
+                              _controller.catalog.value,
                                   dropDownValue!.id!)
                               .then((value) {
-                            _catalogController.fetchGetAll();
+                            _controller.fetchGetAll();
                             Navigator.of(dialogContext).pop();
                           });
                         }
