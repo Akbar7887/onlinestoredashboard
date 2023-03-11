@@ -122,7 +122,7 @@ class Controller extends GetxController {
     return await api.saveImage(url, data, param, name);
   }
 
-  Future<dynamic> getCharasteristic(String url, String id) async {
+  Future<List<dynamic>> getCharasteristic(String url, String id) async {
     return await api.getByParentId(url, id);
   }
 

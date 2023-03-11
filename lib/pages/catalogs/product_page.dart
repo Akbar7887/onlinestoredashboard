@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../generated/l10n.dart';
+import '../../models/catalogs/Characteristic.dart';
 import '../../models/constants/main_constant.dart';
 import 'dialogs/addcharacteristic_dialog.dart';
 import 'dialogs/delete_dialog.dart';
@@ -36,9 +37,9 @@ class ProductPage extends GetView<Controller> {
                         alignment: Alignment.topLeft,
                         child: ElevatedButton(
                             onPressed: () {
-                              if (_controller.catalog.value.id == null) {
-                                return;
-                              }
+                              // if (_controller.catalog.value.id == null) {
+                              //   return;
+                              // }
                               _controller.product = Product().obs;
                               Future.delayed(
                                   const Duration(seconds: 0),
@@ -109,15 +110,18 @@ class ProductPage extends GetView<Controller> {
                       },
                       headerRowHeight: UiO.datagrig_height,
                       onCellTap: ((cell) {
-                        // print("pk");
-                        // if (_catalogController.catalog.value.id == null) {
-                        //   return;
-                        // }
+
                         _controller.product.value = _controller
                             .products.value[cell.rowColumnIndex.rowIndex - 1];
                         _controller.catalog.value =
                             _controller.product.value.catalog!;
-
+                        _controller
+                            .getCharasteristic(
+                            "doc/characteristic/get", _controller.product.value.id.toString())
+                            .then((value) {
+                          _controller.characteristics.value =
+                              value.map((e) => Characteristic.fromJson(e)).toList();
+                        });
                         Future.delayed(
                             const Duration(seconds: 0),
                             () => showDialog(

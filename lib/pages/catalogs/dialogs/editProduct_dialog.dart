@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/controller/Controller.dart';
+import 'package:onlinestoredashboard/pages/catalogs/dialogs/addcharacteristic_dialog.dart';
 import 'package:onlinestoredashboard/pages/catalogs/dialogs/productImage_part.dart';
 
 import '../../../generated/l10n.dart';
@@ -25,7 +26,6 @@ String _id = '';
 final _keyEdit = GlobalKey<FormState>();
 final _keyPrice = GlobalKey<FormState>();
 final Controller _controller = Get.find();
-
 
 var _formatter = new DateFormat('yyyy-MM-dd');
 var _formatterToSend = new DateFormat('yyyy-MM-ddTHH:mm:ss');
@@ -53,10 +53,11 @@ class EditProductDialog extends StatelessWidget {
                         setState(() => _controller.catalogslist.value
                             .firstWhere((element) => element.id == value!.id));
                       },
-                      value: _controller.catalog.value.id == null? null: _controller.catalogslist.value.firstWhere(
-                          (element) =>
-                              element.id ==
-                                  _controller.catalog.value.id),
+                      value: _controller.catalog.value.id == null
+                          ? null
+                          : _controller.catalogslist.value.firstWhere(
+                              (element) =>
+                                  element.id == _controller.catalog.value.id),
                     )),
                 Container(
                     alignment: Alignment.topLeft, child: Text('№ ${_id}')),
@@ -102,8 +103,7 @@ class EditProductDialog extends StatelessWidget {
 
   Widget priceTab(BuildContext context) {
     _controller
-        .getByParentId(
-            "doc/price/get", _controller.product.value.id.toString())
+        .getByParentId("doc/price/get", _controller.product.value.id.toString())
         .then((value) => _controller.prices.value =
             value.map((e) => Price.fromJson(e)).toList());
     return Container(
@@ -131,8 +131,9 @@ class EditProductDialog extends StatelessWidget {
                     itemBuilder: (context, idx) {
                       return InkWell(
                           onTap: () {
+
                             _controller.price.value =
-                            _controller.prices.value[idx];
+                                _controller.prices.value[idx];
                             MainConstant.getRate(DateTime.parse(
                                 _controller.prices.value[idx].date!));
                             Future.delayed(const Duration(seconds: 0),
@@ -157,7 +158,7 @@ class EditProductDialog extends StatelessWidget {
                                                 // style: TextStyle(fontSize: 20),
                                                 _formatter
                                                     .format(DateTime.parse(
-                                                  _controller
+                                              _controller
                                                   .prices.value[idx].date!,
                                             )))),
                                         VerticalDivider(),
@@ -211,12 +212,11 @@ class EditProductDialog extends StatelessWidget {
 
   Future<void> showdialogPrice(BuildContext context) async {
     if (_controller.price.value.date != null) {
-      _dateController.text = _formatter
-          .format(DateTime.parse(_controller.price.value.date!));
+      _dateController.text =
+          _formatter.format(DateTime.parse(_controller.price.value.date!));
       _ratesController.text = _controller.price.value.rates!;
       _priceController.text = _controller.price.value.price.toString();
-      _pricesumController.text =
-          _controller.price.value.pricesum.toString();
+      _pricesumController.text = _controller.price.value.pricesum.toString();
     } else {
       _dateController.text = _formatter.format(DateTime.now());
       _ratesController.text = RATE.USD.name;
@@ -304,7 +304,7 @@ class EditProductDialog extends StatelessWidget {
                                   onChanged: (value) {
                                     _pricesumController.text =
                                         (double.parse(value) *
-                                            _controller.rate.value)
+                                                _controller.rate.value)
                                             .toString();
                                   },
                                   onEditingComplete: () {},
@@ -359,8 +359,7 @@ class EditProductDialog extends StatelessWidget {
                 _controller.price.value.price =
                     double.parse(_priceController.text);
 
-                _controller.price.value.product =
-                    _controller.product.value;
+                _controller.price.value.product = _controller.product.value;
                 _controller.price.value.pricesum =
                     double.parse(_pricesumController.text);
                 _controller
@@ -388,8 +387,7 @@ class EditProductDialog extends StatelessWidget {
     return Obx(() {
       if (_controller.product.value.id != null) {
         _nameController.text = _controller.product.value.name!;
-        _descriptionController.text =
-        _controller.product.value.description!;
+        _descriptionController.text = _controller.product.value.description!;
         _id = _controller.product.value.id.toString();
       } else {
         _id = '';
@@ -397,9 +395,8 @@ class EditProductDialog extends StatelessWidget {
         _descriptionController.clear();
       }
       if (_controller.catalog.value.id != null) {
-        _controller.catalog.value = _controller.catalogslist.value
-            .firstWhere(
-                (element) => element.id == _controller.catalog.value.id);
+        _controller.catalog.value = _controller.catalogslist.value.firstWhere(
+            (element) => element.id == _controller.catalog.value.id);
       }
 
       return AlertDialog(
@@ -409,7 +406,7 @@ class EditProductDialog extends StatelessWidget {
                 width: MediaQuery.of(context).size.width / 1.2,
                 height: MediaQuery.of(context).size.height,
                 child: DefaultTabController(
-                    length: 3,
+                    length: 4,
                     child: Form(
                         key: _keyEdit,
                         child: Column(children: [
@@ -425,13 +422,15 @@ class EditProductDialog extends StatelessWidget {
                               Tab(text: S.of(context).main),
                               Tab(text: S.of(context).price),
                               Tab(text: S.of(context).image_store),
+                              Tab(text: S.of(context).characteristics),
                             ],
                           )),
                           Expanded(
                               child: TabBarView(children: [
                             mainTab(context),
                             priceTab(context),
-                            ProductImagePart()
+                            ProductImagePart(),
+                            AddcharacteristicDialog()
                           ]))
                         ]))))),
         actions: <Widget>[
@@ -449,12 +448,10 @@ class EditProductDialog extends StatelessWidget {
               _product.description = _descriptionController.text;
 
               _product.catalog = _controller.catalog.value;
-              _controller
-                  .save("doc/product/save", _product)
-                  .then((value) {
+              _controller.save("doc/product/save", _product).then((value) {
                 _controller.product.value = Product.fromJson(value);
-                _controller.fetchgetAll(
-                    _controller.catalog.value.id.toString());
+                _controller
+                    .fetchgetAll(_controller.catalog.value.id.toString());
                 Navigator.of(context).pop(); // Dismiss alert dialog
               });
             },

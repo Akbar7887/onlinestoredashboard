@@ -43,7 +43,7 @@ class Api {
     }
   }
 
-  Future<dynamic> getall(String url) async {
+  Future<List<dynamic>> getall(String url) async {
     Uri uri = Uri.parse("${UiO.url}${url}");
     final response = await http.get(uri, headers: header);
 
@@ -55,7 +55,7 @@ class Api {
     }
   }
 
-  Future<dynamic> getByParentId(String url, String id) async {
+  Future<List<dynamic>> getByParentId(String url, String id) async {
     Map<String, dynamic> param = {"id": id};
     Uri uri = Uri.parse("${UiO.url}${url}").replace(queryParameters: param);
     final response = await http.get(uri, headers: header);

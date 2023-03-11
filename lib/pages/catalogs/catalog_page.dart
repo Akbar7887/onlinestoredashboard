@@ -88,22 +88,7 @@ class CatalogPage extends StatelessWidget {
                           ),
 
                           // Spacer(),
-                          Padding(
-                            padding: EdgeInsets.only(right: 1),
-                            child: IconButton(
-                              onPressed: () {
-                                _controller
-                                    .deleteActive(
-                                        "doc/catalog/deleteactive", e.id!)
-                                    .then((value) => _controller.fetchGetAll());
-                              },
-                              icon: Icon(
-                                Icons.delete,
-                                color: Colors.blue,
-                                size: 15,
-                              ),
-                            ),
-                          ),
+
                           Container(
                               child: IconButton(
                             icon: Icon(
@@ -137,6 +122,21 @@ class CatalogPage extends StatelessWidget {
                               color: Colors.blue,
                             );
                           })),
+                          Padding(
+                            padding: EdgeInsets.only(right: 1),
+                            child: IconButton(
+                              onPressed: () {
+                                _controller
+                                    .deleteActive(
+                                    "doc/catalog/deleteactive", e.id!)
+                                    .then((value) => _controller.fetchGetAll());
+                              },
+                              icon: Icon(
+                                Icons.delete,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
                         ],
                       )),
                     ))),

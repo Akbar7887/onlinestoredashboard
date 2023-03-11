@@ -22,180 +22,173 @@ class AddcharacteristicDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _controller
-        .getCharasteristic("doc/characteristic/get", _controller.product.value.id.toString()).then((value) {
-      _controller.characteristics.value =
-          value.map((e) => Characteristic.fromJson(e)).toList();
-    });
     return Obx(() {
       CharacteristicDataGridSource _characteristicDataGridSource =
           CharacteristicDataGridSource(
-              characteristics: _controller.characteristics,
-              emptycount: 0);
+              characteristics: _controller.characteristics, emptycount: 0);
 
-      return AlertDialog(
-        title: Text(
-            '${S.of(context).form_dialog} ${S.of(context).characteristics}'),
-        content: SafeArea(
-            child: Form(
-                key: _keyForm,
-                child:
-                    StatefulBuilder(builder: (BuildContext context, setState) {
-                  return Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      child: Column(
-                        children: [
-                          Container(
-                              height: 30,
-                              child: Row(
-                                children: [
-                                  Container(
-                                      alignment: Alignment.topLeft,
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            _controller
-                                                .characteristics.value
-                                                .add(Characteristic(
-                                                    name: "", valuename: ""));
-                                            setState(() {
-                                              _characteristicDataGridSource =
-                                                  CharacteristicDataGridSource(
-                                                      characteristics:
-                                                      _controller
-                                                              .characteristics,
-                                                      emptycount: 1);
-                                            });
-                                          },
-                                          style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.grey[800])),
-                                          child: Text("Добавить"))),
-                                  SizedBox(width: 50),
-                                  Expanded(
-                                      child: FittedBox(
-                                          fit: BoxFit.contain,
-                                          child: Text(_controller
-                                              .product.value.name!)))
-                                ],
-                              )),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Expanded(
-                              child: SfDataGridTheme(
-                            data: SfDataGridThemeData(
-                              headerColor: Colors.grey[700],
-                              rowHoverColor: Colors.grey,
-                              gridLineStrokeWidth: 1,
-                              rowHoverTextStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
+      return SafeArea(
+          child: Form(
+              key: _keyForm,
+              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Column(children: [
+                    Container(
+                        height: 30,
+                        child: Row(
+                          children: [
+                            Container(
+                                alignment: Alignment.topLeft,
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      _controller.characteristics.value.add(
+                                          Characteristic(
+                                              name: "", valuename: ""));
+                                      // setState(() {
+                                      _characteristicDataGridSource =
+                                          CharacteristicDataGridSource(
+                                              characteristics:
+                                                  _controller.characteristics,
+                                              emptycount: 1);
+                                      // });
+                                    },
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.grey[800])),
+                                    child: Text("Добавить"))),
+                            SizedBox(width: 50),
+                            Expanded(
+                                child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child:
+                                        Text(_controller.product.value.name!)))
+                          ],
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                        child: SfDataGridTheme(
+                      data: SfDataGridThemeData(
+                        headerColor: Colors.grey[700],
+                        rowHoverColor: Colors.grey,
+                        gridLineStrokeWidth: 1,
+                        rowHoverTextStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
+                      ),
+                      child: SfDataGrid(
+                          source: _characteristicDataGridSource,
+                          selectionMode: SelectionMode.single,
+                          headerGridLinesVisibility:
+                              GridLinesVisibility.vertical,
+                          columnWidthMode: ColumnWidthMode.fill,
+                          isScrollbarAlwaysShown: true,
+
+                          // allowFiltering: true,
+                          allowSorting: true,
+                          allowEditing: true,
+                          gridLinesVisibility: GridLinesVisibility.both,
+                          onQueryRowHeight: (details) {
+                            return UiO.datagrig_height;
+                          },
+                          headerRowHeight: UiO.datagrig_height,
+                          onCellTap: (cell) {},
+                          columns: [
+                            GridColumn(
+                                columnName: 'id',
+                                width: 50,
+                                label: Center(
+                                  child: Text(
+                                    "№",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )),
+                            GridColumn(
+                              columnName: 'name',
+                              // width: MediaQuery.of(context).size.width/2,
+                              label: Center(
+                                child: Text(
+                                  S.of(context).name,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                            child: SfDataGrid(
-                                source: _characteristicDataGridSource,
-                                selectionMode: SelectionMode.single,
-                                headerGridLinesVisibility:
-                                    GridLinesVisibility.vertical,
-                                columnWidthMode: ColumnWidthMode.fill,
-                                isScrollbarAlwaysShown: true,
+                            GridColumn(
+                              columnName: 'valuename',
+                              // width: MediaQuery.of(context).size.width/2,
+                              label: Center(
+                                child: Text(
+                                  S.of(context).valuename,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                                columnName: "delete",
+                                label: Icon(Icons.more_vert_outlined)),
+                          ]),
+                    )),
+                    Container(
+                      child: Row(
+                        children: [
+                          ElevatedButton(
+                              onPressed: () {
+                                if (!_keyForm.currentState!.validate()) {
+                                  return;
+                                }
 
-                                // allowFiltering: true,
-                                allowSorting: true,
-                                allowEditing: true,
-                                gridLinesVisibility: GridLinesVisibility.both,
-                                onQueryRowHeight: (details) {
-                                  return UiO.datagrig_height;
-                                },
-                                headerRowHeight: UiO.datagrig_height,
-                                onCellTap: (cell) {},
-                                columns: [
-                                  GridColumn(
-                                      columnName: 'id',
-                                      width: 50,
-                                      label: Center(
-                                        child: Text(
-                                          "№",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      )),
-                                  GridColumn(
-                                    columnName: 'name',
-                                    // width: MediaQuery.of(context).size.width/2,
-                                    label: Center(
-                                      child: Text(
-                                        S.of(context).name,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'valuename',
-                                    // width: MediaQuery.of(context).size.width/2,
-                                    label: Center(
-                                      child: Text(
-                                        S.of(context).valuename,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                      columnName: "delete",
-                                      label: Icon(Icons.more_vert_outlined)),
-                                ]),
-                          ))
+                                _controller.characteristics.value
+                                    .forEach((element) {
+                                  element.name = _namecontroller[_controller
+                                          .characteristics.value
+                                          .indexOf(element)]
+                                      .text;
+                                  element.valuename = _valuenamecontroller[
+                                          _controller.characteristics.value
+                                              .indexOf(element)]
+                                      .text;
+                                  element.product = _controller.product.value;
+                                  element.productId =
+                                      _controller.product.value.id;
+                                });
+
+                                _controller
+                                    .savelist("doc/characteristic/save",
+                                        _controller.characteristics.value)
+                                    .then((value) {
+                                  _controller.characteristics.value = value
+                                      .map((e) => Characteristic.fromJson(e))
+                                      .toList();
+                                  Navigator.of(context)
+                                      .pop(); // Dismiss alert dialog
+                                });
+                              },
+                              child: Text(S.of(context).save)),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pop(); // Dismiss alert dialog
+                            },
+                            child: Text(S.of(context).cancel),
+                          )
                         ],
-                      ));
-                }))),
-        actions: [
-          TextButton(
-            child: Text(S.of(context).save),
-            onPressed: () {
-              if (!_keyForm.currentState!.validate()) {
-                return;
-              }
-
-              _controller.characteristics.value
-                  .forEach((element) {
-                element.name = _namecontroller[_controller
-                        .characteristics.value
-                        .indexOf(element)]
-                    .text;
-                element.valuename = _valuenamecontroller[
-                _controller.characteristics.value
-                            .indexOf(element)]
-                    .text;
-                element.product = _controller.product.value;
-                element.productId = _controller.product.value.id;
-              });
-
-              _controller
-                  .savelist("doc/characteristic/save",
-                  _controller.characteristics.value)
-                  .then((value) {
-                _controller.characteristics.value =
-                    value.map((e) => Characteristic.fromJson(e)).toList();
-                Navigator.of(context).pop(); // Dismiss alert dialog
-              });
-            },
-          ),
-          TextButton(
-            child: Text(S.of(context).cancel),
-            onPressed: () {
-              Navigator.of(context).pop(); // Dismiss alert dialog
-            },
-          ),
-        ],
-      );
+                      ),
+                    )
+                  ]))));
     });
   }
 }
@@ -209,9 +202,7 @@ class CharacteristicDataGridSource extends DataGridSource {
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<int>(
                   columnName: 'id',
-                  value: _controller.characteristics.value
-                          .indexOf(e) +
-                      1),
+                  value: _controller.characteristics.value.indexOf(e) + 1),
               DataGridCell<String>(columnName: 'name', value: e.name),
               DataGridCell<String>(columnName: 'valuename', value: e.valuename),
               DataGridCell<Icon>(
@@ -223,19 +214,7 @@ class CharacteristicDataGridSource extends DataGridSource {
               // DataGridCell<bool>(columnName: 'editable', value: false),
             ]))
         .toList();
-    // for (int i = 0; i < emptycount; i++) {
-    //   dataGridRows.add(const DataGridRow(cells: [
-    //     DataGridCell(columnName: 'id', value: ""),
-    //     DataGridCell(columnName: 'name', value: ""),
-    //     DataGridCell(columnName: 'valuename', value: ""),
-    //     DataGridCell(
-    //         columnName: 'delete',
-    //         value: Icon(
-    //           Icons.delete,
-    //           size: 15,
-    //         )),
-    //   ]));
-    // }
+
     _namecontroller = [];
     _valuenamecontroller = [];
     dataGridRows.forEach((element) {
@@ -299,21 +278,17 @@ class CharacteristicDataGridSource extends DataGridSource {
         child: InkWell(
           child: row.getCells()[3].value,
           onTap: () {
-            if (_controller
-                    .characteristics[dataGridRows.indexOf(row)].id ==
+            if (_controller.characteristics[dataGridRows.indexOf(row)].id ==
                 null) {
-              _controller.characteristics
-                  .removeAt(dataGridRows.indexOf(row));
+              _controller.characteristics.removeAt(dataGridRows.indexOf(row));
             }
             _controller
                 .deleteById(
                     "doc/characteristic/removecharacter",
-                _controller
-                        .characteristics[dataGridRows.indexOf(row)].id
+                    _controller.characteristics[dataGridRows.indexOf(row)].id
                         .toString())
                 .then((value) {
-              _controller.characteristics
-                  .removeAt(dataGridRows.indexOf(row));
+              _controller.characteristics.removeAt(dataGridRows.indexOf(row));
             });
           },
         ),
