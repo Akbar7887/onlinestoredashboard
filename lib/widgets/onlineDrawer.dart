@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 
 import '../controller/UniversalController.dart';
 import '../generated/l10n.dart';
 
-final UniversalController _universalController = Get.find();
+final Controller _controller = Get.find();
 
 class OnlineDrawer extends StatelessWidget {
   const OnlineDrawer({Key? key}) : super(key: key);
@@ -51,7 +52,7 @@ class OnlineDrawer extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   onTap: () {
-                    _universalController.page.value = 0;
+                    _controller.page.value = 0;
                   },
                 ),
                 ListTile(
@@ -61,7 +62,7 @@ class OnlineDrawer extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   onTap: () {
-                    _universalController.page.value = 1;
+                    _controller.page.value = 1;
                   },
                 ),
               ],

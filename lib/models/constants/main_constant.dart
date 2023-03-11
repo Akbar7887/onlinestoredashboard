@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:onlinestoredashboard/controller/Controller.dart';
 
 import '../../controller/UniversalController.dart';
 import '../calculate/Exchange.dart';
 
 class MainConstant {
-  static final UniversalController _universalController = Get.find();
+  static final Controller _controller = Get.find();
 
   static InputDecoration decoration(String name) {
     return InputDecoration(
@@ -23,11 +24,11 @@ class MainConstant {
   }
 
   static void getRate(DateTime dateTime) {
-    _universalController
+    _controller
         .getRateFirst("doc/exchange/getbydate", dateTime)
         .then((value) {
       double ratevalue = Exchange.fromJson(value).ratevalue!;
-      _universalController.rate.value = ratevalue == null ? 0 : ratevalue;
+      _controller.rate.value = ratevalue == null ? 0 : ratevalue;
     });
   }
 }

@@ -26,7 +26,7 @@ String _id = '';
 final _keyEdit = GlobalKey<FormState>();
 final _keyPrice = GlobalKey<FormState>();
 final Controller _controller = Get.find();
-final UniversalController _universalController = Get.find();
+
 
 var _formatter = new DateFormat('yyyy-MM-dd');
 var _formatterToSend = new DateFormat('yyyy-MM-ddTHH:mm:ss');
@@ -102,10 +102,10 @@ class EditProductDialog extends StatelessWidget {
   }
 
   Widget priceTab(BuildContext context) {
-    _universalController
+    _controller
         .getByParentId(
             "doc/price/get", _controller.product.value.id.toString())
-        .then((value) => _universalController.prices.value =
+        .then((value) => _controller.prices.value =
             value.map((e) => Price.fromJson(e)).toList());
     return Container(
         padding: EdgeInsets.only(left: 50, right: 50),
@@ -118,7 +118,7 @@ class EditProductDialog extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: ElevatedButton(
                     onPressed: () async {
-                      _universalController.price = Price().obs;
+                      _controller.price = Price().obs;
 
                       await showdialogPrice(context);
                     },
@@ -128,14 +128,14 @@ class EditProductDialog extends StatelessWidget {
                     child: Text(S.of(context).add))),
             Expanded(
                 child: ListView.builder(
-                    itemCount: _universalController.prices.value.length,
+                    itemCount: _controller.prices.value.length,
                     itemBuilder: (context, idx) {
                       return InkWell(
                           onTap: () {
-                            _universalController.price.value =
-                                _universalController.prices.value[idx];
+                            _controller.price.value =
+                            _controller.prices.value[idx];
                             MainConstant.getRate(DateTime.parse(
-                                _universalController.prices.value[idx].date!));
+                                _controller.prices.value[idx].date!));
                             Future.delayed(const Duration(seconds: 0),
                                 () => showdialogPrice(context));
                           },
@@ -158,21 +158,21 @@ class EditProductDialog extends StatelessWidget {
                                                 // style: TextStyle(fontSize: 20),
                                                 _formatter
                                                     .format(DateTime.parse(
-                                              _universalController
+                                                  _controller
                                                   .prices.value[idx].date!,
                                             )))),
                                         VerticalDivider(),
                                         Container(
                                             padding: EdgeInsets.all(5),
                                             child: Text(
-                                              _universalController
+                                              _controller
                                                   .prices.value[idx].rates!,
                                               // style: TextStyle(fontSize: 20),
                                             )),
                                         Container(
                                             padding: EdgeInsets.all(5),
                                             child: Text(
-                                              _universalController
+                                              _controller
                                                   .prices.value[idx].price
                                                   .toString(),
                                             )),
@@ -185,7 +185,7 @@ class EditProductDialog extends StatelessWidget {
                                         Container(
                                             padding: EdgeInsets.all(5),
                                             child: Text(
-                                              _universalController
+                                              _controller
                                                   .prices.value[idx].pricesum
                                                   .toString(),
                                             )),
@@ -195,9 +195,9 @@ class EditProductDialog extends StatelessWidget {
                                             child: IconButton(
                                               icon: Icon(Icons.delete),
                                               onPressed: () {
-                                                _universalController.delete(
+                                                _controller.deleteById(
                                                     "doc/price/delete",
-                                                    _universalController
+                                                    _controller
                                                         .prices.value[idx].id
                                                         .toString());
                                               },
@@ -211,13 +211,13 @@ class EditProductDialog extends StatelessWidget {
   }
 
   Future<void> showdialogPrice(BuildContext context) async {
-    if (_universalController.price.value.date != null) {
+    if (_controller.price.value.date != null) {
       _dateController.text = _formatter
-          .format(DateTime.parse(_universalController.price.value.date!));
-      _ratesController.text = _universalController.price.value.rates!;
-      _priceController.text = _universalController.price.value.price.toString();
+          .format(DateTime.parse(_controller.price.value.date!));
+      _ratesController.text = _controller.price.value.rates!;
+      _priceController.text = _controller.price.value.price.toString();
       _pricesumController.text =
-          _universalController.price.value.pricesum.toString();
+          _controller.price.value.pricesum.toString();
     } else {
       _dateController.text = _formatter.format(DateTime.now());
       _ratesController.text = RATE.USD.name;
@@ -282,7 +282,7 @@ class EditProductDialog extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  '${S.of(context).doll} ${_universalController.rate.value.toString()} ${S.of(context).sum}',
+                                  '${S.of(context).doll} ${_controller.rate.value.toString()} ${S.of(context).sum}',
                                   style: GoogleFonts.openSans(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w200,
@@ -305,7 +305,7 @@ class EditProductDialog extends StatelessWidget {
                                   onChanged: (value) {
                                     _pricesumController.text =
                                         (double.parse(value) *
-                                                _universalController.rate.value)
+                                            _controller.rate.value)
                                             .toString();
                                   },
                                   onEditingComplete: () {},
@@ -354,20 +354,20 @@ class EditProductDialog extends StatelessWidget {
                   return;
                 }
 
-                _universalController.price.value.date = _formatterToSend
+                _controller.price.value.date = _formatterToSend
                     .format(DateTime.parse(_dateController.text));
-                _universalController.price.value.rates = _ratesController.text;
-                _universalController.price.value.price =
+                _controller.price.value.rates = _ratesController.text;
+                _controller.price.value.price =
                     double.parse(_priceController.text);
 
-                _universalController.price.value.product =
+                _controller.price.value.product =
                     _controller.product.value;
-                _universalController.price.value.pricesum =
+                _controller.price.value.pricesum =
                     double.parse(_pricesumController.text);
-                _universalController
-                    .save("doc/price/save", _universalController.price.value)
+                _controller
+                    .save("doc/price/save", _controller.price.value)
                     .then((value) {
-                  _universalController.prices.value.add(Price.fromJson(value));
+                  _controller.prices.value.add(Price.fromJson(value));
                   Navigator.of(dialogContext).pop();
                 });
               },

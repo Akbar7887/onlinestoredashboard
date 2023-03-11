@@ -10,7 +10,7 @@ import '../generated/l10n.dart';
 import 'catalogs/catalog_page.dart';
 import '../widgets/header.dart';
 
-final UniversalController _universalController = Get.put(UniversalController());
+final Controller _controller = Get.put(Controller());
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
   }
 
   selectPage() {
-    switch (_universalController.page.value) {
+    switch (_controller.page.value) {
       case 0:
         {
           return CatalogPage();
@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
     }
   }
   String selectPageName() {
-    switch (_universalController.page.value) {
+    switch (_controller.page.value) {
       case 0:
         {
           return S.of(context).catalog_page_name;

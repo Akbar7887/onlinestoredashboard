@@ -12,7 +12,6 @@ import 'package:onlinestoredashboard/models/catalogs/ProductImage.dart';
 import '../../../generated/l10n.dart';
 import '../../../models/UiO.dart';
 
-final UniversalController _universalController = Get.find();
 final Controller _controller = Get.find();
 int idx = 0;
 Uint8List? _webImage;
@@ -22,12 +21,12 @@ class ProductImagePart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _universalController
-        .getByParentId("doc/productimage/get",
-        _controller.product.value.id.toString())
+    _controller
+        .getByParentId(
+            "doc/productimage/get", _controller.product.value.id.toString())
         .then((value) {
       // if (value.isNotEmpty) {
-      _universalController.productImages.value =
+      _controller.productImages.value =
           value.map((e) => ProductImage.fromJson(e)).toList();
       // } else {}
     });
@@ -53,15 +52,12 @@ class ProductImagePart extends StatelessWidget {
 
                             Map<String, dynamic> param = {
                               "id": "",
-                              "parent_id": _controller.product.value.id
-                                  .toString(),
+                              "parent_id":
+                                  _controller.product.value.id.toString(),
                               "mainimg": false.toString()
                             };
-                            _universalController.saveImage(
-                                "doc/productimage/upload",
-                                f,
-                                param,
-                                image.name);
+                            _controller.saveImage("doc/productimage/upload", f,
+                                param, image.name);
                           }
                         },
                         style: ButtonStyle(
@@ -73,11 +69,10 @@ class ProductImagePart extends StatelessWidget {
                 ),
 
                 Expanded(
-                    child: _universalController.productImages.value.isEmpty
+                    child: _controller.productImages.value.isEmpty
                         ? Container()
                         : ListView.builder(
-                            itemCount:
-                                _universalController.productImages.value.length,
+                            itemCount: _controller.productImages.value.length,
                             itemBuilder: (context, inx) {
                               return Container(
                                   decoration: BoxDecoration(
@@ -93,7 +88,7 @@ class ProductImagePart extends StatelessWidget {
                                               },
                                               child: Card(
                                                 child: Image.network(
-                                                    '${UiO.url}doc/productimage/download/${_universalController.productImages.value[inx].id}'),
+                                                    '${UiO.url}doc/productimage/download/${_controller.productImages.value[inx].id}'),
                                               ))),
                                       Expanded(
                                           child: IconButton(
@@ -102,9 +97,9 @@ class ProductImagePart extends StatelessWidget {
                                           color: Colors.red,
                                         ),
                                         onPressed: () {
-                                          _universalController.delete(
+                                          _controller.deleteById(
                                               "doc/productimage/deleteimage",
-                                              _universalController
+                                              _controller
                                                   .productImages.value[inx].id
                                                   .toString());
                                         },
@@ -119,12 +114,12 @@ class ProductImagePart extends StatelessWidget {
             VerticalDivider(),
             Expanded(
               flex: 3,
-              child: _universalController.productImages.value.isEmpty
+              child: _controller.productImages.value.isEmpty
                   ? Container()
                   : Container(
                       child: Card(
                           child: Image.network(
-                              '${UiO.url}doc/productimage/download/${_universalController.productImages.value[idx].id}')),
+                              '${UiO.url}doc/productimage/download/${_controller.productImages.value[idx].id}')),
                     ),
             )
           ],

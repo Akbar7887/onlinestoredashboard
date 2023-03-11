@@ -6,9 +6,11 @@ import 'package:onlinestoredashboard/controller/UniversalController.dart';
 import 'package:onlinestoredashboard/models/Organization.dart';
 
 import '../models/calculate/Exchange.dart';
+import '../models/calculate/Price.dart';
 import '../models/catalogs/Catalog.dart';
 import '../models/catalogs/Characteristic.dart';
 import '../models/catalogs/Product.dart';
+import '../models/catalogs/ProductImage.dart';
 
 class Controller extends GetxController {
   final api = ApiConnector();
@@ -22,6 +24,12 @@ class Controller extends GetxController {
   var exchange = Exchange().obs;
   var products = <Product>[].obs;
   Rx<Product> product = Product().obs;
+  var page = 0.obs;
+  var prices = <Price>[].obs;
+  Rx<Price> price = Price().obs;
+  var rate = 0.0.obs;
+  var productImages = <ProductImage>[].obs;
+
 
 
 
@@ -45,6 +53,13 @@ class Controller extends GetxController {
     this.products.value = json.map((e) => Product.fromJson(e)).toList();
   }
 
+  Future<dynamic> getRateFirst(String url, DateTime  dateTime) async {
+    return  await api.getRateFirst(url, dateTime);
+  }
+
+  Future<List<dynamic>> getByParentId(String url, String id) async {
+    return await api.getByParentId(url, id);
+  }
 
   Future<dynamic> save(String url, dynamic object) async {
     return await api.save(url, object);
@@ -126,6 +141,5 @@ class HomeBindings extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => Controller());
-    Get.lazyPut(() => UniversalController());
   }
 }
