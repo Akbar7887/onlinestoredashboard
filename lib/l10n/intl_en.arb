@@ -29,6 +29,7 @@
   "organization": "Организация",
   "image_store": "Картинки",
   "dashboard": "Dashboard",
-  "groups": "Группы"
+  "groups": "Группы",
+  "error": "Ошибка"
 
 }

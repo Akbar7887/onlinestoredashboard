@@ -359,6 +359,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Ошибка`
+  String get error {
+    return Intl.message(
+      'Ошибка',
+      name: 'error',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

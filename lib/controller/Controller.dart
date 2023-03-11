@@ -19,6 +19,7 @@ class Controller extends GetxController {
   var catalogslist = <Catalog>[].obs;
   Rx<Catalog> catalog = Catalog().obs;
   var characteristics = <Characteristic>[].obs;
+  var characteristic = Characteristic().obs;
   var exchanges = <Exchange>[].obs;
   var exchange = Exchange().obs;
   var products = <Product>[].obs;
@@ -28,6 +29,7 @@ class Controller extends GetxController {
   Rx<Price> price = Price().obs;
   var rate = 0.0.obs;
   var productImages = <ProductImage>[].obs;
+
 
 
 

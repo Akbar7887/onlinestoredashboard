@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:onlinestoredashboard/controller/Controller.dart';
+import 'package:onlinestoredashboard/models/catalogs/ProductImage.dart';
+import 'package:onlinestoredashboard/models/constants/main_constant.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -13,8 +15,9 @@ import '../../../models/catalogs/Characteristic.dart';
 
 final Controller _controller = Get.put(Controller());
 
-List<TextEditingController> _namecontroller = [];
-List<TextEditingController> _valuenamecontroller = [];
+TextEditingController _namecontrollerd = TextEditingController();
+TextEditingController _valuenamecontrollerd = TextEditingController();
+
 final _keyForm = GlobalKey<FormState>();
 
 class AddcharacteristicDialog extends StatelessWidget {
@@ -25,7 +28,7 @@ class AddcharacteristicDialog extends StatelessWidget {
     return Obx(() {
       CharacteristicDataGridSource _characteristicDataGridSource =
           CharacteristicDataGridSource(
-              characteristics: _controller.characteristics, emptycount: 0);
+              characteristics: _controller.characteristics);
 
       return SafeArea(
           child: Form(
@@ -34,36 +37,97 @@ class AddcharacteristicDialog extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   child: Column(children: [
+                    SizedBox(
+                      height: 20,
+                    ),
                     Container(
                         height: 30,
                         child: Row(
                           children: [
+                            Expanded(
+                                child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return S.of(context).error;
+                                }
+                              },
+                              decoration: MainConstant.decoration(
+                                  S.of(context).characteristic),
+                              textAlignVertical: TextAlignVertical.center,
+                              controller: _namecontrollerd,
+                            )),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                                child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return S.of(context).error;
+                                }
+                              },
+                              decoration: MainConstant.decoration(
+                                  S.of(context).valuename),
+                              textAlignVertical: TextAlignVertical.center,
+                              controller: _valuenamecontrollerd,
+                            )),
+                            SizedBox(
+                              width: 20,
+                            ),
                             Container(
                                 alignment: Alignment.topLeft,
                                 child: ElevatedButton(
                                     onPressed: () {
-                                      _controller.characteristics.value.add(
+                                      if (!_keyForm.currentState!.validate()) {
+                                        return;
+                                      }
+
+                                      _controller.characteristic.value =
                                           Characteristic(
-                                              name: "", valuename: ""));
-                                      // setState(() {
-                                      _characteristicDataGridSource =
-                                          CharacteristicDataGridSource(
-                                              characteristics:
-                                                  _controller.characteristics,
-                                              emptycount: 1);
-                                      // });
+                                              id: _controller
+                                                  .characteristic.value.id,
+                                              name: _namecontrollerd.text,
+                                              valuename:
+                                                  _valuenamecontrollerd.text,
+                                              product:
+                                                  _controller.product.value);
+
+                                      _controller
+                                          .save("doc/characteristic/save",
+                                              _controller.characteristic.value)
+                                          .then((value) {
+                                        _namecontrollerd.clear();
+                                        _valuenamecontrollerd.clear();
+                                        // Characteristic characteristic  =Characteristic.fromJson(value);
+
+                                        _controller
+                                            .getCharasteristic(
+                                                "doc/characteristic/get",
+                                                _controller.product.value.id
+                                                    .toString())
+                                            .then((value) {
+                                          _controller.characteristics.value =
+                                              value
+                                                  .map((e) =>
+                                                      Characteristic.fromJson(
+                                                          e))
+                                                  .toList();
+                                        });
+                                        _controller.characteristic =
+                                            Characteristic().obs;
+                                      });
                                     },
                                     style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all(
                                                 Colors.grey[800])),
                                     child: Text("Добавить"))),
-                            SizedBox(width: 50),
-                            Expanded(
-                                child: FittedBox(
-                                    fit: BoxFit.contain,
-                                    child:
-                                        Text(_controller.product.value.name!)))
+
+                            // Expanded(
+                            //     child: FittedBox(
+                            //         fit: BoxFit.contain,
+                            //         child:
+                            //             Text(_controller.product.value.name!)))
                           ],
                         )),
                     SizedBox(
@@ -96,7 +160,15 @@ class AddcharacteristicDialog extends StatelessWidget {
                             return UiO.datagrig_height;
                           },
                           headerRowHeight: UiO.datagrig_height,
-                          onCellTap: (cell) {},
+                          onCellTap: (cell) {
+                            _controller.characteristic.value =
+                                _controller.characteristics[
+                                    cell.rowColumnIndex.rowIndex - 1];
+                            _namecontrollerd.text =
+                                _controller.characteristic.value.name!;
+                            _valuenamecontrollerd.text =
+                                _controller.characteristic.value.valuename!;
+                          },
                           columns: [
                             GridColumn(
                                 columnName: 'id',
@@ -139,55 +211,6 @@ class AddcharacteristicDialog extends StatelessWidget {
                                 label: Icon(Icons.more_vert_outlined)),
                           ]),
                     )),
-                    Container(
-                      child: Row(
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                if (!_keyForm.currentState!.validate()) {
-                                  return;
-                                }
-
-                                _controller.characteristics.value
-                                    .forEach((element) {
-                                  element.name = _namecontroller[_controller
-                                          .characteristics.value
-                                          .indexOf(element)]
-                                      .text;
-                                  element.valuename = _valuenamecontroller[
-                                          _controller.characteristics.value
-                                              .indexOf(element)]
-                                      .text;
-                                  element.product = _controller.product.value;
-                                  element.productId =
-                                      _controller.product.value.id;
-                                });
-
-                                _controller
-                                    .savelist("doc/characteristic/save",
-                                        _controller.characteristics.value)
-                                    .then((value) {
-                                  _controller.characteristics.value = value
-                                      .map((e) => Characteristic.fromJson(e))
-                                      .toList();
-                                  Navigator.of(context)
-                                      .pop(); // Dismiss alert dialog
-                                });
-                              },
-                              child: Text(S.of(context).save)),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pop(); // Dismiss alert dialog
-                            },
-                            child: Text(S.of(context).cancel),
-                          )
-                        ],
-                      ),
-                    )
                   ]))));
     });
   }
@@ -195,8 +218,7 @@ class AddcharacteristicDialog extends StatelessWidget {
 
 class CharacteristicDataGridSource extends DataGridSource {
   CharacteristicDataGridSource(
-      {required List<Characteristic> characteristics,
-      required int emptycount}) {
+      {required List<Characteristic> characteristics}) {
     // characteristics.sort((a, b) => a.id!.compareTo(b.id!));
     dataGridRows = characteristics
         .map<DataGridRow>((e) => DataGridRow(cells: [
@@ -214,15 +236,6 @@ class CharacteristicDataGridSource extends DataGridSource {
               // DataGridCell<bool>(columnName: 'editable', value: false),
             ]))
         .toList();
-
-    _namecontroller = [];
-    _valuenamecontroller = [];
-    dataGridRows.forEach((element) {
-      _namecontroller.add(
-          TextEditingController(text: element.getCells()[1].value.toString()));
-      _valuenamecontroller.add(
-          TextEditingController(text: element.getCells()[2].value.toString()));
-    });
   }
 
   void addController(DataGridRow row) {}
@@ -242,35 +255,12 @@ class CharacteristicDataGridSource extends DataGridSource {
       Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.symmetric(horizontal: 16),
-        child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Ошибка";
-              }
-            },
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              isCollapsed: true,
-              // isDense: true,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            controller: _namecontroller[dataGridRows.indexOf(row)]),
+        child: Text(row.getCells()[1].value),
       ),
       Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.symmetric(horizontal: 16),
-        child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Ошибка";
-              }
-            },
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              isCollapsed: true,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            controller: _valuenamecontroller[dataGridRows.indexOf(row)]),
+        child: Text(row.getCells()[2].value),
       ),
       Container(
         alignment: Alignment.center,

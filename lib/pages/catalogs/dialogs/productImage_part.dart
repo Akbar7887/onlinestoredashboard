@@ -20,15 +20,7 @@ class ProductImagePart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _controller
-        .getByParentId(
-            "doc/productimage/get", _controller.product.value.id.toString())
-        .then((value) {
-      // if (value.isNotEmpty) {
-      _controller.productImages.value =
-          value.map((e) => ProductImage.fromJson(e)).toList();
-      // } else {}
-    });
+
     return Obx(() => SafeArea(
             child: Container(
                 child: Row(

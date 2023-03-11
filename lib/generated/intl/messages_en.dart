@@ -35,6 +35,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "description": MessageLookupByLibrary.simpleMessage("Описание"),
         "doll": MessageLookupByLibrary.simpleMessage("Курс 1 долл США"),
         "edit": MessageLookupByLibrary.simpleMessage("Изменить"),
+        "error": MessageLookupByLibrary.simpleMessage("Ошибка"),
         "exchange": MessageLookupByLibrary.simpleMessage("Курс валют"),
         "form_dialog": MessageLookupByLibrary.simpleMessage(
             "Форма для измениие или добавление!"),
