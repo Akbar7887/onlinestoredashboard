@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
-
-import '../controller/UniversalController.dart';
 import '../generated/l10n.dart';
 
 final Controller _controller = Get.find();

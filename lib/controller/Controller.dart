@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:get/get.dart';
 import 'package:onlinestoredashboard/controller/ApiConnector.dart';
-import 'package:onlinestoredashboard/controller/UniversalController.dart';
 import 'package:onlinestoredashboard/models/Organization.dart';
 
 import '../models/calculate/Exchange.dart';

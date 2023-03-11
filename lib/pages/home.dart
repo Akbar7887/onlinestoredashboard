@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:onlinestoredashboard/controller/UniversalController.dart';
 import 'package:onlinestoredashboard/pages/catalogs/product_page.dart';
 import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
 import 'package:onlinestoredashboard/widgets/onlineDrawer.dart';

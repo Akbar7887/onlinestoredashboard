@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/controller/Controller.dart';
-import 'package:onlinestoredashboard/controller/UniversalController.dart';
 import 'package:onlinestoredashboard/pages/catalogs/dialogs/productImage_part.dart';
 
 import '../../../generated/l10n.dart';

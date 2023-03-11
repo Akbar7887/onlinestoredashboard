@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:onlinestoredashboard/controller/Controller.dart';
-import 'package:onlinestoredashboard/controller/UniversalController.dart';
 import 'package:onlinestoredashboard/models/catalogs/ProductImage.dart';
 
 import '../../../generated/l10n.dart';
