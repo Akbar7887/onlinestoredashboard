@@ -1,24 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:onlinestoredashboard/controller/Controller.dart';
-import 'package:onlinestoredashboard/widgets/header.dart';
 
 import '../../generated/l10n.dart';
 import '../../models/UiO.dart';
 import '../../models/catalogs/Catalog.dart';
 import '../../models/constants/main_constant.dart';
-import '../../widgets/onlineAppBar.dart';
 
 final Controller _controller = Get.put(Controller());
-Catalog? _catalog;
+// Catalog? _catalog;
 List<DropdownMenuItem<Catalog>> _catalogfordrop = [];
 Catalog? dropDownValue;
 final _keyForm = GlobalKey<FormState>();
-List<Catalog> _catalogs = [];
+
 
 class CatalogPage extends StatelessWidget {
   const CatalogPage({Key? key}) : super(key: key);
@@ -41,7 +37,8 @@ class CatalogPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       dropDownValue = null;
-                      _catalog = null;
+                      // _catalog = null;
+                      _controller.catalog = Catalog().obs;
                       showDialogCatalog(context);
                     },
                     child: FittedBox(
@@ -52,8 +49,7 @@ class CatalogPage extends StatelessWidget {
           ),
           Container(
               child: TreeView(
-                  nodes: createCatalogHiriarh(
-                      context, _controller.catalogs)))
+                  nodes: createCatalogHiriarh(context, _controller.catalogs)))
         ],
       ))));
     });
@@ -65,7 +61,7 @@ class CatalogPage extends StatelessWidget {
         .map((e) => TreeNode(
             content: InkWell(
                 onTap: () {
-                  _catalog = e;
+                  _controller.catalog.value = e;
                   showDialogCatalog(context);
                 },
                 child: Container(
@@ -76,7 +72,8 @@ class CatalogPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black38)),
-                      child: Row(
+                      child: Container(
+                          child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
@@ -99,8 +96,7 @@ class CatalogPage extends StatelessWidget {
                                 _controller
                                     .deleteActive(
                                         "doc/catalog/deleteactive", e.id!)
-                                    .then((value) =>
-                                        _controller.fetchGetAll());
+                                    .then((value) => _controller.fetchGetAll());
                               },
                               icon: Icon(
                                 Icons.delete,
@@ -143,7 +139,7 @@ class CatalogPage extends StatelessWidget {
                             );
                           })),
                         ],
-                      ),
+                      )),
                     ))),
             children: createCatalogHiriarh(context, e.catalogs!)))
         .toList();
@@ -151,7 +147,7 @@ class CatalogPage extends StatelessWidget {
 
   dropDownTree(List<Catalog> catalogs) {
     catalogs.forEach((element) {
-      _catalogs.add(element);
+      _controller.catalogslist.add(element);
       _catalogfordrop.add(DropdownMenuItem(
           child: TreeView(nodes: [
             TreeNode(
@@ -165,7 +161,7 @@ class CatalogPage extends StatelessWidget {
   getDropDownCatalogs(List<Catalog> catalogs) {
     // _catalogs = [];
     catalogs.forEach((element) {
-      _catalogs.add(element);
+      _controller.catalogslist.value.add(element);
       _catalogfordrop.add(
           DropdownMenuItem(child: Text(element.catalogname!), value: element));
       getDropDownCatalogs(element.catalogs!);
@@ -177,22 +173,22 @@ class CatalogPage extends StatelessWidget {
     //   dropDownValue = _catalogController.catalogs.firstWhere((element) =>
     //       _catalogController.catalogs.first.parent!.id == element.id);
     _catalogfordrop = [];
-    _catalogs = [];
+    _controller.catalogslist.value = [];
     getDropDownCatalogs(_controller.catalogs);
 
-    if (_catalog != null) {
-      if (_catalog!.parent != null) {
-        dropDownValue = _catalogs
-            .firstWhere((element) => _catalog!.parent!.id == element.id);
+    if (_controller.catalog.value != null) {
+      if (_controller.catalog.value.parent != null) {
+        dropDownValue = _controller.catalogslist.value.firstWhere(
+            (element) => _controller.catalog.value!.parent!.id == element.id);
       } else {
         dropDownValue = null;
       }
     }
     TextEditingController _controllercatalogName = TextEditingController();
-    if (_catalog != null) {
-      _controllercatalogName.text = _catalog!.catalogname!;
+    if (_controller.catalog.value.catalogname != null) {
+      _controllercatalogName.text = _controller.catalog.value.catalogname!;
     } else {
-      _controllercatalogName.text = "";
+      _controllercatalogName.clear();
     }
 
     return showDialog<void>(
@@ -248,19 +244,17 @@ class CatalogPage extends StatelessWidget {
 
                         if (_controller.catalog.value.parent == null) {
                           _controller
-                              .save("doc/catalog/save",
-                              _controller.catalog.value)
+                              .save(
+                                  "doc/catalog/save", _controller.catalog.value)
                               .then((value) {
-                                _controller.catalog.value = Catalog.fromJson(value);
+                            _controller.catalog.value = Catalog.fromJson(value);
                             _controller.fetchGetAll();
                             Navigator.of(dialogContext).pop();
                           });
                         } else {
                           _controller
-                              .savesub(
-                                  "doc/catalog/savesub",
-                              _controller.catalog.value,
-                                  dropDownValue!.id!)
+                              .savesub("doc/catalog/savesub",
+                                  _controller.catalog.value, dropDownValue!.id!)
                               .then((value) {
                             _controller.fetchGetAll();
                             Navigator.of(dialogContext).pop();

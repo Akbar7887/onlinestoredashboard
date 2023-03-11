@@ -32,7 +32,6 @@ class Controller extends GetxController {
 
 
 
-
   @override
   void onInit() {
     fetchGetAll();
