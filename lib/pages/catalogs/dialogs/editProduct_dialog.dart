@@ -54,10 +54,13 @@ class EditProductDialog extends StatelessWidget {
                         );
                       }).toList(),
                       onChanged: (value) {
-                        setState(
-                            () => _catalogController.catalog.value = value!);
+                        setState(() => _catalogController.catalogslist.value
+                            .firstWhere((element) => element.id == value!.id));
                       },
-                      value: _catalogController.catalog.value,
+                      value: _catalogController.catalog.value.id == null? null: _catalogController.catalogslist.value.firstWhere(
+                          (element) =>
+                              element.id ==
+                              _catalogController.catalog.value.id),
                     )),
                 Container(
                     alignment: Alignment.topLeft, child: Text('№ ${_id}')),

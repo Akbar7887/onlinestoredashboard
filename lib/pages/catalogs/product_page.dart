@@ -34,15 +34,6 @@ class ProductPage extends GetView<CatalogController> {
             child: Column(
               children: [
                 Container(
-                    height: 20,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: Text(
-                        S.of(context).product,
-                      ),
-                    )),
-                Divider(),
-                Container(
                     child: Row(
                   children: [
                     Container(
@@ -126,13 +117,14 @@ class ProductPage extends GetView<CatalogController> {
                         // if (_catalogController.catalog.value.id == null) {
                         //   return;
                         // }
-                        _productController.product.value =
-                        _productController.products
-                            .value[cell.rowColumnIndex.rowIndex];
+                        _productController.product.value = _productController
+                            .products.value[cell.rowColumnIndex.rowIndex - 1];
+                        _catalogController.catalog.value =
+                            _productController.product.value.catalog!;
 
                         Future.delayed(
                             const Duration(seconds: 0),
-                                () => showDialog(
+                            () => showDialog(
                                 context: context,
                                 barrierDismissible: true,
                                 builder: (BuildContext context) {
@@ -191,25 +183,10 @@ class ProductPage extends GetView<CatalogController> {
       _productDataGridSource =
           ProductDataGridSource(_productController.products.value);
       return SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: Column(children: [
-            Container(
-              alignment: Alignment.center,
-              child: Text(
-                S.of(context).product_page_name,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: UiO.font,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Expanded(flex: 3, child: table(context)),
-          ]),
-        ),
+        child: Column(children: [
+          Expanded(flex: 3, child: table(context)),
+        ]),
+
         // drawer: DskNavigationDrawer(),
 
         // drawer: DskNavigationDrawer(),

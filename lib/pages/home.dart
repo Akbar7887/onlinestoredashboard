@@ -6,7 +6,9 @@ import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
 import 'package:onlinestoredashboard/widgets/onlineDrawer.dart';
 
 import '../controller/Controller.dart';
+import '../generated/l10n.dart';
 import 'catalogs/catalog_page.dart';
+import '../widgets/header.dart';
 
 final UniversalController _universalController = Get.put(UniversalController());
 
@@ -19,6 +21,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final controller = Get.put(Controller());
+  bool showDrawer = true;
 
   @override
   void initState() {
@@ -27,30 +30,53 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: OnlineAppBar(),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Row(
-          children: [
-            Expanded(child: OnlineDrawer()),
-            // VerticalDivider(),
-            Expanded(flex: 4, child: selectPage())
-          ],
-        ),
-      ),
-    );
+    return Obx(() => Scaffold(
+        appBar: OnlineAppBar(),
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Row(
+            children: [
+              showDrawer ? Expanded(child: OnlineDrawer()) : Container(),
+              Expanded(
+                  flex: 4,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.menu),
+                              onPressed: () {
+                                setState(() {
+                                  showDrawer = !showDrawer;
+                                });
+                              },
+                            ),
+                            Header(selectPageName()),
+
+                          ],
+                        ),
+                      ),
+                      Expanded(child: selectPage())
+                    ],
+                  ))
+            ],
+          ),
+        )));
   }
 
   selectPage() {
     switch (_universalController.page.value) {
-      case 1:
+      case 0:
         {
           return CatalogPage();
         }
         break;
-      case 0:
+      case 1:
         {
           return ProductPage();
         }
@@ -58,6 +84,24 @@ class _HomeState extends State<Home> {
       default:
         {
           return Container();
+        }
+    }
+  }
+  String selectPageName() {
+    switch (_universalController.page.value) {
+      case 0:
+        {
+          return S.of(context).catalog_page_name;
+        }
+        break;
+      case 1:
+        {
+          return S.of(context).product;
+        }
+        break;
+      default:
+        {
+          return "";
         }
     }
   }

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:onlinestoredashboard/controller/CatalogController.dart';
-import 'package:onlinestoredashboard/pages/catalogs/header.dart';
+import 'package:onlinestoredashboard/widgets/header.dart';
 
 import '../../generated/l10n.dart';
 import '../../models/UiO.dart';
@@ -27,35 +27,35 @@ class CatalogPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       return SafeArea(
-          child: Padding(
-              padding: EdgeInsets.only(left: 20, right: 20),
+          child: Card(
               child: SingleChildScrollView(
                   child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Header(S.of(context).catalog_page_name),
-                  Container(
-                      child: SizedBox(
-                          width: 200,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              dropDownValue = null;
-                              _catalog = null;
-                              showDialogCatalog(context);
-                            },
-                            child: FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Text(S.of(context).add)),
-                          ))),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                      child: TreeView(
-                          nodes: createCatalogHiriarh(
-                              context, _catalogController.catalogs)))
-                ],
-              ))));
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              child: SizedBox(
+                  width: 150,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      dropDownValue = null;
+                      _catalog = null;
+                      showDialogCatalog(context);
+                    },
+                    child: FittedBox(
+                        fit: BoxFit.fitWidth, child: Text(S.of(context).add)),
+                  ))),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              child: TreeView(
+                  nodes: createCatalogHiriarh(
+                      context, _catalogController.catalogs)))
+        ],
+      ))));
     });
   }
 

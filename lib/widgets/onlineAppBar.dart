@@ -35,30 +35,30 @@ class OnlineAppBar extends StatelessWidget with PreferredSizeWidget {
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
-                      PopupMenuItem(
-                          onTap: () {
-                            Get.to(() => OrganizationPage());
-                          },
-                          child: Text(
-                            S.of(context).organization,
-                            style: TextStyle(fontSize: 20),
-                          )),
-                      PopupMenuItem(
-                          onTap: () {
-                            Get.to(() => CatalogPage());
-                          },
-                          child: Text(
-                            S.of(context).catalog,
-                            style: TextStyle(fontSize: 20),
-                          )),
-                      PopupMenuItem(
-                          onTap: () {
-                            Get.to(() => ProductPage());
-                          },
-                          child: Text(
-                            S.of(context).product_page_name,
-                            style: TextStyle(fontSize: 20),
-                          )),
+                      // PopupMenuItem(
+                      //     onTap: () {
+                      //       Get.to(() => OrganizationPage());
+                      //     },
+                      //     child: Text(
+                      //       S.of(context).organization,
+                      //       style: TextStyle(fontSize: 20),
+                      //     )),
+                      // PopupMenuItem(
+                      //     onTap: () {
+                      //       Get.to(() => CatalogPage());
+                      //     },
+                      //     child: Text(
+                      //       S.of(context).catalog,
+                      //       style: TextStyle(fontSize: 20),
+                      //     )),
+                      // PopupMenuItem(
+                      //     onTap: () {
+                      //       Get.to(() => ProductPage());
+                      //     },
+                      //     child: Text(
+                      //       S.of(context).product_page_name,
+                      //       style: TextStyle(fontSize: 20),
+                      //     )),
                     ])),
       ],
 

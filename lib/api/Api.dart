@@ -35,9 +35,8 @@ class Api {
     final response = await http.get(uri, headers: header);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final json = jsonDecode(utf8.decode(response.bodyBytes));
 
-      return json;
+      return  jsonDecode(utf8.decode(response.bodyBytes));
     } else {
       throw Exception("Error");
     }
