@@ -13,6 +13,7 @@ class _TestState extends State<Test> {
     return Center(
       child: Row(
         children: [
+          Text("HElloooo"),
           Text("HElloooomm"),
           Text("Salom"),
           Text("Salom"),
