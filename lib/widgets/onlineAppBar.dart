@@ -6,6 +6,7 @@ import 'package:onlinestoredashboard/pages/catalogs/catalog_page.dart';
 import 'package:onlinestoredashboard/pages/catalogs/product_page.dart';
 
 import '../generated/l10n.dart';
+import '../main.dart';
 import '../models/UiO.dart';
 import '../pages/organization_page.dart';
 
@@ -60,12 +61,14 @@ class OnlineAppBar extends StatelessWidget with PreferredSizeWidget {
                       //       style: TextStyle(fontSize: 20),
                       //     )),
                     ])),
+        SizedBox(width: 20,),
       ],
 
       title: Text(
         UiO.companyName,
         style: TextStyle(fontSize: 30),
       ),
+      centerTitle: true,
     );
   }
 }

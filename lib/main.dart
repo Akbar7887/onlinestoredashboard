@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: TextTheme(),
         fontFamily: UiO.font,
-         // textTheme: TextTheme(bodyText1: ),
+        // textTheme: TextTheme(bodyText1: ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         //primarySwatch: Colors.black87,
       ),
