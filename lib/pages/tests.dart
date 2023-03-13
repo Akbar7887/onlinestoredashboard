@@ -11,7 +11,7 @@ class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
+      child: Row(
         children: [
           Text("HElloooomm"),
           Text("Salom"),
