@@ -39,10 +39,10 @@ class Controller extends GetxController {
     fetchGetAll();
     fetchAll();
     fetchListOrganization();
-    fetchgetAll("0");
 
     super.onInit();
   }
+
   Future<void> fetchAll() async {
     final json = await api.getAll("doc/exchange/get");
     this.exchanges.value = json.map((e) => Exchange.fromJson(e)).toList();
@@ -56,9 +56,9 @@ class Controller extends GetxController {
     creatCatalogList(this.catalogs.value);
   }
 
-  Future<void> fetchgetAll(String id) async {
+  Future<List<Product>> fetchgetAll(String id) async {
     final json = await api.getByParentId("doc/product/get", id);
-    this.products.value = json.map((e) => Product.fromJson(e)).toList();
+    return json.map((e) => Product.fromJson(e)).toList();
   }
 
   Future<dynamic> getRateFirst(String url, DateTime  dateTime) async {

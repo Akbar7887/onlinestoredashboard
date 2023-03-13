@@ -20,7 +20,6 @@ class ProductImagePart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Obx(() => SafeArea(
             child: Container(
                 child: Row(
@@ -47,8 +46,15 @@ class ProductImagePart extends StatelessWidget {
                                   _controller.product.value.id.toString(),
                               "mainimg": false.toString()
                             };
-                            _controller.saveImage("doc/productimage/upload", f,
-                                param, image.name);
+                            _controller
+                                .saveImage("doc/productimage/upload", f, param,
+                                    image.name)
+                                .then((value) {
+                              ProductImage productimage =
+                                  ProductImage.fromJson(value);
+                              _controller.productImages.add(productimage);
+                              _controller.productImages.refresh();
+                            });
                           }
                         },
                         style: ButtonStyle(

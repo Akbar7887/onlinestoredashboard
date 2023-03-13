@@ -10,7 +10,7 @@ class Product {
   String? name;
   String? description;
   dynamic? imagepath;
-  String? active;
+  // String? active;
   List<ProductImage>? productImages;
   int? catalogId;
   List<Characteristic>? characteristics;
@@ -21,7 +21,7 @@ class Product {
       this.name,
       this.description,
       this.imagepath,
-      this.active,
+      // this.active,
       this.productImages,
       this.catalogId,
       this.characteristics});
@@ -31,7 +31,7 @@ class Product {
     name = json['name'];
     description = json['description'];
     imagepath = json['imagepath'];
-    active = json['active'];
+    // active = json['active'];
     if (json['productImages'] != null) {
       productImages = [];
       json['productImages'].forEach((v) {
@@ -55,7 +55,7 @@ class Product {
     map['name'] = name;
     map['description'] = description;
     map['imagepath'] = imagepath;
-    map['active'] = active;
+    // map['active'] = active;
     if (productImages != null) {
       map['productImages'] = productImages!.map((v) => v.toJson()).toList();
     }

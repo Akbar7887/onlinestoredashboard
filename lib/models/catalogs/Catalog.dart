@@ -4,7 +4,7 @@ class Catalog {
   int? id;
   String? catalogname;
   String? imagepath;
-  String? active;
+  // String? active;
   List<Catalog>? catalogs;
   Catalog? parent;
 

@@ -26,6 +26,7 @@ String _id = '';
 final _keyEdit = GlobalKey<FormState>();
 final _keyPrice = GlobalKey<FormState>();
 final Controller _controller = Get.find();
+Catalog? dropDown;
 
 var _formatter = new DateFormat('yyyy-MM-dd');
 var _formatterToSend = new DateFormat('yyyy-MM-ddTHH:mm:ss');
@@ -34,6 +35,10 @@ class EditProductDialog extends StatelessWidget {
   EditProductDialog({Key? key}) : super(key: key);
 
   Widget mainTab(BuildContext context) {
+    if (_controller.catalog.value.id != null) {
+      dropDown = _controller.catalogslist
+          .firstWhere((element) => element.id == _controller.catalog.value.id);
+    }
     return StatefulBuilder(
         builder: (BuildContext context, setState) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,6 +46,7 @@ class EditProductDialog extends StatelessWidget {
                 Container(
                     width: MediaQuery.of(context).size.width / 2,
                     child: DropdownButton<Catalog>(
+                      hint: Text(S.of(context).catalog),
                       isExpanded: true,
                       items: _controller.catalogslist.value
                           .map<DropdownMenuItem<Catalog>>((e) {
@@ -50,14 +56,12 @@ class EditProductDialog extends StatelessWidget {
                         );
                       }).toList(),
                       onChanged: (value) {
-                        setState(() => _controller.catalogslist.value
-                            .firstWhere((element) => element.id == value!.id));
+                        setState(() {
+                          dropDown = value;
+                          _controller.catalog.value = value!;
+                        });
                       },
-                      value: _controller.catalog.value.id == null
-                          ? null
-                          : _controller.catalogslist.value.firstWhere(
-                              (element) =>
-                                  element.id == _controller.catalog.value.id),
+                      value: dropDown,
                     )),
                 Container(
                     alignment: Alignment.topLeft, child: Text('№ ${_id}')),
@@ -102,10 +106,6 @@ class EditProductDialog extends StatelessWidget {
   }
 
   Widget priceTab(BuildContext context) {
-    _controller
-        .getByParentId("doc/price/get", _controller.product.value.id.toString())
-        .then((value) => _controller.prices.value =
-            value.map((e) => Price.fromJson(e)).toList());
     return Container(
         padding: EdgeInsets.only(left: 50, right: 50),
         child: Column(
@@ -131,7 +131,6 @@ class EditProductDialog extends StatelessWidget {
                     itemBuilder: (context, idx) {
                       return InkWell(
                           onTap: () {
-
                             _controller.price.value =
                                 _controller.prices.value[idx];
                             MainConstant.getRate(DateTime.parse(
@@ -210,7 +209,7 @@ class EditProductDialog extends StatelessWidget {
         ));
   }
 
-  Future<void> showdialogPrice(BuildContext context) async {
+  Future<void> showdialogPrice(BuildContext dialogcontext) async {
     if (_controller.price.value.date != null) {
       _dateController.text =
           _formatter.format(DateTime.parse(_controller.price.value.date!));
@@ -225,12 +224,12 @@ class EditProductDialog extends StatelessWidget {
     }
 
     await showDialog<void>(
-      context: context,
+      context: dialogcontext,
       barrierDismissible: true,
       // false = user must tap button, true = tap outside dialog
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: Text(S.of(context).form_dialog),
+          title: Text(S.of(dialogcontext).form_dialog),
           // titlePadding: EdgeInsetsGeometry(),
           content: Container(
               height: MediaQuery.of(dialogContext).size.height / 2,
@@ -257,11 +256,11 @@ class EditProductDialog extends StatelessWidget {
                                     fontSize: 20,
                                     fontWeight: FontWeight.w200,
                                     color: Colors.black),
-                                decoration:
-                                    MainConstant.decoration(S.of(context).date),
+                                decoration: MainConstant.decoration(
+                                    S.of(dialogcontext).date),
                                 onTap: () async {
                                   await showDatePicker(
-                                    context: context,
+                                    context: dialogcontext,
                                     initialDate: DateTime.now(),
                                     firstDate: DateTime(2015),
                                     lastDate: DateTime(2030),
@@ -281,7 +280,7 @@ class EditProductDialog extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  '${S.of(context).doll} ${_controller.rate.value.toString()} ${S.of(context).sum}',
+                                  '${S.of(dialogcontext).doll} ${_controller.rate.value.toString()} ${S.of(dialogcontext).sum}',
                                   style: GoogleFonts.openSans(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w200,
@@ -347,7 +346,7 @@ class EditProductDialog extends StatelessWidget {
                       ))))),
           actions: <Widget>[
             TextButton(
-              child: Text(S.of(context).save),
+              child: Text(S.of(dialogcontext).save),
               onPressed: () {
                 if (!_keyEdit.currentState!.validate()) {
                   return;
@@ -366,6 +365,7 @@ class EditProductDialog extends StatelessWidget {
                     .save("doc/price/save", _controller.price.value)
                     .then((value) {
                   _controller.prices.value.add(Price.fromJson(value));
+                  _controller.prices.refresh();
                   Navigator.of(dialogContext).pop();
                 });
               },
@@ -439,20 +439,31 @@ class EditProductDialog extends StatelessWidget {
               if (!_keyEdit.currentState!.validate()) {
                 return;
               }
+              if (dropDown == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(S.of(context).validate)));
+                return;
+              }
+
               Product? _product;
               _product = _controller.product.value;
-              if (_product == null) {
+              if (_product.id == null) {
                 _product = Product();
               }
               _product.name = _nameController.text;
               _product.description = _descriptionController.text;
+              _product.catalog = dropDown;
 
-              _product.catalog = _controller.catalog.value;
               _controller.save("doc/product/save", _product).then((value) {
                 _controller.product.value = Product.fromJson(value);
-                _controller
-                    .fetchgetAll(_controller.catalog.value.id.toString());
-                Navigator.of(context).pop(); // Dismiss alert dialog
+
+                Product? result = _controller.products.value.firstWhereOrNull(
+                    (element) => element.id == _controller.product.value.id);
+                if (result == null) {
+                  _controller.products.value.add(_controller.product.value);
+                }
+                _controller.products.refresh();
+                Navigator.of(context).pop();
               });
             },
             child: Text(S.of(context).save),

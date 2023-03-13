@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../generated/l10n.dart';
+import '../../models/calculate/Price.dart';
 import '../../models/catalogs/Characteristic.dart';
 import '../../models/catalogs/ProductImage.dart';
 import '../../models/constants/main_constant.dart';
@@ -39,9 +40,8 @@ class ProductPage extends GetView<Controller> {
                         child: ElevatedButton(
                             onPressed: () {
                               // if (_controller.catalog.value.id == null) {
-                              //   return;
-                              // }
                               _controller.product.value = Product();
+                              // }
 
                               _controller.productImages = <ProductImage>[].obs;
                               Future.delayed(
@@ -78,6 +78,7 @@ class ProductPage extends GetView<Controller> {
                               _controller
                                   .fetchgetAll(value.id.toString())
                                   .then((value) {
+                                _controller.products.value = value;
                                 _productDataGridSource = ProductDataGridSource(
                                     _controller.products.value);
                               });
@@ -112,10 +113,11 @@ class ProductPage extends GetView<Controller> {
                         return UiO.datagrig_height;
                       },
                       headerRowHeight: UiO.datagrig_height,
-                      onCellTap: ((cell) {
+                      onCellDoubleTap: ((cell) {
                         _controller.product.value = _controller
                             .products.value[cell.rowColumnIndex.rowIndex - 1];
-                        _controller.catalog.value = dropDownValue!;
+                        _controller.catalog.value =
+                            _controller.product.value.catalog!;
                         _controller
                             .getByParentId("doc/productimage/get",
                                 _controller.product.value.id.toString())
@@ -125,6 +127,13 @@ class ProductPage extends GetView<Controller> {
                               .map((e) => ProductImage.fromJson(e))
                               .toList();
                           // } else {}
+                        });
+                        _controller
+                            .getByParentId("doc/price/get",
+                                _controller.product.value.id.toString())
+                            .then((value) {
+                          _controller.prices.value =
+                              value.map((e) => Price.fromJson(e)).toList();
                         });
                         _controller
                             .getCharasteristic("doc/characteristic/get",
