@@ -71,6 +71,7 @@ class CatalogPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                       side: BorderSide(color: Colors.black38)),
                   child: Container(
+                    padding: EdgeInsets.all(5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
