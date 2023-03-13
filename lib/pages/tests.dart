@@ -10,6 +10,16 @@ class Test extends StatefulWidget {
 class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Center(
+      child: Column(
+        children: [
+          Text("HElloooo"),
+          Text("Salom"),
+          Text("Salom"),
+          Text("Salom"),
+        ]
+      ),
+    );
   }
 }
+
