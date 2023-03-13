@@ -78,7 +78,7 @@ class OnlineDrawer extends StatelessWidget {
             ),
             ListTile(
               iconColor: Colors.white,
-              leading: Icon(Icons.home, color: Colors.white,),
+              leading: Icon(Icons.currency_exchange, color: Colors.white,),
               title: Text(
                 S.of(context).exchange,
                 style: TextStyle(color: Colors.white),
