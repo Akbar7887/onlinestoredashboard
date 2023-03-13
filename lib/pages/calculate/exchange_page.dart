@@ -173,9 +173,7 @@ class ExchangePage extends StatelessWidget {
       _exchangeDataGridSource =
           ExchangeDataGridSource(_controller.exchanges.value);
 
-      return Scaffold(
-          appBar: OnlineAppBar(), // extendBodyBehindAppBar: true,
-          body: SafeArea(
+      return SafeArea(
             child: Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: Column(children: [
@@ -309,7 +307,7 @@ class ExchangePage extends StatelessWidget {
             // drawer: DskNavigationDrawer(),
 
             // drawer: DskNavigationDrawer(),
-          ));
+          );
     });
   }
 }

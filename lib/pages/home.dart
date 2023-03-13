@@ -7,6 +7,7 @@ import 'package:onlinestoredashboard/widgets/onlineDrawer.dart';
 
 import '../controller/Controller.dart';
 import '../generated/l10n.dart';
+import 'calculate/exchange_page.dart';
 import 'catalogs/catalog_page.dart';
 import '../widgets/header.dart';
 
@@ -86,6 +87,11 @@ class _HomeState extends State<Home> {
           return ProductPage();
         }
         break;
+      case 3:
+        {
+          return ExchangePage();
+        }
+        break;
       default:
         {
           return Container();
@@ -107,6 +113,11 @@ class _HomeState extends State<Home> {
       case 2:
         {
           return S.of(context).product;
+        }
+        break;
+      case 3:
+        {
+          return S.of(context).exchange;
         }
         break;
       default:

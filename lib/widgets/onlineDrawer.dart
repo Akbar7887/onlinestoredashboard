@@ -76,6 +76,17 @@ class OnlineDrawer extends StatelessWidget {
                 ),
               ],
             ),
+            ListTile(
+              iconColor: Colors.white,
+              leading: Icon(Icons.home, color: Colors.white,),
+              title: Text(
+                S.of(context).exchange,
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                _controller.page.value = 3;
+              },
+            ),
             // Divider(
             //   color: Colors.white,
             // ),
