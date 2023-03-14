@@ -66,7 +66,7 @@ class Api {
     }
   }
 
-  Future<dynamic> post(String url, Object object) async {
+  Future<dynamic> save(String url, Object object) async {
     Uri uri = Uri.parse("${UiO.url}${url}");
 
     final response =

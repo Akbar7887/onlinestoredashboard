@@ -32,7 +32,7 @@ class ApiConnector extends GetConnect{
   }
 
   Future<dynamic> save(String url, Object object) async {
-    return await api.post(url, object);
+    return await api.save(url, object);
   }
 
   Future<dynamic> savesub(String url, Object object, String id) async {
