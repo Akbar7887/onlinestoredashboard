@@ -3,9 +3,6 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:onlinestoredashboard/controller/ApiConnector.dart';
 import 'package:onlinestoredashboard/models/Organization.dart';
-import 'package:onlinestoredashboard/models/contragent/User.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
 
 import '../models/calculate/Exchange.dart';
 import '../models/calculate/Price.dart';
@@ -16,7 +13,7 @@ import '../models/catalogs/ProductImage.dart';
 
 class Controller extends GetxController {
   final api = ApiConnector();
-  var organization = Organization().obs;
+  Organization? organization;
   var zero = 0.obs;
   var catalogs = <Catalog>[].obs;
   var catalogslist = <Catalog>[].obs;
@@ -32,11 +29,6 @@ class Controller extends GetxController {
   Rx<Price> price = Price().obs;
   var rate = 0.0.obs;
   var productImages = <ProductImage>[].obs;
-  var productImage = ProductImage().obs;
-  var users = <User>[].obs;
-  Rx<User> user = User().obs;
-  var dataGridRows = <DataGridRow>[].obs;
-
 
 
 
@@ -45,20 +37,13 @@ class Controller extends GetxController {
   @override
   void onInit() {
     fetchGetAll();
-    fetchAllExchange();
+    fetchAll();
     fetchListOrganization();
-    fetchAll("doc/user/get").then((value) {
-      this.users.value = value.map((e) => User.fromJson(e)).toList();
-    });
+
     super.onInit();
   }
-  Future<List<dynamic>> fetchAll(String url) async {
-    return await api.getAll(url);
-  }
 
-
-
-  Future<void> fetchAllExchange() async {
+  Future<void> fetchAll() async {
     final json = await api.getAll("doc/exchange/get");
     this.exchanges.value = json.map((e) => Exchange.fromJson(e)).toList();
   }
@@ -111,7 +96,7 @@ class Controller extends GetxController {
     Organization loadedorg = Organization.fromJson(json);
 
     if (loadedorg != null) {
-      organization.value = loadedorg;
+      organization = loadedorg;
       // notifyChildrens();
     }
     update();
