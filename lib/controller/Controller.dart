@@ -29,6 +29,7 @@ class Controller extends GetxController {
   Rx<Price> price = Price().obs;
   var rate = 0.0.obs;
   var productImages = <ProductImage>[].obs;
+  var productImage = ProductImage().obs;
 
 
 
