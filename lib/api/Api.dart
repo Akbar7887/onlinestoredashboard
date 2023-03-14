@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
-import 'package:onlinestoredashboard/models/catalogs/Product.dart';
+
 
 class Api {
   Map<String, String> header = {
@@ -21,9 +21,7 @@ class Api {
     final response = await http.get(uri, headers: header);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final json = jsonDecode(utf8.decode(response.bodyBytes));
-
-      return json;
+      return jsonDecode(utf8.decode(response.bodyBytes));
     } else {
       throw Exception("Error");
     }
@@ -49,7 +47,6 @@ class Api {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(utf8.decode(response.bodyBytes));
-
     } else {
       throw Exception("Error");
     }
@@ -120,8 +117,8 @@ class Api {
     }
   }
 
-  Future<dynamic> saveImage(
-      String url, Uint8List data, Map<String, dynamic> param, String name) async {
+  Future<dynamic> saveImage(String url, Uint8List data,
+      Map<String, dynamic> param, String name) async {
     List<int> list = data;
     final uri = Uri.parse('${UiO.url}${url}');
     var request = await http.MultipartRequest('POST', uri);
@@ -133,9 +130,9 @@ class Api {
     // request.fields["parent_id"] = "19";
     // request.fields["mainimg"] = "false";
 
-
     // request.headers.addAll(hedersWithToken);
-    request.files.add(http.MultipartFile.fromBytes("file", list, filename: name));
+    request.files
+        .add(http.MultipartFile.fromBytes("file", list, filename: name));
     final response = await request.send();
     if (response.statusCode == 200 || response.statusCode == 201) {
       final result = await http.Response.fromStream(response);
