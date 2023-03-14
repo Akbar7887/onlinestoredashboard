@@ -126,6 +126,9 @@ class ProductPage extends GetView<Controller> {
                           _controller.productImages.value = value
                               .map((e) => ProductImage.fromJson(e))
                               .toList();
+                          if (_controller.productImages.isNotEmpty) {
+                            _controller.productImage.value = _controller.productImages.value[0];
+                          }
                           // } else {}
                         });
                         _controller
