@@ -13,7 +13,7 @@ import '../models/catalogs/ProductImage.dart';
 
 class Controller extends GetxController {
   final api = ApiConnector();
-  Organization? organization;
+  var organization = Organization().obs;
   var zero = 0.obs;
   var catalogs = <Catalog>[].obs;
   var catalogslist = <Catalog>[].obs;
@@ -96,7 +96,7 @@ class Controller extends GetxController {
     Organization loadedorg = Organization.fromJson(json);
 
     if (loadedorg != null) {
-      organization = loadedorg;
+      organization.value = loadedorg;
       // notifyChildrens();
     }
     update();
