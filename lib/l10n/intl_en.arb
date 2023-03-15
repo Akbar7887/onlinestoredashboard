@@ -30,6 +30,8 @@
   "image_store": "Картинки",
   "dashboard": "Dashboard",
   "groups": "Группы",
-  "error": "Ошибка"
+  "error": "Ошибка",
+  "user": "Пользователь",
+  "contragent": "Контрагенты"
 
 }
