@@ -18,79 +18,92 @@ class OnlineDrawer extends StatelessWidget {
         backgroundColor: Colors.black87,
         // scrollDirection: Axis.vertical,
         child: SafeArea(
-            child: Column(
-          children: [
-            ListTile(
-              title: Text(
-                UiO.companyName,
-                style: TextStyle(color: Colors.white),
-              ),
+            child: Column(children: [
+          ListTile(
+            title: Text(
+              UiO.companyName,
+              style: TextStyle(color: Colors.white),
             ),
-            Divider(
+          ),
+          Divider(
+            color: Colors.white,
+          ),
+          ListTile(
+            iconColor: Colors.white,
+            leading: Icon(
+              Icons.home,
               color: Colors.white,
             ),
-            ListTile(
-              iconColor: Colors.white,
-              leading: Icon(Icons.home, color: Colors.white,),
-              title: Text(
-                S.of(context).organization,
-                style: TextStyle(color: Colors.white),
-              ),
-              onTap: () {
-                _controller.page.value = 0;
-              },
+            title: Text(
+              S.of(context).organization,
+              style: TextStyle(color: Colors.white),
             ),
-            ExpansionTile(
-              collapsedIconColor: Colors.white,
-              controlAffinity: ListTileControlAffinity.platform,
-              leading: Icon(
-                Icons.view_agenda,
-                color: Colors.white,
-              ),
-              title: Text(
-                S.of(context).catalog,
-                style: TextStyle(color: Colors.white),
-              ),
-              textColor: Colors.white,
-              children: [
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 80.0, right: 0.0),
-                  iconColor: Colors.white,
-                  title: Text(
-                    S.of(context).groups,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onTap: () {
-                    _controller.page.value = 1;
-                  },
+            onTap: () {
+              _controller.page.value = 0;
+            },
+          ),
+          ExpansionTile(
+            collapsedIconColor: Colors.white,
+            controlAffinity: ListTileControlAffinity.platform,
+            leading: Icon(
+              Icons.view_agenda,
+              color: Colors.white,
+            ),
+            title: Text(
+              S.of(context).catalog,
+              style: TextStyle(color: Colors.white),
+            ),
+            textColor: Colors.white,
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.only(left: 80.0, right: 0.0),
+                iconColor: Colors.white,
+                title: Text(
+                  S.of(context).groups,
+                  style: TextStyle(color: Colors.white),
                 ),
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 80.0, right: 0.0),
-                  title: Text(
-                    S.of(context).product,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onTap: () {
-                    _controller.page.value = 2;
-                  },
-                ),
-              ],
-            ),
-            ListTile(
-              iconColor: Colors.white,
-              leading: Icon(Icons.currency_exchange, color: Colors.white,),
-              title: Text(
-                S.of(context).exchange,
-                style: TextStyle(color: Colors.white),
+                onTap: () {
+                  _controller.page.value = 1;
+                },
               ),
-              onTap: () {
-                _controller.page.value = 3;
-              },
+              ListTile(
+                contentPadding: EdgeInsets.only(left: 80.0, right: 0.0),
+                title: Text(
+                  S.of(context).product,
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  _controller.page.value = 2;
+                },
+              ),
+            ],
+          ),
+          ExpansionTile(
+            collapsedIconColor: Colors.white,
+            controlAffinity: ListTileControlAffinity.platform,
+            leading: Icon(
+              Icons.view_agenda,
+              color: Colors.white,
             ),
-            // Divider(
-            //   color: Colors.white,
-            // ),
-          ],
-        )));
+            title: Text(
+              S.of(context).contragent,
+              style: TextStyle(color: Colors.white),
+            ),
+            textColor: Colors.white,
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.only(left: 80.0, right: 0.0),
+                iconColor: Colors.white,
+                title: Text(
+                  S.of(context).user,
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  _controller.page.value = 4;
+                },
+              ),
+            ],
+          )
+        ])));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:onlinestoredashboard/pages/catalogs/product_page.dart';
+import 'package:onlinestoredashboard/pages/contragent/user_page.dart';
 import 'package:onlinestoredashboard/pages/organization_page.dart';
 import 'package:onlinestoredashboard/widgets/onlineAppBar.dart';
 import 'package:onlinestoredashboard/widgets/onlineDrawer.dart';
@@ -92,6 +93,11 @@ class _HomeState extends State<Home> {
           return ExchangePage();
         }
         break;
+      case 4:
+        {
+          return UserPage();
+        }
+        break;
       default:
         {
           return Container();
@@ -118,6 +124,11 @@ class _HomeState extends State<Home> {
       case 3:
         {
           return S.of(context).exchange;
+        }
+        break;
+      case 4:
+        {
+          return S.of(context).user;
         }
         break;
       default:

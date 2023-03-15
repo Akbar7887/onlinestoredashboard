@@ -369,6 +369,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Пользователь`
+  String get user {
+    return Intl.message(
+      'Пользователь',
+      name: 'user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Контрагенты`
+  String get contragent {
+    return Intl.message(
+      'Контрагенты',
+      name: 'contragent',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

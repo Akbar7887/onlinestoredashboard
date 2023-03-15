@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "characteristic": MessageLookupByLibrary.simpleMessage("Харак-ка"),
         "characteristics":
             MessageLookupByLibrary.simpleMessage("характеристики"),
+        "contragent": MessageLookupByLibrary.simpleMessage("Контрагенты"),
         "dashboard": MessageLookupByLibrary.simpleMessage("Dashboard"),
         "date": MessageLookupByLibrary.simpleMessage("Дата"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
@@ -52,6 +53,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "rate": MessageLookupByLibrary.simpleMessage("Валюта"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "sum": MessageLookupByLibrary.simpleMessage("Сум"),
+        "user": MessageLookupByLibrary.simpleMessage("Пользователь"),
         "validate":
             MessageLookupByLibrary.simpleMessage("Просим заплнить поля"),
         "valuename": MessageLookupByLibrary.simpleMessage("Значение"),
