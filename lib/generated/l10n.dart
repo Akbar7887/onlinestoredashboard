@@ -60,9 +60,6 @@ class S {
     );
   }
 
-
-
-
   /// `Наименование`
   String get name {
     return Intl.message(
@@ -273,16 +270,6 @@ class S {
     );
   }
 
-  /// `Дата создания`
-  String get date_create {
-    return Intl.message(
-      'Дата создания',
-      name: 'date_create',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Основное`
   String get main {
     return Intl.message(
@@ -393,26 +380,6 @@ class S {
     );
   }
 
-  /// `Пароль`
-  String get password {
-    return Intl.message(
-      'Пароль',
-      name: 'password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Телефон`
-  String get phone {
-    return Intl.message(
-      'Телефон',
-      name: 'phone',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Контрагенты`
   String get contragent {
     return Intl.message(
@@ -422,19 +389,6 @@ class S {
       args: [],
     );
   }
-
-  /// `ID пользователя`
-  String get userId {
-    return Intl.message(
-      'ID пользователя',
-      name: 'userId',
-      desc: '',
-      args: [],
-    );
-  }
-
-
-
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

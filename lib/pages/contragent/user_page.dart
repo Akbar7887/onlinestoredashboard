@@ -221,7 +221,8 @@ class UserDataGridSource extends DataGridSource {
                   value: _formatterToSend
                       .format(DateTime.parse(e.dateCreate.toString()))),
               DataGridCell<Icon>(
-                  columnName: 'delete', value: Icon(Icons.delete)),
+                  columnName: 'delete',
+                  value: Icon(Icons.delete_forever_outlined)),
             ]))
         .toList();
   }
