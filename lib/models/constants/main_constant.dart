@@ -18,8 +18,29 @@ class MainConstant {
             borderSide: BorderSide(width: 0.5, color: Colors.black)),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(width: 0.5, color: Colors.black)));
+            borderSide: BorderSide(width: 0.5, color: Colors.black))
+    );
   }
+
+  static InputDecoration decorationUserForm(String name, Icon iconPref, GestureTapCallback tapEvent, Icon iconSuf) {
+    return InputDecoration(
+        fillColor: Colors.white,
+        //Theme.of(context).backgroundColor,
+        labelText: name,
+        prefixIcon: iconPref,
+        suffixIcon: GestureDetector(
+          onTap:  tapEvent,
+          child: iconSuf,
+        ),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(width: 0.5, color: Colors.black)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(width: 0.5, color: Colors.black))
+    );
+  }
+
 
   static void getRate(DateTime dateTime) {
     _controller
