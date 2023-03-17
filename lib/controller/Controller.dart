@@ -3,6 +3,9 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:onlinestoredashboard/controller/ApiConnector.dart';
 import 'package:onlinestoredashboard/models/Organization.dart';
+import 'package:onlinestoredashboard/models/contragent/User.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
 
 import '../models/calculate/Exchange.dart';
 import '../models/calculate/Price.dart';
@@ -30,6 +33,10 @@ class Controller extends GetxController {
   var rate = 0.0.obs;
   var productImages = <ProductImage>[].obs;
   var productImage = ProductImage().obs;
+  var users = <User>[].obs;
+  Rx<User> user = User().obs;
+  var dataGridRows = <DataGridRow>[].obs;
+
 
 
 
@@ -38,13 +45,20 @@ class Controller extends GetxController {
   @override
   void onInit() {
     fetchGetAll();
-    fetchAll();
+    fetchAllExchange();
     fetchListOrganization();
-
+    fetchAll("doc/user/get").then((value) {
+      this.users.value = value.map((e) => User.fromJson(e)).toList();
+    });
     super.onInit();
   }
+  Future<List<dynamic>> fetchAll(String url) async {
+    return await api.getAll(url);
+  }
 
-  Future<void> fetchAll() async {
+
+
+  Future<void> fetchAllExchange() async {
     final json = await api.getAll("doc/exchange/get");
     this.exchanges.value = json.map((e) => Exchange.fromJson(e)).toList();
   }
