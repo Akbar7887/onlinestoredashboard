@@ -150,7 +150,7 @@ class ExchangePage extends StatelessWidget {
                 _controller
                     .save("doc/exchange/save", _controller.exchange.value)
                     .then((value) {
-                  _controller.fetchAll();
+                  _controller.fetchAllExchange();
                   Navigator.of(dialogContext).pop();
                 });
               },
@@ -329,7 +329,7 @@ class ExchangeDataGridSource extends DataGridSource {
                   value: IconButton(
                     onPressed: () {
                       _controller.deleteById("doc/exchange/delete", e.id.toString()).then((value) {
-                        _controller.fetchAll();
+                        _controller.fetchAllExchange();
                       });
                     },
                     icon: Icon(Icons.delete, size: 15),

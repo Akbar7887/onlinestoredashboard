@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
     switch (_controller.page.value) {
       case 0:
         {
-          return OrganizationPage();
+          return Container();
         }
         break;
       case 1:
