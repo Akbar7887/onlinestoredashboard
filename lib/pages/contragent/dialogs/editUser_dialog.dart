@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:onlinestoredashboard/controller/Controller.dart';
 import '../../../generated/l10n.dart';
 import '../../../models/constants/main_constant.dart';
@@ -11,6 +12,11 @@ import '../../../models/contragent/User.dart';
 TextEditingController _nameController = TextEditingController();
 TextEditingController _passwordController = TextEditingController();
 TextEditingController _phoneController = TextEditingController();
+
+var maskFormatter = MaskTextInputFormatter(
+    mask: '+### (##) ###-##-##',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy);
 
 String _id = '';
 String _create = '';
@@ -85,16 +91,22 @@ class EditUserDialog extends StatelessWidget {
                 ),
                 TextFormField(
                     controller: _phoneController,
+                    inputFormatters: [maskFormatter],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return S.of(context).validate;
                       }
+                      return null;
                     },
                     style: GoogleFonts.openSans(
                         fontSize: 20,
                         fontWeight: FontWeight.w200,
                         color: Colors.black),
-                    decoration: MainConstant.decoration(S.of(context).phone)),
+                    decoration: MainConstant.decorationUserForm(
+                        S.of(context).phone,
+                        Icon(Icons.phone),
+                        () => _phoneController.clear(),
+                        Icon(Icons.delete))),
               ],
             ));
   }
@@ -125,7 +137,7 @@ class EditUserDialog extends StatelessWidget {
         title: Text(S.of(context).form_dialog),
         content: SafeArea(
             child: Container(
-                width: MediaQuery.of(context).size.width / 1.2,
+                width: MediaQuery.of(context).size.width / 2.5,
                 height: MediaQuery.of(context).size.height,
                 child: Form(
                     key: _keyEdit,
