@@ -8,11 +8,11 @@ import 'package:onlinestoredashboard/models/UiO.dart';
 
 class Api {
   Map<String, String> header = {
-    // 'Content-Type': 'application/json',
-    // 'Access-Control-Allow-Origin': '*',
-    // 'Access-Control-Allow-Credentials': 'true',
-    // 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE',
-    // 'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept'
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept'
   };
   var _formatterToSend = new DateFormat('yyyy-MM-dd HH:mm:ss');
 

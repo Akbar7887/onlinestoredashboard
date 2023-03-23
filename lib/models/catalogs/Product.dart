@@ -69,7 +69,7 @@ class Product {
     if (this.catalog != null) {
       map['catalog'] = this.catalog!.toJson();
     }
-    map['code'] = code;
+    map['code'] = this.code;
 
     return map;
   }
