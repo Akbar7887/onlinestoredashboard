@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:onlinestoredashboard/controller/Controller.dart';
@@ -82,7 +83,7 @@ class OnlineDrawer extends StatelessWidget {
             collapsedIconColor: Colors.white,
             controlAffinity: ListTileControlAffinity.platform,
             leading: Icon(
-              Icons.view_agenda,
+              FlutterIcons.counter_mco,
               color: Colors.white,
             ),
             title: Text(
