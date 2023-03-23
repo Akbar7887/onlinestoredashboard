@@ -14,7 +14,6 @@ import '../../models/catalogs/Characteristic.dart';
 import '../../models/catalogs/ProductImage.dart';
 import '../../models/constants/main_constant.dart';
 import '../../models/contragent/User.dart';
-import 'dialogs/delete_user_dialog.dart';
 import 'dialogs/editUser_dialog.dart';
 
 final Controller _controller = Get.put(Controller());
