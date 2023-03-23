@@ -9,19 +9,24 @@ import 'package:onlinestoredashboard/pages/catalogs/product_page.dart';
 import 'package:onlinestoredashboard/pages/home.dart';
 import 'package:onlinestoredashboard/pages/organization_page.dart';
 import 'package:url_strategy/url_strategy.dart';
-
+import 'package:timezone/data/latest.dart' as tz;
 import 'controller/Controller.dart';
 import 'generated/l10n.dart';
 
+
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
 
   setPathUrlStrategy();
   runApp(const MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
 
   // This widget is the root of your application.
   @override
@@ -54,5 +59,6 @@ class MyApp extends StatelessWidget {
 
       ],
     );
+
   }
 }
