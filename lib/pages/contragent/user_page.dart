@@ -22,8 +22,6 @@ late UserDataGridSource _userDataGridSource;
 
 var _formatterToSend = new DateFormat('yyyy-MM-dd  HH:mm:ss');
 
-
-
 class UserPage extends GetView<Controller> {
   UserPage() : super();
 
@@ -247,54 +245,18 @@ class UserDataGridSource extends DataGridSource {
                             child: row.getCells()[4].value,
                             onTap: () {
                               _controller
-                                  .deleteById(
+                                  .deleteActive(
                                       "doc/user/delete",
                                       _controller
                                           .users[_controller.dataGridRows
                                               .indexOf(row)]
-                                          .id
-                                          .toString())
+                                          .id!)
                                   .then((value) {
                                 _controller.users.removeAt(
                                     _controller.dataGridRows.indexOf(row));
                               });
                             },
                           ),
-                          // PopupMenuButton(
-                          //   // tooltip: "Изменение строки",
-                          //   itemBuilder: (BuildContext context) => [
-                          //     PopupMenuItem(
-                          //       onTap: () {
-                          //         _controller.user.value = _controller
-                          //             .users.value[dataGridRows.indexOf(row)];
-                          //         Future.delayed(
-                          //             const Duration(seconds: 0),
-                          //                 () => showDialog(
-                          //                 context: context,
-                          //                 barrierDismissible: true,
-                          //                 builder: (BuildContext dialogContext) {
-                          //                   return DeleteUserDialog(
-                          //                     url: "doc/user",
-                          //                     index: dataGridRows.indexOf(row),
-                          //                   );
-                          //                 }));
-                          //       },
-                          //       child: Row(
-                          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //         children: [
-                          //           Text(S.of(context).delete),
-                          //           SizedBox(
-                          //             width: 5,
-                          //           ),
-                          //           Icon(
-                          //             Icons.delete,
-                          //             size: 20,
-                          //           ),
-                          //         ],
-                          //       ),
-                          //     ),
-                          //   ],
-                          // )
                         ))
                 : Container(
                     alignment: Alignment.centerLeft,

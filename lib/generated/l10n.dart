@@ -60,9 +60,6 @@ class S {
     );
   }
 
-
-
-
   /// `Наименование`
   String get name {
     return Intl.message(
@@ -273,16 +270,6 @@ class S {
     );
   }
 
-  /// `Дата создания`
-  String get date_create {
-    return Intl.message(
-      'Дата создания',
-      name: 'date_create',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Основное`
   String get main {
     return Intl.message(
@@ -393,11 +380,21 @@ class S {
     );
   }
 
-  /// `Пароль`
-  String get password {
+  /// `Контрагенты`
+  String get contragent {
     return Intl.message(
-      'Пароль',
-      name: 'password',
+      'Контрагенты',
+      name: 'contragent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Дата создание`
+  String get date_create {
+    return Intl.message(
+      'Дата создание',
+      name: 'date_create',
       desc: '',
       args: [],
     );
@@ -413,28 +410,25 @@ class S {
     );
   }
 
-  /// `Контрагенты`
-  String get contragent {
-    return Intl.message(
-      'Контрагенты',
-      name: 'contragent',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `ID пользователя`
+  /// `ID Пользователя`
   String get userId {
     return Intl.message(
-      'ID пользователя',
+      'ID Пользователя',
       name: 'userId',
       desc: '',
       args: [],
     );
   }
 
-
-
+  /// `Пароль`
+  String get password {
+    return Intl.message(
+      'Пароль',
+      name: 'password',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
