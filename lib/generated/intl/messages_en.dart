@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "characteristic": MessageLookupByLibrary.simpleMessage("Харак-ка"),
         "characteristics":
             MessageLookupByLibrary.simpleMessage("характеристики"),
+        "code": MessageLookupByLibrary.simpleMessage("Код товара"),
         "contragent": MessageLookupByLibrary.simpleMessage("Контрагенты"),
         "dashboard": MessageLookupByLibrary.simpleMessage("Dashboard"),
         "date": MessageLookupByLibrary.simpleMessage("Дата"),

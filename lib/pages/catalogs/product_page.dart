@@ -114,6 +114,8 @@ class ProductPage extends GetView<Controller> {
                       },
                       headerRowHeight: UiO.datagrig_height,
                       onCellDoubleTap: ((cell) {
+                        // print(cell.rowColumnIndex.columnIndex);
+
                         _controller.product.value = _controller
                             .products.value[cell.rowColumnIndex.rowIndex - 1];
                         _controller.catalog.value =
@@ -127,7 +129,8 @@ class ProductPage extends GetView<Controller> {
                               .map((e) => ProductImage.fromJson(e))
                               .toList();
                           if (_controller.productImages.isNotEmpty) {
-                            _controller.productImage.value = _controller.productImages.value[0];
+                            _controller.productImage.value =
+                                _controller.productImages.value[0];
                           }
                           // } else {}
                         });
@@ -183,13 +186,26 @@ class ProductPage extends GetView<Controller> {
                           ),
                         ),
                         GridColumn(
-                            columnName: "edit",
+                          columnName: 'code',
+                          // width: MediaQuery.of(context).size.width/2,
+                          label: Center(
+                            child: Text(
+                              S.of(context).code,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                            columnName: "delete",
                             maximumWidth: 150,
                             label: Container(
                                 padding: EdgeInsets.all(5.0),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  S.of(context).edit,
+                                  S.of(context).delete,
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.white,
@@ -200,6 +216,8 @@ class ProductPage extends GetView<Controller> {
               ],
             )));
   }
+
+  deleteDialog(BuildContext context, int index) {}
 
   @override
   Widget build(BuildContext context) {
@@ -228,8 +246,29 @@ class ProductDataGridSource extends DataGridSource {
                   columnName: 'id',
                   value: _controller.products.value.indexOf(e) + 1),
               DataGridCell<String>(columnName: 'name', value: e.name),
-              DataGridCell<Icon>(
-                  columnName: 'delete', value: Icon(Icons.more_vert_outlined)),
+              DataGridCell<String>(columnName: 'code', value: e.code),
+              DataGridCell<IconButton>(
+                columnName: 'delete',
+                value: IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    size: 15,
+                  ),
+                  onPressed: () {
+                    _controller.product.value =
+                        _controller.products.value[products.indexOf(e)];
+                    _controller
+                        .deleteActive("doc/product/delete",
+                            _controller.products.value[products.indexOf(e)].id!)
+                        .then((value) {
+                          _controller.products.value.remove(_controller.products.value[products.indexOf(e)]);
+                      // _controller
+                      //     .fetchgetAll(_controller.catalog.value.id.toString());
+                      _controller.products.refresh();
+                    });
+                  },
+                ),
+              ),
             ]))
         .toList();
   }
@@ -248,107 +287,14 @@ class ProductDataGridSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row
             .getCells()
-            .map((e) => e.columnName == 'delete'
+            .map((e) => e.columnName != "delete"
                 ? Container(
-                    alignment: Alignment.center,
-                    // padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: PopupMenuButton(
-                      // tooltip: "Изменение строки",
-                      itemBuilder: (BuildContext context) => [
-                        PopupMenuItem(
-                            value: 0,
-                            onTap: () async {
-                              if (_controller.catalog.value.id == null) {
-                                return;
-                              }
-                              _controller.product.value = _controller
-                                  .products.value[dataGridRows.indexOf(row)];
-
-                              Future.delayed(
-                                  const Duration(seconds: 0),
-                                  () => showDialog(
-                                      context: context,
-                                      barrierDismissible: true,
-                                      builder: (BuildContext context) {
-                                        return EditProductDialog();
-                                      }));
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(S.of(context).edit),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                ),
-                              ],
-                            )),
-                        PopupMenuItem(
-                          onTap: () {
-                            _controller.product.value = _controller
-                                .products.value[dataGridRows.indexOf(row)];
-                            Future.delayed(
-                                const Duration(seconds: 0),
-                                () => showDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (BuildContext context) {
-                                      return AddcharacteristicDialog();
-                                    }));
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(S.of(context).characteristic),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                Icons.add_comment,
-                                size: 20,
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          onTap: () {
-                            _controller.product.value = _controller
-                                .products.value[dataGridRows.indexOf(row)];
-                            Future.delayed(
-                                const Duration(seconds: 0),
-                                () => showDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (BuildContext dialogContext) {
-                                      return DeleteDialog(
-                                        url: "doc/product/delete",
-                                        index: dataGridRows.indexOf(row),
-                                      );
-                                    }));
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(S.of(context).delete),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                Icons.delete,
-                                size: 20,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ))
-                : Container(
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(e.value.toString())))
+                    child: Text(e.value.toString()))
+                : Container(
+                    child: e.value,
+                  ))
             .toList());
   }
 }

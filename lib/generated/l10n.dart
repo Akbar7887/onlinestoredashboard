@@ -429,6 +429,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Код товара`
+  String get code {
+    return Intl.message(
+      'Код товара',
+      name: 'code',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

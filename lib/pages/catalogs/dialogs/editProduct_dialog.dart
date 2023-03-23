@@ -21,7 +21,7 @@ TextEditingController _dateController = TextEditingController();
 TextEditingController _ratesController = TextEditingController();
 TextEditingController _priceController = TextEditingController();
 TextEditingController _pricesumController = TextEditingController();
-
+TextEditingController _codeController = TextEditingController();
 String _id = '';
 final _keyEdit = GlobalKey<FormState>();
 final _keyPrice = GlobalKey<FormState>();
@@ -65,6 +65,24 @@ class EditProductDialog extends StatelessWidget {
                     )),
                 Container(
                     alignment: Alignment.topLeft, child: Text('№ ${_id}')),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: TextFormField(
+                        controller: _codeController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return S.of(context).validate;
+                          }
+                        },
+                        style: GoogleFonts.openSans(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w200,
+                            color: Colors.black),
+                        decoration: MainConstant.decoration(
+                            S.of(context).code))),
                 SizedBox(
                   height: 20,
                 ),
@@ -389,10 +407,12 @@ class EditProductDialog extends StatelessWidget {
         _nameController.text = _controller.product.value.name!;
         _descriptionController.text = _controller.product.value.description!;
         _id = _controller.product.value.id.toString();
+        _codeController.text = _controller.product.value.code!;
       } else {
         _id = '';
         _nameController.clear();
         _descriptionController.clear();
+        _codeController.clear();
       }
       if (_controller.catalog.value.id != null) {
         _controller.catalog.value = _controller.catalogslist.value.firstWhere(
@@ -453,7 +473,7 @@ class EditProductDialog extends StatelessWidget {
               _product.name = _nameController.text;
               _product.description = _descriptionController.text;
               _product.catalog = dropDown;
-
+              _product.code = _codeController.text;
               _controller.save("doc/product/save", _product).then((value) {
                 _controller.product.value = Product.fromJson(value);
 

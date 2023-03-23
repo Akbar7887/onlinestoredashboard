@@ -15,6 +15,7 @@ class Product {
   int? catalogId;
   List<Characteristic>? characteristics;
   Catalog? catalog;
+  String? code;
 
   Product(
       {this.id,
@@ -24,7 +25,8 @@ class Product {
       // this.active,
       this.productImages,
       this.catalogId,
-      this.characteristics});
+      this.characteristics,
+      this.code});
 
   Product.fromJson(dynamic json) {
     id = json['id'];
@@ -47,6 +49,8 @@ class Product {
     }
     catalog =
         json['catalog'] != null ? Catalog.fromJson(json['catalog']) : null;
+    code = json['code'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +69,8 @@ class Product {
     if (this.catalog != null) {
       map['catalog'] = this.catalog!.toJson();
     }
+    map['code'] = code;
+
     return map;
   }
 }
