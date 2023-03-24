@@ -82,7 +82,7 @@ class OnlineDrawer extends StatelessWidget {
             collapsedIconColor: Colors.white,
             controlAffinity: ListTileControlAffinity.platform,
             leading: Icon(
-              Icons.supervisor_account,
+            Icons.supervisor_account,
               color: Colors.white,
             ),
             title: Text(

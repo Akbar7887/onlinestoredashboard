@@ -246,13 +246,13 @@ class UserDataGridSource extends DataGridSource {
                             child: row.getCells()[4].value,
                             onTap: () {
                               _controller
-                                  .deleteById(
+                                  .deleteActive(
                                       "doc/user/delete",
                                       _controller
                                           .users[_controller.dataGridRows
                                               .indexOf(row)]
-                                          .id
-                                          .toString())
+                                          .id!
+                                          )
                                   .then((value) {
                                 _controller.users.removeAt(
                                     _controller.dataGridRows.indexOf(row));
