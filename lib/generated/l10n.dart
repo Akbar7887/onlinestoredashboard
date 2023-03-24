@@ -433,15 +433,7 @@ class S {
     );
   }
 
-  /// `ID пользователя`
-  String get userId2 {
-    return Intl.message(
-      'ID пользователя',
-      name: 'userId',
-      desc: '',
-      args: [],
-    );
-  }
+
 
 
 
