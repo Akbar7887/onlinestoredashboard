@@ -5,10 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 
-
 class Api {
   Map<String, String> header = {
     'Content-Type': 'application/json',
+    'charset': 'utf-8',
+    'Accept': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE',

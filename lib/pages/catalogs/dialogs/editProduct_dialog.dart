@@ -407,7 +407,7 @@ class EditProductDialog extends StatelessWidget {
         _nameController.text = _controller.product.value.name!;
         _descriptionController.text = _controller.product.value.description!;
         _id = _controller.product.value.id.toString();
-        _codeController.text = _controller.product.value.code!;
+        _codeController.text = _controller.product.value.codeproduct!;
       } else {
         _id = '';
         _nameController.clear();
@@ -473,7 +473,7 @@ class EditProductDialog extends StatelessWidget {
               _product.name = _nameController.text;
               _product.description = _descriptionController.text;
               _product.catalog = dropDown;
-              _product.code = _codeController.text;
+              _product.codeproduct = _codeController.text;
               _controller.save("doc/product/save", _product).then((value) {
                 _controller.product.value = Product.fromJson(value);
 

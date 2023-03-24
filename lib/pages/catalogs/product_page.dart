@@ -186,7 +186,7 @@ class ProductPage extends GetView<Controller> {
                           ),
                         ),
                         GridColumn(
-                          columnName: 'code',
+                          columnName: 'codeproduct',
                           // width: MediaQuery.of(context).size.width/2,
                           label: Center(
                             child: Text(
@@ -246,7 +246,7 @@ class ProductDataGridSource extends DataGridSource {
                   columnName: 'id',
                   value: _controller.products.value.indexOf(e) + 1),
               DataGridCell<String>(columnName: 'name', value: e.name),
-              DataGridCell<String>(columnName: 'code', value: e.code),
+              DataGridCell<String>(columnName: 'codeproduct', value: e.codeproduct),
               DataGridCell<IconButton>(
                 columnName: 'delete',
                 value: IconButton(

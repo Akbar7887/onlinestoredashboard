@@ -15,7 +15,7 @@ class Product {
   int? catalogId;
   List<Characteristic>? characteristics;
   Catalog? catalog;
-  String? code;
+  String? codeproduct;
 
   Product(
       {this.id,
@@ -26,7 +26,7 @@ class Product {
       this.productImages,
       this.catalogId,
       this.characteristics,
-      this.code});
+      this.codeproduct});
 
   Product.fromJson(dynamic json) {
     id = json['id'];
@@ -49,7 +49,7 @@ class Product {
     }
     catalog =
         json['catalog'] != null ? Catalog.fromJson(json['catalog']) : null;
-    code = json['code'];
+    codeproduct = json['codeproduct'];
 
   }
 
@@ -69,7 +69,7 @@ class Product {
     if (this.catalog != null) {
       map['catalog'] = this.catalog!.toJson();
     }
-    map['code'] = this.code;
+    map['codeproduct'] = this.codeproduct;
 
     return map;
   }
