@@ -6,7 +6,6 @@ import 'package:onlinestoredashboard/models/Organization.dart';
 import 'package:onlinestoredashboard/models/contragent/User.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-
 import '../models/calculate/Exchange.dart';
 import '../models/calculate/Price.dart';
 import '../models/catalogs/Catalog.dart';
@@ -37,34 +36,35 @@ class Controller extends GetxController {
   Rx<User> user = User().obs;
   var dataGridRows = <DataGridRow>[].obs;
 
-
-
-
-
-
   @override
   void onInit() {
-    fetchGetAll();
-    fetchAllExchange();
-    fetchListOrganization();
-    fetchAll("doc/user/get").then((value) {
-      this.users.value = value.map((e) => User.fromJson(e)).toList();
+    login("Admin", "7887").then((value) {
+      fetchGetAll();
+      fetchAllExchange();
+      fetchListOrganization();
+      fetchAll("doc/user/get").then((value) {
+        this.users.value = value.map((e) => User.fromJson(e)).toList();
+      });
     });
+
     super.onInit();
   }
-  Future<List<dynamic>> fetchAll(String url) async {
-    return await api.getAll(url);
+
+  Future<bool> login(String username, String password) async {
+    return await api.login(username, password);
   }
 
-
+  Future<List<dynamic>> fetchAll(String url) async {
+    return await api.getall(url);
+  }
 
   Future<void> fetchAllExchange() async {
-    final json = await api.getAll("doc/exchange/get");
+    final json = await api.getall("doc/exchange/get");
     this.exchanges.value = json.map((e) => Exchange.fromJson(e)).toList();
   }
 
   Future<void> fetchGetAll() async {
-    final json = await api.getAll("doc/catalog/get");
+    final json = await api.getall("doc/catalog/get");
     this.catalogs.value = json.map((e) => Catalog.fromJson(e)).toList();
 
     this.catalogslist.value = <Catalog>[].obs;
@@ -76,8 +76,8 @@ class Controller extends GetxController {
     return json.map((e) => Product.fromJson(e)).toList();
   }
 
-  Future<dynamic> getRateFirst(String url, DateTime  dateTime) async {
-    return  await api.getRateFirst(url, dateTime);
+  Future<dynamic> getRateFirst(String url, DateTime dateTime) async {
+    return await api.getRatefirst(url, dateTime);
   }
 
   Future<List<dynamic>> getByParentId(String url, String id) async {
@@ -86,7 +86,6 @@ class Controller extends GetxController {
 
   Future<dynamic> save(String url, dynamic object) async {
     return await api.save(url, object);
-
   }
 
   Future<Catalog> savesub(String url, Catalog catalog, int id) async {
@@ -95,8 +94,6 @@ class Controller extends GetxController {
     return catalog;
   }
 
-
-
   creatCatalogList(List<Catalog> catalogs) {
     catalogs.forEach((element) {
       this.catalogslist.value.add(element);
@@ -104,7 +101,6 @@ class Controller extends GetxController {
       // update();
     });
   }
-
 
   fetchListOrganization() async {
     final json = await api.getfirst("organization/get");
@@ -127,15 +123,15 @@ class Controller extends GetxController {
   }
 
   Future<bool> deleteById(url, id) async {
-    return await api.deleteById(url, id);
+    return await api.deletebyId(url, id);
   }
 
   Future<bool> deleteActive(String url, int id) async {
     return await api.deleteActive(url, id.toString());
   }
 
-  Future<dynamic> saveImage(
-      String url, Uint8List data, Map<String, dynamic> param, String name) async {
+  Future<dynamic> saveImage(String url, Uint8List data,
+      Map<String, dynamic> param, String name) async {
     return await api.saveImage(url, data, param, name);
   }
 
@@ -143,15 +139,13 @@ class Controller extends GetxController {
     return await api.getByParentId(url, id);
   }
 
-  Future<dynamic> savelist(String url,
-      List<Characteristic> list,
+  Future<dynamic> savelist(
+    String url,
+    List<Characteristic> list,
   ) async {
-    return  await api.saveList(url, list);
+    return await api.saveList(url, list);
   }
-
-
 }
-
 
 class HomeBindings extends Bindings {
   @override

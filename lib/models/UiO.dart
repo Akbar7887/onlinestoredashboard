@@ -10,8 +10,9 @@ class UiO{
   static final fontbold = 'PlayBold';
 
   // static final String url = '';
-   //static final String url = 'http://localhost:5558/online/';
-   static final String url = "https://admin.tascom.uz:5558/online/";
+  static final String url = 'http://localhost:5558/online/';
+  static final String urllogin = 'http://localhost:5558/';
+   //static final String url = "https://admin.tascom.uz:5558/online/";
 
   // static final String adress =
   //     'г.Ташкент, Янгихаётский район, ул.Зироат, дом 4, 100083, Узбекистан';
