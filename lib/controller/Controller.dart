@@ -35,6 +35,7 @@ class Controller extends GetxController {
   var users = <User>[].obs;
   Rx<User> user = User().obs;
   var dataGridRows = <DataGridRow>[].obs;
+   // Rx<String> token = ''.obs;
 
   @override
   void onInit() {

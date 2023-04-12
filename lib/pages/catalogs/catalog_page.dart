@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,15 +9,32 @@ import '../../models/UiO.dart';
 import '../../models/catalogs/Catalog.dart';
 import '../../models/constants/main_constant.dart';
 
-final Controller _controller = Get.put(Controller());
-// Catalog? _catalog;
-List<DropdownMenuItem<Catalog>> _catalogfordrop = [];
-Catalog? dropDownValue;
-final _keyForm = GlobalKey<FormState>();
-
-class CatalogPage extends StatelessWidget {
+class CatalogPage extends StatefulWidget {
   const CatalogPage({Key? key}) : super(key: key);
 
+  @override
+  State<CatalogPage> createState() => _CatalogPageState();
+}
+
+class _CatalogPageState extends State<CatalogPage> {
+  final Controller _controller = Get.put(Controller());
+
+// Catalog? _catalog;
+  List<DropdownMenuItem<Catalog>> _catalogfordrop = [];
+  Catalog? dropDownValue;
+  final _keyForm = GlobalKey<FormState>();
+  FlutterSecureStorage _storage = FlutterSecureStorage();
+  String? _token;
+
+  @override
+  void initState() {
+    getToken();
+    super.initState();
+  }
+
+  Future<void> getToken() async {
+    _token = await _storage.read(key: "token");
+  }
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -112,7 +130,10 @@ class CatalogPage extends StatelessWidget {
                               Container(
                                   child: Image.network(
                                       "${UiO.url}doc/catalog/download/${e.id.toString()}",
-                                      errorBuilder: (
+                                      headers: {
+                                    "Authorization":
+                                        "Bearer ${_token}"
+                                  }, errorBuilder: (
                                 BuildContext context,
                                 Object error,
                                 StackTrace? stackTrace,

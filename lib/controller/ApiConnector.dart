@@ -4,11 +4,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:onlinestoredashboard/controller/Controller.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 
 class ApiConnector extends GetConnect {
   String? token;
   FlutterSecureStorage _storage = FlutterSecureStorage();
+  final Controller _controller = Get.put(Controller());
 
   Map<String, String> header = {
     'Content-Type': 'application/json; charset=utf-8',
@@ -165,6 +167,7 @@ class ApiConnector extends GetConnect {
     param.forEach((key, value) {
       request.fields[key] = value;
     });
+    request.headers.addAll(header);
 
     // request.fields["id"] = "";
     // request.fields["parent_id"] = "19";
