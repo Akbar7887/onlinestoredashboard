@@ -24,17 +24,19 @@ class _CatalogPageState extends State<CatalogPage> {
   Catalog? dropDownValue;
   final _keyForm = GlobalKey<FormState>();
   FlutterSecureStorage _storage = FlutterSecureStorage();
-  String? _token;
+   String? _token;
 
   @override
   void initState() {
     getToken();
+
     super.initState();
   }
 
   Future<void> getToken() async {
     _token = await _storage.read(key: "token");
   }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -65,9 +67,24 @@ class _CatalogPageState extends State<CatalogPage> {
           ),
           Container(
               child: TreeView(
-                  nodes: createCatalogHiriarh(context, _controller.catalogs)))
+                  nodes: createCatalogHiriarh(
+                      context, _controller.catalogs.value)))
         ],
       ))));
+    });
+  }
+
+  Widget iconImage(Catalog e) {
+    return Image.network("${UiO.url}doc/catalog/download/${e.id.toString()}",
+        errorBuilder: (
+      BuildContext context,
+      Object error,
+      StackTrace? stackTrace,
+    ) {
+      return Icon(
+        Icons.photo,
+        color: Colors.blue,
+      );
     });
   }
 
@@ -122,27 +139,24 @@ class _CatalogPageState extends State<CatalogPage> {
                                     Map<String, dynamic> param = {
                                       "id": e.id.toString()
                                     };
-                                    _controller.saveImage("doc/catalog/upload",
-                                        f, param, image.name);
+                                    _controller
+                                        .saveImage("doc/catalog/upload", f,
+                                            param, image.name)
+                                        .then((value) {
+                                      _controller
+                                          .fetchAll("doc/catalog/get")
+                                          .then((value) {
+                                        _controller.catalogs.refresh();
+                                        setState(() {
+                                          iconImage(_controller.catalogs.value.firstWhere((element) => element.id == e.id));
+                                        });
+                                      });
+                                      // iconImage(value);
+                                    });
                                   }
                                 },
                               )),
-                              Container(
-                                  child: Image.network(
-                                      "${UiO.url}doc/catalog/download/${e.id.toString()}",
-                                      headers: {
-                                    "Authorization":
-                                        "Bearer ${_token}"
-                                  }, errorBuilder: (
-                                BuildContext context,
-                                Object error,
-                                StackTrace? stackTrace,
-                              ) {
-                                return Icon(
-                                  Icons.photo,
-                                  color: Colors.blue,
-                                );
-                              })),
+                              Container(child: iconImage(e)),
                               Padding(
                                 padding: EdgeInsets.only(right: 1),
                                 child: IconButton(

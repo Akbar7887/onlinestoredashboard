@@ -12,7 +12,6 @@ class Product {
   dynamic? imagepath;
   // String? active;
   List<ProductImage>? productImages;
-  int? catalogId;
   List<Characteristic>? characteristics;
   Catalog? catalog;
   String? codeproduct;
@@ -24,7 +23,6 @@ class Product {
       this.imagepath,
       // this.active,
       this.productImages,
-      this.catalogId,
       this.characteristics,
       this.codeproduct});
 
@@ -38,13 +36,6 @@ class Product {
       productImages = [];
       json['productImages'].forEach((v) {
         productImages!.add(ProductImage.fromJson(v));
-      });
-    }
-    catalogId = json['catalogId'];
-    if (json['characteristics'] != null) {
-      characteristics = [];
-      json['characteristics'].forEach((c) {
-        characteristics!.add(Characteristic.fromJson(c));
       });
     }
     catalog =
@@ -62,9 +53,6 @@ class Product {
     // map['active'] = active;
     if (productImages != null) {
       map['productImages'] = productImages!.map((v) => v.toJson()).toList();
-    }
-    if (characteristics != null) {
-      map['characteristics'] = characteristics!.map((v) => v.toJson()).toList();
     }
     if (this.catalog != null) {
       map['catalog'] = this.catalog!.toJson();

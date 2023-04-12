@@ -10,7 +10,6 @@ import 'package:onlinestoredashboard/models/UiO.dart';
 class ApiConnector extends GetConnect {
   String? token;
   FlutterSecureStorage _storage = FlutterSecureStorage();
-  final Controller _controller = Get.put(Controller());
 
   Map<String, String> header = {
     'Content-Type': 'application/json; charset=utf-8',

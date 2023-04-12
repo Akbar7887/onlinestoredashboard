@@ -79,8 +79,9 @@ class ProductPage extends GetView<Controller> {
                                   .fetchgetAll(value.id.toString())
                                   .then((value) {
                                 _controller.products.value = value;
-                                _productDataGridSource = ProductDataGridSource(
-                                    _controller.products.value);
+                                _controller.product.refresh();
+                                // _productDataGridSource = ProductDataGridSource(
+                                //     _controller.products.value);
                               });
                             }))
                   ],
