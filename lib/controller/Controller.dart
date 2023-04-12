@@ -38,13 +38,11 @@ class Controller extends GetxController {
 
   @override
   void onInit() {
-    login("Admin", "7887").then((value) {
-      fetchGetAll();
-      fetchAllExchange();
-      fetchListOrganization();
-      fetchAll("doc/user/get").then((value) {
-        this.users.value = value.map((e) => User.fromJson(e)).toList();
-      });
+    fetchListOrganization();
+    fetchGetAll();
+    fetchAllExchange();
+    fetchAll("doc/user/get").then((value) {
+      this.users.value = value.map((e) => User.fromJson(e)).toList();
     });
 
     super.onInit();
@@ -59,21 +57,25 @@ class Controller extends GetxController {
   }
 
   Future<void> fetchAllExchange() async {
-    final json = await api.getall("doc/exchange/get");
-    this.exchanges.value = json.map((e) => Exchange.fromJson(e)).toList();
+    await api.getall("doc/exchange/get").then((value) {
+      this.exchanges.value = value.map((e) => Exchange.fromJson(e)).toList();
+    });
   }
 
   Future<void> fetchGetAll() async {
-    final json = await api.getall("doc/catalog/get");
-    this.catalogs.value = json.map((e) => Catalog.fromJson(e)).toList();
+    await api.getall("doc/catalog/get").then((value) {
+      this.catalogs.value = value.map((e) => Catalog.fromJson(e)).toList();
 
-    this.catalogslist.value = <Catalog>[].obs;
-    creatCatalogList(this.catalogs.value);
+      this.catalogslist.value = <Catalog>[].obs;
+      creatCatalogList(this.catalogs.value);
+    });
   }
 
   Future<List<Product>> fetchgetAll(String id) async {
-    final json = await api.getByParentId("doc/product/get", id);
-    return json.map((e) => Product.fromJson(e)).toList();
+    await api.getByParentId("doc/product/get", id).then((value) {
+      return value.map((e) => Product.fromJson(e)).toList();
+    });
+    return [];
   }
 
   Future<dynamic> getRateFirst(String url, DateTime dateTime) async {
@@ -88,10 +90,12 @@ class Controller extends GetxController {
     return await api.save(url, object);
   }
 
-  Future<Catalog> savesub(String url, Catalog catalog, int id) async {
-    final json = await api.savesub(url, catalog, id.toString());
-    catalog = Catalog.fromJson(json);
-    return catalog;
+  Future<Catalog?> savesub(String url, Catalog catalog, int id) async {
+    await api.savesub(url, catalog, id.toString()).then((value) {
+      catalog = Catalog.fromJson(value);
+      return catalog;
+    });
+    return null;
   }
 
   creatCatalogList(List<Catalog> catalogs) {
@@ -103,23 +107,23 @@ class Controller extends GetxController {
   }
 
   fetchListOrganization() async {
-    final json = await api.getfirst("organization/get");
-    Organization loadedorg = Organization.fromJson(json);
-
-    if (loadedorg != null) {
-      organization.value = loadedorg;
-      // notifyChildrens();
-    }
-    update();
+    await api.getall("organization/get").then((value) {
+      List<Organization> _listOrganization =
+          value.map((e) => Organization.fromJson(e)).toList();
+      if (_listOrganization.length != 0) {
+        organization.value = _listOrganization.first;
+      }
+    });
   }
 
   Future<dynamic?> changeObject(String url, dynamic object) async {
     dynamic result;
-    final json = await api.save(url, object);
-    if (object is Organization) {
-      result = Organization.fromJson(json);
-    }
-    return result;
+    await api.save(url, object).then((value) {
+      if (object is Organization) {
+        result = Organization.fromJson(value);
+      }
+      return result;
+    });
   }
 
   Future<bool> deleteById(url, id) async {

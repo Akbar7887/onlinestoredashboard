@@ -6,13 +6,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:onlinestoredashboard/models/UiO.dart';
 
-class ApiConnector extends GetConnect{
-
+class ApiConnector extends GetConnect {
   String? token;
   FlutterSecureStorage _storage = FlutterSecureStorage();
 
   Map<String, String> header = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset=utf-8',
     // 'charset': 'utf-8',
     // 'Accept': 'application/json',
   };
@@ -39,15 +38,16 @@ class ApiConnector extends GetConnect{
     }
   }
 
-
   Future<dynamic> getfirst(String url) async {
     token = await _storage.read(key: "token");
-    header.addAll({    "Authorization": "Bearer $token"});
+    header.addAll({"Authorization": "Bearer $token"});
     Uri uri = Uri.parse("${UiO.url}${url}");
     final response = await http.get(uri, headers: header);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      return jsonDecode(utf8.decode(response.bodyBytes));
+
+        return jsonDecode(utf8.decode(response.bodyBytes));
+
     } else {
       throw Exception("Error");
     }
@@ -55,7 +55,7 @@ class ApiConnector extends GetConnect{
 
   Future<dynamic> getRatefirst(String url, DateTime dateTime) async {
     token = await _storage.read(key: "token");
-    header.addAll({    "Authorization": "Bearer $token"});
+    header.addAll({"Authorization": "Bearer $token"});
     Map<String, dynamic> param = {"date": _formatterToSend.format(dateTime)};
     Uri uri = Uri.parse("${UiO.url}${url}").replace(queryParameters: param);
     final response = await http.get(uri, headers: header);
@@ -84,7 +84,7 @@ class ApiConnector extends GetConnect{
 
   Future<List<dynamic>> getByParentId(String url, String id) async {
     token = await _storage.read(key: "token");
-    header.addAll({    "Authorization": "Bearer $token"});
+    header.addAll({"Authorization": "Bearer $token"});
     Map<String, dynamic> param = {"id": id};
     Uri uri = Uri.parse("${UiO.url}${url}").replace(queryParameters: param);
     final response = await http.get(uri, headers: header);
@@ -100,11 +100,11 @@ class ApiConnector extends GetConnect{
 
   Future<dynamic> save(String url, Object object) async {
     token = await _storage.read(key: "token");
-    header.addAll({    "Authorization": "Bearer $token"});
+    header.addAll({"Authorization": "Bearer $token"});
     Uri uri = Uri.parse("${UiO.url}${url}");
 
     final response =
-    await http.post(uri, body: jsonEncode(object), headers: header);
+        await http.post(uri, body: jsonEncode(object), headers: header);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(utf8.decode(response.bodyBytes));
@@ -117,14 +117,14 @@ class ApiConnector extends GetConnect{
 
   Future<dynamic> savesub(String url, Object object, String id) async {
     token = await _storage.read(key: "token");
-    header.addAll({    "Authorization": "Bearer $token"});
+    header.addAll({"Authorization": "Bearer $token"});
     Map<String, dynamic> param = {'id': id};
 
     Uri uri = Uri.parse("${UiO.url}${url}").replace(queryParameters: param);
 
     // Uri uri = Uri.https(UiO.url, url,{"id": id});
     final response =
-    await http.post(uri, body: json.encode(object), headers: header);
+        await http.post(uri, body: json.encode(object), headers: header);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(utf8.decode(response.bodyBytes));
@@ -137,14 +137,14 @@ class ApiConnector extends GetConnect{
 
   Future<List<dynamic>> saveList(String url, List<dynamic> list) async {
     token = await _storage.read(key: "token");
-    header.addAll({    "Authorization": "Bearer $token"});
+    header.addAll({"Authorization": "Bearer $token"});
     // Map<String, dynamic> param = {'id': id};
 
     Uri uri = Uri.parse("${UiO.url}${url}");
 
     // Uri uri = Uri.https(UiO.url, url,{"id": id});
     final response =
-    await http.post(uri, body: json.encode(list), headers: header);
+        await http.post(uri, body: json.encode(list), headers: header);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final json = jsonDecode(utf8.decode(response.bodyBytes));
@@ -158,7 +158,7 @@ class ApiConnector extends GetConnect{
   Future<dynamic> saveImage(String url, Uint8List data,
       Map<String, dynamic> param, String name) async {
     token = await _storage.read(key: "token");
-    header.addAll({    "Authorization": "Bearer $token"});
+    header.addAll({"Authorization": "Bearer $token"});
     List<int> list = data;
     final uri = Uri.parse('${UiO.url}${url}');
     var request = await http.MultipartRequest('POST', uri);
@@ -184,7 +184,7 @@ class ApiConnector extends GetConnect{
 
   Future<dynamic> deleteActive(String url, String id) async {
     token = await _storage.read(key: "token");
-    header.addAll({    "Authorization": "Bearer $token"});
+    header.addAll({"Authorization": "Bearer $token"});
     Map<String, dynamic> param = {'id': id};
 
     Uri uri = Uri.parse("${UiO.url}${url}").replace(queryParameters: param);
@@ -205,7 +205,7 @@ class ApiConnector extends GetConnect{
 
   Future<dynamic> removethroughtParent(String url, String id) async {
     token = await _storage.read(key: "token");
-    header.addAll({    "Authorization": "Bearer $token"});
+    header.addAll({"Authorization": "Bearer $token"});
     Map<String, dynamic> param = {'id': id};
 
     Uri uri = Uri.parse("${UiO.url}${url}").replace(queryParameters: param);
@@ -224,9 +224,9 @@ class ApiConnector extends GetConnect{
 
   Future<bool> deletebyId(String url, String id) async {
     token = await _storage.read(key: "token");
-    header.addAll({    "Authorization": "Bearer $token"});
+    header.addAll({"Authorization": "Bearer $token"});
     Uri uri =
-    Uri.parse("${UiO.url}${url}").replace(queryParameters: {"id": id});
+        Uri.parse("${UiO.url}${url}").replace(queryParameters: {"id": id});
 
     final response = await http.delete(uri, headers: header);
 
@@ -236,5 +236,4 @@ class ApiConnector extends GetConnect{
       throw Exception("Error");
     }
   }
-
 }

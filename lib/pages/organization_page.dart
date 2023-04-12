@@ -27,7 +27,7 @@ class OrganizationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _organization = _controller.organization.value;
-    if (_controller.organization != null) {
+    if (_controller.organization.value.id != null) {
       _nameController!.text = _organization!.name!;
       _adressController!.text = _organization!.adress!;
       _emailController!.text = _organization!.email!;

@@ -1,3 +1,4 @@
+
 class Organization {
     String? adress;
     String? email;
