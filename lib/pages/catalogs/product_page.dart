@@ -79,7 +79,7 @@ class ProductPage extends GetView<Controller> {
                                   .fetchgetAll(value.id.toString())
                                   .then((value) {
                                 _controller.products.value = value;
-                                // _controller.product.refresh();
+                               //  _controller.products.refresh();
                                 _productDataGridSource = ProductDataGridSource(
                                     _controller.products.value);
                               });

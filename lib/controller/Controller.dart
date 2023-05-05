@@ -73,10 +73,9 @@ class Controller extends GetxController {
   }
 
   Future<List<Product>> fetchgetAll(String id) async {
-    await api.getByParentId("doc/product/v1/get", id).then((value) {
-      return value.map((e) => Product.fromJson(e)).toList();
-    });
-    return [];
+    var json  = await api.getByParentId("doc/product/v1/get", id);
+    return json.map((e) => Product.fromJson(e)).toList();
+
   }
 
   Future<dynamic> getRateFirst(String url, DateTime dateTime) async {
