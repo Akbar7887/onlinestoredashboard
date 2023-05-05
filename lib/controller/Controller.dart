@@ -72,9 +72,9 @@ class Controller extends GetxController {
     });
   }
 
-  Future<List<Product>> fetchgetAll(String id) async {
-    var json  = await api.getByParentId("doc/product/v1/get", id);
-    return json.map((e) => Product.fromJson(e)).toList();
+  Future<List<dynamic>> fetchgetAll(String id) async {
+    return await api.getByParentId("doc/product/v1/get", id);
+
 
   }
 

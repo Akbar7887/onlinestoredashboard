@@ -78,7 +78,9 @@ class ProductPage extends GetView<Controller> {
                               _controller
                                   .fetchgetAll(value.id.toString())
                                   .then((value) {
-                                _controller.products.value = value;
+
+
+                                _controller.products.value =  value.map((e) => Product.fromJson(e)).toList();
                                //  _controller.products.refresh();
                                 _productDataGridSource = ProductDataGridSource(
                                     _controller.products.value);
