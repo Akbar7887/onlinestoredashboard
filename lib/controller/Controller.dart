@@ -42,7 +42,7 @@ class Controller extends GetxController {
     fetchListOrganization();
     fetchGetAll();
     fetchAllExchange();
-    fetchAll("doc/user/get").then((value) {
+    fetchAll("login/get").then((value) {
       this.users.value = value.map((e) => User.fromJson(e)).toList();
     });
 
@@ -58,13 +58,13 @@ class Controller extends GetxController {
   }
 
   Future<void> fetchAllExchange() async {
-    await api.getall("doc/exchange/get").then((value) {
+    await api.getall("doc/exchange/v1/get").then((value) {
       this.exchanges.value = value.map((e) => Exchange.fromJson(e)).toList();
     });
   }
 
   Future<void> fetchGetAll() async {
-    await api.getall("doc/catalog/get").then((value) {
+    await api.getall("doc/catalog/v1/get").then((value) {
       this.catalogs.value = value.map((e) => Catalog.fromJson(e)).toList();
 
       this.catalogslist.value = <Catalog>[].obs;
@@ -73,7 +73,7 @@ class Controller extends GetxController {
   }
 
   Future<List<Product>> fetchgetAll(String id) async {
-    await api.getByParentId("doc/product/get", id).then((value) {
+    await api.getByParentId("doc/product/v1/get", id).then((value) {
       return value.map((e) => Product.fromJson(e)).toList();
     });
     return [];
@@ -108,7 +108,7 @@ class Controller extends GetxController {
   }
 
   fetchListOrganization() async {
-    await api.getall("organization/get").then((value) {
+    await api.getall("organization/v1/get").then((value) {
       List<Organization> _listOrganization =
           value.map((e) => Organization.fromJson(e)).toList();
       if (_listOrganization.length != 0) {

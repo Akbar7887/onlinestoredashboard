@@ -122,7 +122,7 @@ class ProductPage extends GetView<Controller> {
                         _controller.catalog.value =
                             _controller.product.value.catalog!;
                         _controller
-                            .getByParentId("doc/productimage/get",
+                            .getByParentId("doc/productimage/v1/get",
                                 _controller.product.value.id.toString())
                             .then((value) {
                           // if (value.isNotEmpty) {
@@ -136,14 +136,14 @@ class ProductPage extends GetView<Controller> {
                           // } else {}
                         });
                         _controller
-                            .getByParentId("doc/price/get",
+                            .getByParentId("doc/price/v1/get",
                                 _controller.product.value.id.toString())
                             .then((value) {
                           _controller.prices.value =
                               value.map((e) => Price.fromJson(e)).toList();
                         });
                         _controller
-                            .getCharasteristic("doc/characteristic/get",
+                            .getCharasteristic("doc/characteristic/v1/get",
                                 _controller.product.value.id.toString())
                             .then((value) {
                           _controller.characteristics.value = value
