@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:crypto/crypto.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -32,7 +33,9 @@ class ApiConnector extends GetConnect {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       Map<String, dynamic> login = jsonDecode(utf8.decode(response.bodyBytes));
-      await _storage.write(key: 'token', value: login['access_token']);
+
+       await _storage.write(key: 'token', value: login['access_token']);
+
       return true;
     } else {
       return false;
